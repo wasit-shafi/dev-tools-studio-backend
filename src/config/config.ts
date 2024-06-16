@@ -1,5 +1,5 @@
 const _config: Record<string, string | number | undefined> = {
-	API_KEY: process.env.apiKey,
+	DATABASE_URI: process.env.DATABASE_URI,
 	PORT: process.env.PORT,
 };
 

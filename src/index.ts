@@ -1,11 +1,11 @@
-import { config } from './config/config';
+import { env } from './config/environments/env';
 
-import { connectDatabase } from './database';
+import { connectDatabase } from './api/shared/database';
 import { app } from './app';
 
 connectDatabase()
 	.then(() => {
-		const port = config.get('PORT');
+		const port = env.get('PORT');
 		app.listen(port, () => {
 			console.log(`Server is running on port ${port}`);
 		});

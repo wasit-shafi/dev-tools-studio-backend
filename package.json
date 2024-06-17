@@ -4,7 +4,7 @@
 	"main": "index.js",
 	"scripts": {
 		"build": "npx tsc",
-		"start": "tsc && node --env-file=.prod.env dist/index.js",
+		"start": "tsc && node --env-file=src/config/environments/prod.env dist/index.js",
 		"dev": "nodemon src/index.ts",
 		"build:docker": "docker build -t dev-tools-studio-backend:v1.0.0 .",
 		"start:docker": "docker run -p 3000:3000 dev-tools-studio-backend:v1.0.0",
@@ -14,11 +14,15 @@
 	"license": "ISC",
 	"description": "",
 	"dependencies": {
+		"cookie-parser": "^1.4.6",
+		"cors": "^2.8.5",
 		"express": "^4.19.2",
 		"mongodb": "^6.7.0",
 		"mongoose": "^8.4.1"
 	},
 	"devDependencies": {
+		"@types/cookie-parser": "^1.4.7",
+		"@types/cors": "^2.8.17",
 		"@types/express": "^4.17.21",
 		"@types/node": "^20.14.2",
 		"concurrently": "^8.2.2",

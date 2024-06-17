@@ -1,9 +1,9 @@
-const _config: Record<string, string | number | undefined> = {
+const _env: Record<string, string | number | undefined> = {
 	DATABASE_URI: process.env.DATABASE_URI,
 	PORT: process.env.PORT,
 };
 
-export const config = {
+export const env = {
 	get(key: string): string | number | undefined {
 		if (!key || typeof key !== 'string') {
 			throw new Error(
@@ -11,10 +11,10 @@ export const config = {
 			);
 		}
 
-		if (!Object.keys(_config).includes(key)) {
+		if (!Object.keys(_env).includes(key)) {
 			throw new Error('Invalid key for accessing environment variables');
 		}
 
-		return _config[key];
+		return _env[key];
 	},
 };

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import * as constants from '../utils/constants';
+import * as constants from '../../shared/utils/constants';
 
 const userSchema = new mongoose.Schema(
 	{

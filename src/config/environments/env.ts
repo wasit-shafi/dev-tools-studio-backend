@@ -1,6 +1,7 @@
 const _env: Record<string, string | number | undefined> = {
 	DATABASE_URI: process.env.DATABASE_URI,
 	PORT: process.env.PORT,
+	CORS_ORIGIN: process.env.CORS_ORIGIN,
 };
 
 export const env = {

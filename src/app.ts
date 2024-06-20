@@ -2,11 +2,13 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 
 import cookieParser from 'cookie-parser';
-import { env } from './config/environments/env';
+import { _env } from './config/environments/env';
 
 const app = express();
 
-const corsOrigin = env.get('CORS_ORIGIN');
+
+
+const corsOrigin = _env.get('CORS_ORIGIN');
 
 if (corsOrigin && typeof corsOrigin === 'string') {
 	// TODO(wasit): review cors options later (specially for prod env)

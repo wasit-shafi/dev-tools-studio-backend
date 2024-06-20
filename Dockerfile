@@ -10,4 +10,6 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD ["node", "--env-file=src/config/environments/prod.env","dist/index.js"]
+CMD ["node","dist/index.js"]
+
+# CMD ["node", "--env-file=src/config/environments/prod.env","dist/index.js"]

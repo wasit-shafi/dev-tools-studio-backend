@@ -1,9 +1,16 @@
 import mongoose from 'mongoose';
 
-import { env } from '../../../config/environments/env';
+import { _env } from '../../../config/environments/env';
 import * as constants from '../../shared/utils/constants';
 
 export const connectDatabase = async () => {
+	// console.log({
+	// 	port: _env.get('PORT'),
+	// 	cors: _env.get('CORS_ORIGIN'),
+	// 	nodeEnv: _env.get('NODE_ENV'),
+	// 	dbUri: _env.get('DATABASE_URI'),
+	// });
+
 	try {
 		mongoose.connection.on('connected', () => {
 			console.log('connected');
@@ -24,10 +31,11 @@ export const connectDatabase = async () => {
 			console.log('close');
 		});
 
-		const connectionInstance = await mongoose.connect(
-			`${env.get('DATABASE_URI')}/${constants.DATABASE_NAME}
-			?retryWrites=true&w=majority&appName=Cluster0`
-		);
+		const connectionString = `${_env.get('DATABASE_URI')}/${
+			constants.DATABASE_NAME
+		}?retryWrites=true&w=majority&appName=Cluster0`;
+
+		const connectionInstance = await mongoose.connect(connectionString);
 		// console.log(
 		// 	'Successfully connected with database, connectionInstance: ' +
 		// 		connectionInstance

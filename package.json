@@ -4,11 +4,13 @@
 	"main": "index.js",
 	"scripts": {
 		"build": "npx tsc",
-		"start": "tsc && node --env-file=src/config/environments/prod.env dist/index.js",
+		"build:d4r": "docker build -t dev-tools-studio-backend:v1.0.0 .",
 		"dev": "nodemon src/index.ts",
-		"build:docker": "docker build -t dev-tools-studio-backend:v1.0.0 .",
-		"start:docker": "docker run -p 3000:3000 dev-tools-studio-backend:v1.0.0",
-		"start:docker:d": "docker run -p 3000:3000 -d dev-tools-studio-backend:v1.0.0"
+		"dev:mongo": "docker run -d -v volume_database:/data/db --name mongo-container --network my_custom_network -p 27017:27017 mongo",
+		"dev:d4r": "docker run --name dev-tools-studio-backend-dev-container --network my_custom_network -v volume_database:/data/db --env-file ./src/config/environments/dev.env -p 3000:3000 dev-tools-studio-backend:v1.0.0",
+		"start": "tsc && node --env-file=src/config/environments/prod.env dist/index.js",
+		"start:d4r": "docker run --name dev-tools-studio-backend-prod-container --network my_custom_network -v volume_database:/data/db --env-file ./src/config/environments/prod.env -p 3000:3000 dev-tools-studio-backend:v1.0.0",
+		"start:d4r:d": "docker run --name dev-tools-studio-backend-prod-container --network my_custom_network -v volume_database:/data/db -d -p 3000:3000 dev-tools-studio-backend:v1.0.0"
 	},
 	"author": "",
 	"license": "ISC",

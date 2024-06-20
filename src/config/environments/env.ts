@@ -1,10 +1,11 @@
-const _env: Record<string, string | number | undefined> = {
+const __env: Record<string, string | number | undefined> = {
 	DATABASE_URI: process.env.DATABASE_URI,
 	PORT: process.env.PORT,
 	CORS_ORIGIN: process.env.CORS_ORIGIN,
+	NODE_ENV: process.env.NODE_ENV,
 };
 
-export const env = {
+export const _env = {
 	get(key: string): string | number | undefined {
 		if (!key || typeof key !== 'string') {
 			throw new Error(
@@ -12,10 +13,10 @@ export const env = {
 			);
 		}
 
-		if (!Object.keys(_env).includes(key)) {
+		if (!Object.keys(__env).includes(key)) {
 			throw new Error('Invalid key for accessing environment variables');
 		}
 
-		return _env[key];
+		return __env[key];
 	},
 };

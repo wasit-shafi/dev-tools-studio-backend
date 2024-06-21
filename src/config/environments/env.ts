@@ -1,3 +1,4 @@
+// TODO: handle injected env by some other service (not added in  __env object)
 const __env: Record<string, string | number | undefined> = {
 	DATABASE_URI: process.env.DATABASE_URI,
 	PORT: process.env.PORT,
@@ -14,9 +15,19 @@ export const _env = {
 		}
 
 		if (!Object.keys(__env).includes(key)) {
-			throw new Error('Invalid key for accessing environment variables');
+			// throw new Error('Invalid key for accessing environment variables');
+
+			if (Object.keys(process.env).includes(key)) {
+				return process.env[key];
+			}
+
+			console.error(
+				'Invalid key for accessing environment variables, key = ',
+				key
+			);
 		}
 
+		//  may return undefined, as i have avoided throwing error now
 		return __env[key];
 	},
 };

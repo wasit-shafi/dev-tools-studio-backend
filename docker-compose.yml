@@ -1,0 +1,40 @@
+services:
+  # service 1: mongo
+
+  mongo:
+    container_name: mongodb-container
+    image: mongo:latest
+    ports:
+      # Note: 27018 is exposed to client (as most of the time i have multiple connection opened at time,)
+      - 27018:27017
+    volumes:
+      - mongoData:/data/db
+  # service 2: backend
+
+  backend:
+    image: 'dev-tools-studio-backend:v1.0.0'
+    container_name: dev-tools-studio-backend-container
+    build:
+      context: '.'
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    env_file:
+      - './src/config/environments/dev.env'
+    depends_on:
+      - mongo
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+          target: .
+          ignore:
+            - node_modules/
+            - dist/
+            - .vscode/
+    expose:
+      - 3000
+    command: npm run dev
+
+volumes:
+  mongoData:

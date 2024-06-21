@@ -35,6 +35,8 @@ export const connectDatabase = async () => {
 			constants.DATABASE_NAME
 		}?retryWrites=true&w=majority&appName=Cluster0`;
 
+		// console.log('connectionString', connectionString);
+
 		const connectionInstance = await mongoose.connect(connectionString);
 		// console.log(
 		// 	'Successfully connected with database, connectionInstance: ' +

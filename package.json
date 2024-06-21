@@ -5,12 +5,13 @@
 	"scripts": {
 		"build": "npx tsc",
 		"build:d4r": "docker build -t dev-tools-studio-backend:v1.0.0 .",
-		"dev": "nodemon src/index.ts",
-		"dev:mongo": "docker run -d -v volume_database:/data/db --name mongo-container --network my_custom_network -p 27017:27017 mongo",
-		"dev:d4r": "docker run --name dev-tools-studio-backend-dev-container --network my_custom_network -v volume_database:/data/db --env-file ./src/config/environments/dev.env -p 3000:3000 dev-tools-studio-backend:v1.0.0",
-		"start": "tsc && node --env-file=src/config/environments/prod.env dist/index.js",
-		"start:d4r": "docker run --name dev-tools-studio-backend-prod-container --network my_custom_network -v volume_database:/data/db --env-file ./src/config/environments/prod.env -p 3000:3000 dev-tools-studio-backend:v1.0.0",
-		"start:d4r:d": "docker run --name dev-tools-studio-backend-prod-container --network my_custom_network -v volume_database:/data/db -d -p 3000:3000 dev-tools-studio-backend:v1.0.0"
+		"tsnd": "ts-node-dev --env-file=src/config/environments/dev.env src/index.ts",
+		"dev": "ts-node-dev src/index.ts",
+		"start": "node dist/index.js",
+		"up": "docker-compose up --build -V --watch",
+		"up:prod": "docker-compose up -f docker-compose.prod.yml ",
+		"down": "docker-compose down",
+		"down:prod": "docker-compose down -f docker-compose.prod.yml"
 	},
 	"author": "",
 	"license": "ISC",
@@ -29,8 +30,7 @@
 		"@types/node": "^20.14.2",
 		"concurrently": "^8.2.2",
 		"eslint": "^9.4.0",
-		"nodemon": "^3.1.3",
-		"ts-node": "^10.9.2",
+		"ts-node-dev": "^2.0.0",
 		"typescript": "^5.4.5"
 	}
 }

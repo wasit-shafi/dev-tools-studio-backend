@@ -1,0 +1,10 @@
+services:
+  dev-tools-studio-backend-container:
+    image: 'dev-tools-studio-backend:v1.0.0'
+    build:
+      context: '.'
+      dockerfile: Dockerfile.prod
+    ports:
+      - 3000:3000
+    env_file:
+      - './src/config/environments/prod.env'

@@ -9,8 +9,9 @@ export const getUsers: RequestHandler = async (request, response) => {
 };
 
 export const registerUser: RequestHandler = async (request, response) => {
+	const num = (await User.find({})).length + 1;
 	const newUser = await User.create({
-		userName: 'name-' + _env.get('NODE_ENV') + '-' + Math.random().toString(),
+		userName: num + '->name-' + _env.get('NODE_ENV') + '-',
 	});
 
 	response.json({ message: 'new user registered!!', user: newUser });

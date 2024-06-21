@@ -17,7 +17,7 @@
         {
           "name": "Backend",
           "commands": [
-            "npm run dev"
+            "npm run tsnd"
           ],
           "autoExecuteCommands": false
         },

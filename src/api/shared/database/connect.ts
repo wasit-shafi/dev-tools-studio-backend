@@ -4,12 +4,12 @@ import { _env } from '../../../config/environments/env';
 import * as constants from '../../shared/utils/constants';
 
 export const connectDatabase = async () => {
-	// console.log({
-	// 	port: _env.get('PORT'),
-	// 	cors: _env.get('CORS_ORIGIN'),
-	// 	nodeEnv: _env.get('NODE_ENV'),
-	// 	dbUri: _env.get('DATABASE_URI'),
-	// });
+	console.log({
+		port: _env.get('PORT'),
+		cors: _env.get('CORS_ORIGIN'),
+		nodeEnv: _env.get('NODE_ENV'),
+		dbUri: _env.get('DATABASE_URI'),
+	});
 
 	try {
 		mongoose.connection.on('connected', () => {

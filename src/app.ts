@@ -6,8 +6,6 @@ import { _env } from './config/environments/env';
 
 const app = express();
 
-
-
 const corsOrigin = _env.get('CORS_ORIGIN');
 
 if (corsOrigin && typeof corsOrigin === 'string') {
@@ -26,7 +24,6 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 app.use(express.json({ limit: '16kb' }));
-//
 
 app.use(express.urlencoded({ extended: true, limit: '16kb' }));
 

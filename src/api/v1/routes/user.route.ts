@@ -5,4 +5,4 @@ export const userRouter = Router();
 
 userRouter.get('/', getUsers);
 
-userRouter.get('/register', registerUser);
+userRouter.post('/register', registerUser);

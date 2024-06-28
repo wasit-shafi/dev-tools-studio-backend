@@ -1,16 +1,15 @@
-import express, { Request, Response } from 'express';
+import path from 'path';
 import cors from 'cors';
-
 import cookieParser from 'cookie-parser';
+import express, { Request, Response } from 'express';
+
 import { _env } from './config/environments/env';
 
 const app = express();
 
 const corsOrigin = _env.get('CORS_ORIGIN');
-
 if (corsOrigin && typeof corsOrigin === 'string') {
 	// TODO(wasit): review cors options later (specially for prod env)
-
 	const corsOptions = {
 		origin: corsOrigin,
 		credentials: true,
@@ -19,16 +18,15 @@ if (corsOrigin && typeof corsOrigin === 'string') {
 	app.use(cors(corsOptions));
 }
 
+app.use(express.json());
+// app.use(express.urlencoded({ extended: false }));
+
 app.use(cookieParser());
 
-app.use(express.static('public'));
-
-app.use(express.json({ limit: '16kb' }));
-
-app.use(express.urlencoded({ extended: true, limit: '16kb' }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (request: Request, response: Response) => {
-	response.json({ message: `Hello World!!` }).send();
+	response.json({ message: 'Hello World!!' }).send();
 });
 
 import { routerV1 } from './api/v1/router';

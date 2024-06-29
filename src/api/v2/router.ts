@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { _env } from '../../config/environments/env';
+import { _env } from '../../config';
 
 const router = Router();
 

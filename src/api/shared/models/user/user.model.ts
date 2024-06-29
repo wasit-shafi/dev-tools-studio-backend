@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
-import * as constants from '../../shared/utils/constants';
+import * as constants from '../../../shared/utils/constants';
 
 interface IUser {
 	firstName: string;

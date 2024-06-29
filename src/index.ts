@@ -1,7 +1,6 @@
-import { _env } from './config/environments/env';
-
-import { connectDatabase } from './api/shared/database';
 import { app } from './app';
+import { _env } from './config';
+import { connectDatabase } from './api/shared/database';
 
 connectDatabase()
 	.then(() => {

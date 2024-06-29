@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import { _env } from '../../../config/environments/env';
+import { _env } from '../../../config';
 import * as constants from '../../shared/utils/constants';
 
 export const connectDatabase = async () => {

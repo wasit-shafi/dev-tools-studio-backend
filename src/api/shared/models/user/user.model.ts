@@ -1,8 +1,13 @@
+import { z } from 'zod';
+
+import bcrypt from 'bcrypt';
+
 import mongoose, { Schema } from 'mongoose';
 
 import * as constants from '../../../shared/utils/constants';
+// import { userZodSchema } from '../../schema/user/user.schema';
 
-interface IUser {
+interface IUser extends mongoose.Document {
 	firstName: string;
 	lastName: string;
 	userName: string;
@@ -68,6 +73,28 @@ const userSchema: Schema<IUser> = new Schema(
 	},
 	{ timestamps: true }
 );
+
+userSchema.pre('save', async function (next) {
+	let user = this as IUser;
+
+	if (!user.isModified('password')) {
+		return next();
+	}
+
+	const salt = await bcrypt.genSalt(10);
+	const hash = await bcrypt.hashSync(user.password, salt);
+
+	user.password = hash;
+	return next();
+});
+
+userSchema.methods.comparePassword = async function (
+	candidatePassword: string
+): Promise<boolean> {
+	const user = this as IUser;
+
+	return bcrypt.compare(candidatePassword, user.password).catch(() => false);
+};
 
 export const User = mongoose.model<IUser>(
 	constants.MODEL_NAMES.USER,

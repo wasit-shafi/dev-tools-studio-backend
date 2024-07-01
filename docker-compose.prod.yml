@@ -1,6 +1,7 @@
 services:
-  dev-tools-studio-backend-container:
+  backend:
     image: 'dev-tools-studio-backend:v1.0.0'
+    container_name: dev-tools-studio-backend-prod-container
     build:
       context: '.'
       dockerfile: Dockerfile.prod

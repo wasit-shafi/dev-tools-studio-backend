@@ -9,9 +9,9 @@
 		"dev": "ts-node-dev src/index.ts",
 		"start": "node dist/index.js",
 		"up": "docker-compose up --build -V --watch",
-		"up:prod": "docker-compose -f docker-compose.prod.yml up",
-		"down": "docker-compose down",
-		"down:prod": "docker-compose -f docker-compose.prod.yml down",
+		"up:prod": "docker-compose -f docker-compose.prod.yml up --build -V",
+		"down": "docker-compose down --remove-orphans -v",
+		"down:prod": "docker-compose -f docker-compose.prod.yml down --remove-orphans -v",
 		"format-codebase": "npx prettier --write ."
 	},
 	"author": "",

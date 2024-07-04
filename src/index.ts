@@ -1,5 +1,5 @@
 import { app } from './app';
-import { _env } from './config';
+import { _env } from '@config';
 import { connectDatabase } from './api/shared/database';
 
 connectDatabase()

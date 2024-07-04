@@ -5,9 +5,9 @@
 	"scripts": {
 		"build": "npx tsc",
 		"build:d4r": "docker build -t dev-tools-studio-backend:v1.0.0 .",
-		"tsnd": "ts-node-dev --env-file=src/config/environments/dev.env src/index.ts",
-		"dev": "ts-node-dev src/index.ts",
-		"start": "node dist/index.js",
+		"tsnd": "ts-node-dev -r tsconfig-paths/register --env-file=src/config/environments/dev.env src/index.ts",
+		"dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
+		"start": "node -r tsconfig-paths/register dist/index.js",
 		"up": "docker-compose up --build -V --watch",
 		"up:prod": "docker-compose -f docker-compose.prod.yml up --build -V",
 		"down": "docker-compose down --remove-orphans -v",
@@ -36,6 +36,7 @@
 		"eslint": "^9.4.0",
 		"prettier": "^3.3.2",
 		"ts-node-dev": "^2.0.0",
+		"tsconfig-paths": "^4.2.0",
 		"typescript": "^5.4.5"
 	}
 }

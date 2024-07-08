@@ -3,14 +3,7 @@ import nodemailer from 'nodemailer';
 import { _env } from '../../../../config';
 
 export const sendMail: RequestHandler = async (request, response) => {
-	const {
-		to = '',
-		subject = '',
-		salutation = '',
-		body = '',
-		closing = '',
-		signature = '',
-	} = request.body;
+	const { to = '', subject = '', salutation = '', body = '', closing = '', signature = '' } = request.body;
 
 	// TODO: Create singleton class TransporterManager
 

@@ -9,14 +9,7 @@ export const getUsers: RequestHandler = async (request, response) => {
 };
 
 export const registerUser: RequestHandler = async (request, response) => {
-	const {
-		firstName = '',
-		lastName = '',
-		email = '',
-		password = '',
-		mobileNumber = '',
-		country = '',
-	} = request.body;
+	const { firstName = '', lastName = '', email = '', password = '', mobileNumber = '', country = '' } = request.body;
 	const userName = firstName + '_' + lastName;
 
 	const newUser = await User.create({

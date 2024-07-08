@@ -88,15 +88,10 @@ userSchema.pre('save', async function (next) {
 	return next();
 });
 
-userSchema.methods.comparePassword = async function (
-	candidatePassword: string
-): Promise<boolean> {
+userSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
 	const user = this as IUser;
 
 	return bcrypt.compare(candidatePassword, user.password).catch(() => false);
 };
 
-export const User = mongoose.model<IUser>(
-	constants.MODEL_NAMES.USER,
-	userSchema
-);
+export const User = mongoose.model<IUser>(constants.MODEL_NAMES.USER, userSchema);

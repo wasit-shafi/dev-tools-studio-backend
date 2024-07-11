@@ -1,7 +1,9 @@
 import path from 'path';
 import cors from 'cors';
+import express from 'express';
 import cookieParser from 'cookie-parser';
-import express, { Request, Response } from 'express';
+
+import type { Request, Response } from 'express';
 
 import { _env } from './config';
 
@@ -28,10 +30,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (request: Request, response: Response) => {
 	response.json({ message: 'Hello World!!' }).send();
 });
+// import routes here for files segregation
 
 import { routerV1 } from './api/v1/router';
 import { routerV2 } from './api/v2/router';
-
 app.use('/api/v1', routerV1);
 app.use('/api/v2', routerV2);
 

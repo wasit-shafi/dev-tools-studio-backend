@@ -1,11 +1,11 @@
-import { RequestHandler } from 'express';
 import nodemailer from 'nodemailer';
+
+import { type RequestHandler } from 'express';
+
 import { _env } from '../../../../config';
 
-export const sendMail: RequestHandler = async (request, response) => {
+const sendMail: RequestHandler = async (request, response) => {
 	const { to = '', subject = '', salutation = '', body = '', closing = '', signature = '' } = request.body;
-
-	// TODO: Create singleton class TransporterManager
 
 	const transporter = nodemailer.createTransport({
 		host: 'smtp.gmail.com',
@@ -26,4 +26,8 @@ export const sendMail: RequestHandler = async (request, response) => {
 	const info = await transporter.sendMail(payLoad);
 
 	response.json({ message: `Message sent: ${info.messageId}` });
+};
+
+export const mailController = {
+	sendMail,
 };

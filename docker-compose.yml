@@ -20,7 +20,7 @@ services:
     ports:
       - 3000:3000
     env_file:
-      - './src/config/environments/dev.env'
+      - './src/config/environment/dev.env'
     environment:
       MONGO_SERVICE_NAME: 'mongodb://mongo:27017'
     depends_on:

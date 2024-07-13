@@ -30,8 +30,44 @@
 		// "moduleResolution": "node10",                     /* Specify how TypeScript looks up a file from a given module specifier. */
 		"baseUrl": "./" /* Specify the base directory to resolve non-relative module names. */,
 		"paths": {
+			"@api": ["src/api", "dist/api"],
+			"@api/*": ["src/api/*", "dist/api/*"],
+			"@shared": ["src/api/shared", "dist/api/shared"],
+			"@shared/*": ["src/api/shared/*", "dist/api/shared/*"],
+			"@database": ["src/api/shared/database/", "dist/api/shared/database"],
+			"@database/*": ["src/api/shared/database/*", "dist/api/shared/database/*"],
+			"@interfaces": ["src/api/shared/interfaces/", "dist/api/shared/interfaces"],
+			"@interfaces/*": ["src/api/shared/interfaces/*", "dist/api/shared/interfaces/*"],
+			"@middlewares": ["src/api/shared/middlewares/", "dist/api/shared/middlewares"],
+			"@middlewares/*": ["src/api/shared/middlewares/*", "dist/api/shared/middlewares/*"],
+			"@models": ["src/api/shared/models/", "dist/api/shared/models"],
+			"@models/*": ["src/api/shared/models/*", "dist/api/shared/models/*"],
+			"@schemas": ["src/api/shared/schemas/", "dist/api/shared/schemas"],
+			"@schemas/*": ["src/api/shared/schemas/*", "dist/api/shared/schemas/*"],
+			"@utils": ["src/api/shared/utils", "dist/api/shared/utils"],
+			"@utils/*": ["src/api/shared/utils/*", "dist/api/shared/utils/*"],
+
+			"@v1": ["src/api/v1", "dist/api/v1"],
+			"@v1/*": ["src/api/v1/*", "dist/api/v1/*"],
+			"@v1Controllers": ["src/api/v1/controllers/", "dist/api/v1/controllers"],
+			"@v1Controllers/*": ["src/api/v1/controllers/*", "dist/api/v1/controllers/*"],
+			"@v1Routes": ["src/api/v1/routes", "dist/api/v1/routes"],
+			"@v1Routes/*": ["src/api/v1/routes/*", "dist/api/v1/routes/*"],
+			"@v1Services": ["src/api/v1/services/", "dist/api/v1/services"],
+			"@v1Services/*": ["src/api/v1/services/*", "dist/api/v1/services/*"],
+
+			"@v2": ["src/api/v2", "dist/api/v2"],
+			"@v2/*": ["src/api/v2/*", "dist/api/v2/*"],
+
 			"@config": ["src/config", "dist/config"],
-			"@config/*": ["src/config/*", "dist/config/*"]
+			"@config/*": ["src/config/*", "dist/config/*"],
+			"@environment": ["src/config/environment", "dist/config/environment"],
+			"@environment/*": ["src/config/environment*", "dist/config/environment*"],
+			"@swagger": ["src/config/swagger", "dist/config/swagger"],
+			"@swagger/*": ["src/config/swagger*", "dist/config/swagger*"],
+
+			"@public": ["src/public/", "dist/public"],
+			"@public/*": ["src/public/*", "dist/public/*"]
 		} /* Specify a set of entries that re-map imports to additional lookup locations. */,
 		// "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
 		// "typeRoots": [],                                  /* Specify multiple folders that act like './node_modules/@types'. */

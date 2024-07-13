@@ -1,7 +1,7 @@
 import { type RequestHandler } from 'express';
 
-import { _env } from '../../../../config';
-import { User } from '../../../shared/models/user/user.model';
+import { _env } from '@environment';
+import { User } from '@models/user/user.model';
 
 const getUsers: RequestHandler = async (request, response) => {
 	const allUsers = await User.find({});

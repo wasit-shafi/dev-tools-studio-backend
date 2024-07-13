@@ -5,7 +5,7 @@
 	"scripts": {
 		"build": "npx tsc",
 		"build:d4r": "docker build -t dev-tools-studio-backend:v1.0.0 .",
-		"tsnd": "ts-node-dev -r tsconfig-paths/register --env-file=src/config/environments/dev.env src/index.ts",
+		"tsnd": "ts-node-dev -r tsconfig-paths/register --env-file=src/config/environment/dev.env src/index.ts",
 		"dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
 		"start": "node -r tsconfig-paths/register dist/index.js",
 		"up": "docker-compose up --build -V --watch",
@@ -22,8 +22,8 @@
 		"cookie-parser": "^1.4.6",
 		"cors": "^2.8.5",
 		"express": "^4.19.2",
-		"mongodb": "^6.7.0",
-		"mongoose": "^8.4.1",
+		"mongodb": "^6.8.0",
+		"mongoose": "^8.5.1",
 		"nodemailer": "^6.9.14",
 		"passport": "^0.7.0",
 		"zod": "^3.23.8"
@@ -33,13 +33,13 @@
 		"@types/cookie-parser": "^1.4.7",
 		"@types/cors": "^2.8.17",
 		"@types/express": "^4.17.21",
-		"@types/node": "^20.14.2",
+		"@types/node": "^20.14.10",
 		"@types/nodemailer": "^6.4.15",
 		"concurrently": "^8.2.2",
-		"eslint": "^9.4.0",
+		"eslint": "^9.7.0",
 		"prettier": "^3.3.2",
 		"ts-node-dev": "^2.0.0",
 		"tsconfig-paths": "^4.2.0",
-		"typescript": "^5.4.5"
+		"typescript": "^5.5.3"
 	}
 }

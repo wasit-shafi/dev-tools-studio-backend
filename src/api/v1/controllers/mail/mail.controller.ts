@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 
 import { type RequestHandler } from 'express';
 
-import { _env } from '../../../../config';
+import { _env } from '@environment';
 
 const sendMail: RequestHandler = async (request, response) => {
 	const { to = '', subject = '', salutation = '', body = '', closing = '', signature = '' } = request.body;

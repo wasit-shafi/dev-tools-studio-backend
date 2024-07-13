@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { mailController } from '../../controllers';
+import { mailController } from '@v1Controllers';
 
 export const mailRouter = Router();
 

@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 
 import mongoose, { Schema } from 'mongoose';
 
-import * as constants from '../../../shared/utils/constants';
+import * as constants from '@utils/constants';
 // import { userZodSchema } from '../../schema/user/user.schema';
 
 interface IUser extends mongoose.Document {

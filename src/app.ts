@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 
 import type { Request, Response } from 'express';
 
-import { _env } from './config';
+import { _env } from './config/environment';
 
 const app = express();
 

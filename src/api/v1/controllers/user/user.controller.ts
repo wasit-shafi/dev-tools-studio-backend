@@ -1,14 +1,15 @@
-import { type RequestHandler } from 'express';
+import type { Request, Response } from 'express';
 
-import { _env } from '@environment';
+import { asyncHandler } from '@utils';
+
 import { User } from '@models/user/user.model';
 
-const getUsers: RequestHandler = async (request, response) => {
+const getUsers = asyncHandler(async (request: Request, response: Response) => {
 	const allUsers = await User.find({});
 	response.json(allUsers);
-};
+});
 
-const registerUser: RequestHandler = async (request, response) => {
+const registerUser = asyncHandler(async (request: Request, response: Response) => {
 	const { firstName = '', lastName = '', email = '', password = '', mobileNumber = '', country = '' } = request.body;
 	const userName = firstName + '_' + lastName;
 
@@ -22,6 +23,6 @@ const registerUser: RequestHandler = async (request, response) => {
 		country,
 	});
 	response.json({ message: 'new user created', user: newUser });
-};
+});
 
 export const userController = { registerUser, getUsers };

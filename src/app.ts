@@ -3,9 +3,11 @@ import cors from 'cors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 
-import type { Request, Response } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 
-import { _env } from './config/environment';
+import { ApiError } from '@utils';
+import { _env } from '@environment';
+import { globalErrorController } from '@controllers';
 
 const app = express();
 
@@ -34,7 +36,14 @@ app.get('/', (request: Request, response: Response) => {
 
 import { routerV1 } from './api/v1/router';
 import { routerV2 } from './api/v2/router';
+
 app.use('/api/v1', routerV1);
 app.use('/api/v2', routerV2);
+
+app.all('*', (request: Request, response: Response, next: NextFunction) => {
+	next(new ApiError(`Can't find ${request.originalUrl} on the server`, 404));
+});
+
+app.use(globalErrorController);
 
 export { app };

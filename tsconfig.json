@@ -32,6 +32,8 @@
 		"paths": {
 			"@api": ["src/api", "dist/api"],
 			"@api/*": ["src/api/*", "dist/api/*"],
+			"@controllers": ["src/api/shared/controllers", "dist/api/shared/controllers"],
+			"@controllers/*": ["src/api/shared/controllers/*", "dist/api/shared/controllers/*"],
 			"@shared": ["src/api/shared", "dist/api/shared"],
 			"@shared/*": ["src/api/shared/*", "dist/api/shared/*"],
 			"@database": ["src/api/shared/database/", "dist/api/shared/database"],

@@ -1,7 +1,13 @@
+import fs from 'fs';
 import path from 'path';
 import cors from 'cors';
+import YAML from 'yaml';
 import express from 'express';
 import cookieParser from 'cookie-parser';
+import swaggerUi from 'swagger-ui-express';
+
+import { routerV1 } from './api/v1/router';
+import { routerV2 } from './api/v2/router';
 
 import type { Request, Response, NextFunction } from 'express';
 
@@ -29,16 +35,22 @@ app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (request: Request, response: Response) => {
-	response.json({ message: 'Hello World!!' }).send();
-});
-// import routes here for files segregation
+const swaggerDocument = YAML.parse(fs.readFileSync(path.join(__dirname, 'config/swagger/openapi.yaml'), 'utf8'));
 
-import { routerV1 } from './api/v1/router';
-import { routerV2 } from './api/v2/router';
+// TODO: review swaggerOptions later for more configuration
+
+const swaggerOptions = {
+	explorer: true,
+};
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions));
 
 app.use('/api/v1', routerV1);
 app.use('/api/v2', routerV2);
+
+app.get('/', (request: Request, response: Response) => {
+	response.json({ message: 'Hello World!!' }).send();
+});
 
 app.all('*', (request: Request, response: Response, next: NextFunction) => {
 	next(new ApiError(`Can't find ${request.originalUrl} on the server`, 404));

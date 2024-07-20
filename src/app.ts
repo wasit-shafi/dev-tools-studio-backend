@@ -3,16 +3,18 @@ import path from 'path';
 import cors from 'cors';
 import YAML from 'yaml';
 import express from 'express';
+import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
-import swaggerUi from 'swagger-ui-express';
 
-import { routerV1 } from './api/v1/router';
-import { routerV2 } from './api/v2/router';
+import swaggerUi from 'swagger-ui-express';
 
 import type { Request, Response, NextFunction } from 'express';
 
-import { ApiError } from '@utils';
+import { routerV1 } from '@apiV1/router';
+import { routerV2 } from '@apiV2/router';
+
 import { _env } from '@environment';
+import { ApiError, logger } from '@utils';
 import { globalErrorController } from '@controllers';
 
 const app = express();
@@ -20,6 +22,7 @@ const app = express();
 const corsOrigin = _env.get('CORS_ORIGIN');
 if (corsOrigin && typeof corsOrigin === 'string') {
 	// TODO(wasit): review cors options later (specially for prod env)
+
 	const corsOptions = {
 		origin: corsOrigin,
 		credentials: true,
@@ -27,6 +30,8 @@ if (corsOrigin && typeof corsOrigin === 'string') {
 	};
 	app.use(cors(corsOptions));
 }
+
+app.use(morgan('dev'));
 
 app.use(express.json());
 // app.use(express.urlencoded({ extended: false }));

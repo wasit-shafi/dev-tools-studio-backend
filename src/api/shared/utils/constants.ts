@@ -14,7 +14,7 @@ const MODEL_NAMES: Record<string, string> = {
 const STATUS_TYPES: Record<string, string> = {
 	FAIL: 'fail', // used for client side errors - 4XX
 	ERROR: 'error', // used for server side errors - 5XX
-	SUCCESS: 'success',
+	OK: 'ok', // used for all other types of responses other than 4xx or 5xx
 } as const;
 
 const HTTP_STATUS_CODES_RANGES: Record<string, number> = {

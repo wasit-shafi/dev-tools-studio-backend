@@ -14,8 +14,9 @@ import { routerV1 } from '@apiV1/router';
 import { routerV2 } from '@apiV2/router';
 
 import { _env } from '@environment';
-import { ApiError, logger } from '@utils';
+import * as constants from '@utils/constants';
 import { globalErrorController } from '@controllers';
+import { ApiError, ApiResponse, logger } from '@utils';
 
 const app = express();
 
@@ -26,7 +27,7 @@ if (corsOrigin && typeof corsOrigin === 'string') {
 	const corsOptions = {
 		origin: corsOrigin,
 		credentials: true,
-		optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+		optionsSuccessStatus: constants.HTTP_STATUS_CODES.OK, // some legacy browsers (IE11, various SmartTVs) choke on 204
 	};
 	app.use(cors(corsOptions));
 }
@@ -54,11 +55,11 @@ app.use('/api/v1', routerV1);
 app.use('/api/v2', routerV2);
 
 app.get('/', (request: Request, response: Response) => {
-	response.json({ message: 'Hello World!!' }).send();
+	response.json(new ApiResponse({ healthCheck: 'Server on working fine' }));
 });
 
 app.all('*', (request: Request, response: Response, next: NextFunction) => {
-	next(new ApiError(`Can't find ${request.originalUrl} on the server`, 404));
+	next(new ApiError(`Can't find ${request.originalUrl} on the server`, constants.HTTP_STATUS_CODES.NOT_FOUND));
 });
 
 app.use(globalErrorController);

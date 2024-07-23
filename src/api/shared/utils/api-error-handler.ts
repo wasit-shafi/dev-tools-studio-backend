@@ -1,18 +1,20 @@
-import { HTTP_STATUS_CODES_RANGES, STATUS_TYPES } from '@utils';
+import * as constants from '@utils/constants';
 
 export class ApiError extends Error {
 	status: string = '';
-	statusCode: number = 0;
+	code: number = 0;
 	isOperational: boolean = false;
+	data: any = {};
 
-	constructor(message: string, statusCode: number) {
+	constructor(message: string, code: number, data: any = {}) {
 		super(message); // calling the constructor of base Error class
-
-		this.statusCode = statusCode;
+		this.data = data;
+		this.code = code;
 		this.status =
-			statusCode >= HTTP_STATUS_CODES_RANGES.MIN_CLIENT_ERROR && statusCode <= HTTP_STATUS_CODES_RANGES.MAX_CLIENT_ERROR
-				? STATUS_TYPES.FAIL
-				: STATUS_TYPES.ERROR;
+			code >= constants.HTTP_STATUS_CODES_RANGES.MIN_CLIENT_ERROR &&
+			code <= constants.HTTP_STATUS_CODES_RANGES.MAX_CLIENT_ERROR
+				? constants.STATUS_TYPES.FAIL
+				: constants.STATUS_TYPES.ERROR;
 
 		// We are using this custom error class only for the operational error types, for more info refer: https://www.youtube.com/watch?v=BZPrK1nQcFI&list=PL1BztTYDF-QPdTvgsjf8HOwO4ZVl_LhxS&index=92
 		this.isOperational = true;

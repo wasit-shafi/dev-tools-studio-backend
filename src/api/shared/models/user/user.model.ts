@@ -103,7 +103,9 @@ userSchema.post('save', function (error: any, document: any, next: any) {
 	// console.log('document :: ', document);
 	// console.log('next :: ', next);
 
-	next(error.code === 11000 ? next(new ApiError(error.errmsg, constants.HTTP_STATUS_CODES.CONFLICT)) : error);
+	next(
+		error.code === 11000 ? next(new ApiError(error.errmsg, constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT)) : error
+	);
 });
 
 userSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {

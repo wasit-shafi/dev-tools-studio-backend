@@ -22,8 +22,8 @@ const signup = asyncHandler(async (request: Request, response: Response) => {
 		country,
 	});
 	response
-		.status(constants.HTTP_STATUS_CODES.CREATED)
-		.json(new ApiResponse({ _id: newUser._id }, 'new user created', constants.HTTP_STATUS_CODES.CREATED));
+		.status(constants.HTTP_STATUS_CODES.INFORMATIONAL.CREATED)
+		.json(new ApiResponse({ _id: newUser._id }, 'new user created', constants.HTTP_STATUS_CODES.INFORMATIONAL.CREATED));
 });
 
 const signin = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
@@ -35,7 +35,7 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 	// making sure user only send only userName or email not both
 
 	if ('userName' in request.body && 'email' in request.body) {
-		next(new ApiError('userName and email for login not allowed', constants.HTTP_STATUS_CODES.CONFLICT));
+		next(new ApiError('userName and email for login not allowed', constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT));
 	}
 
 	const user = await User.findOne({ $or: [{ email: email }, { userName: userName }] });
@@ -43,7 +43,7 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 	if (!user) {
 		// user not found
 		// response.json(new ApiError('Invalid username or password', constants.HTTP_STATUS_CODES.UNAUTHORIZED));
-		next(new ApiError('Invalid username or password', constants.HTTP_STATUS_CODES.UNAUTHORIZED));
+		next(new ApiError('Invalid username or password', constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 
 		return;
 	}

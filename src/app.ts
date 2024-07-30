@@ -27,7 +27,7 @@ if (corsOrigin && typeof corsOrigin === 'string') {
 	const corsOptions = {
 		origin: corsOrigin,
 		credentials: true,
-		optionsSuccessStatus: constants.HTTP_STATUS_CODES.OK, // some legacy browsers (IE11, various SmartTVs) choke on 204
+		optionsSuccessStatus: constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, // some legacy browsers (IE11, various SmartTVs) choke on 204
 	};
 	app.use(cors(corsOptions));
 }
@@ -59,7 +59,9 @@ app.get('/', (request: Request, response: Response) => {
 });
 
 app.all('*', (request: Request, response: Response, next: NextFunction) => {
-	next(new ApiError(`Can't find ${request.originalUrl} on the server`, constants.HTTP_STATUS_CODES.NOT_FOUND));
+	next(
+		new ApiError(`Can't find ${request.originalUrl} on the server`, constants.HTTP_STATUS_CODES.CLIENT_ERROR.NOT_FOUND)
+	);
 });
 
 app.use(globalErrorController);

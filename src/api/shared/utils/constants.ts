@@ -48,36 +48,12 @@ const HTTP_STATUS_CODES_RANGES: Record<string, number> = {
 	MAX_SERVER_ERROR: 599,
 } as const;
 
-const HTTP_STATUS_CODES: Record<string, number> = {
+const HTTP_STATUS_CODES: Record<string, Record<string, number>> = {
 	// Information - 1XX
 
-	// Successful - 2XX
-
-	OK: 200,
-	CREATED: 201,
-	ACCEPTED: 202,
-	NO_CONTENT: 204,
-
-	// Redirection - 3XX
-
-	// Client Error - 4XX
-
-	BAD_REQUEST: 400,
-	UNAUTHORIZED: 401,
-	NOT_FOUND: 404,
-	CONFLICT: 409,
-	TOO_MANY_REQUESTS: 426,
-
-	// Server Error - 5XX
-
-	INTERNAL_SERVER_ERROR: 500,
-	SERVICE_UNAVAILABLE: 503,
-} as const;
-
-const HTTP_STATUS_CODES_ = {
-	// Informational - 1XX
-
-	INFORMATIONAL: {},
+	INFORMATIONAL: {
+		CREATED: 100,
+	},
 	// Successful - 2XX
 
 	SUCCESSFUL: {
@@ -99,6 +75,7 @@ const HTTP_STATUS_CODES_ = {
 		TOO_MANY_REQUESTS: 426,
 	},
 	// Server Error - 5XX
+
 	SERVER_ERROR: {
 		INTERNAL_SERVER_ERROR: 500,
 		SERVICE_UNAVAILABLE: 503,

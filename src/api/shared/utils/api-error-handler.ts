@@ -6,7 +6,7 @@ export class ApiError extends Error {
 	isOperational: boolean = false;
 	data: any = {};
 
-	constructor(message: string, code: number, data: any = {}) {
+	constructor(message: string, code: number, data: any = null) {
 		super(message); // calling the constructor of base Error class
 		this.data = data;
 		this.code = code;

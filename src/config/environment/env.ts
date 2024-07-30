@@ -11,6 +11,7 @@ const __env: Record<string, string | number | undefined> = {
 	TS_NODE_DEV: process.env.TS_NODE_DEV,
 	NODE_MAILER_TRANSPORTER_AUTH_USER: process.env.NODE_MAILER_TRANSPORTER_AUTH_USER,
 	NODE_MAILER_TRANSPORTER_AUTH_PASS: process.env.NODE_MAILER_TRANSPORTER_AUTH_PASS,
+	SALT_ROUNDS: process.env.SALT_ROUNDS,
 };
 
 export const _env = {

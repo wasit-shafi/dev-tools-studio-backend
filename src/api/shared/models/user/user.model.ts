@@ -5,6 +5,9 @@ import bcrypt from 'bcrypt';
 import mongoose, { Schema } from 'mongoose';
 
 import * as constants from '@utils/constants';
+import { ApiError } from '@api/shared/utils';
+
+import { _env } from '@environment';
 // import { userZodSchema } from '../../schema/user/user.schema';
 
 interface IUser extends mongoose.Document {
@@ -19,6 +22,8 @@ interface IUser extends mongoose.Document {
 	devTools: [];
 	createdAt: Date;
 	updatedAt: Date;
+	// TODO: review how to avoid adding comparePassword in interface here...
+	comparePassword: Function;
 }
 
 const userSchema: Schema<IUser> = new Schema(
@@ -82,15 +87,33 @@ userSchema.pre('save', async function (next) {
 		return next();
 	}
 
-	const salt = await bcrypt.genSalt(10);
-	const hash = await bcrypt.hashSync(user.password, salt);
+	const saltRounds: number = Number(_env.get('SALT_ROUNDS'));
+	const salt = bcrypt.genSaltSync(saltRounds);
 
-	user.password = hash;
+	const password: string = user.password;
+	const hashedPassword = bcrypt.hashSync(password, salt);
+
+	user.password = hashedPassword;
+
 	return next();
+});
+
+userSchema.post('save', function (error: any, document: any, next: any) {
+	// console.log('error :: ', error);
+	// console.log('document :: ', document);
+	// console.log('next :: ', next);
+
+	next(error.code === 11000 ? next(new ApiError(error.errmsg, constants.HTTP_STATUS_CODES.CONFLICT)) : error);
 });
 
 userSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
 	const user = this as IUser;
+	// console.log(
+	// 	'inside comparePassword :: candidatePassword :: ',
+	// 	candidatePassword,
+	// 	'__user.password :: ',
+	// 	user.password
+	// );
 
 	return bcrypt.compare(candidatePassword, user.password).catch(() => false);
 };

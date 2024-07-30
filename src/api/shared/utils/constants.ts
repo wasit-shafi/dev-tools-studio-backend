@@ -2,9 +2,23 @@ const DATABASE_NAME: string = 'dev-tools-studio';
 
 const SALT_ROUNDS_FOR_PASSWORD: number = 10;
 
-const ROUTES: Record<string, string> = {
-	LOGIN: '/login',
-	LOGOUT: '/logout',
+// TODO: check correct way for defining object of objects or string
+// { [key: string]: string }
+// const ROUTES: { [key: string]: string | { [key: string]: string } } = {
+// const ROUTES: Record<string, string | Record<string, string>> = {
+const ROUTES = {
+	// LOGIN: '/login',
+	// LOGOUT: '/logout',
+	USER: '/user',
+	MAIL: '/mail',
+	AUTH: '/auth',
+
+	AUTH_ROUTER: {
+		SIGNUP: '/signup',
+		SIGNIN: '/signin',
+		SIGNOUT: '/signout',
+		RESET_PASSWORD: '/reset-password',
+	},
 } as const;
 
 const MODEL_NAMES: Record<string, string> = {
@@ -41,6 +55,8 @@ const HTTP_STATUS_CODES: Record<string, number> = {
 
 	OK: 200,
 	CREATED: 201,
+	ACCEPTED: 202,
+	NO_CONTENT: 204,
 
 	// Redirection - 3XX
 
@@ -49,11 +65,44 @@ const HTTP_STATUS_CODES: Record<string, number> = {
 	BAD_REQUEST: 400,
 	UNAUTHORIZED: 401,
 	NOT_FOUND: 404,
+	CONFLICT: 409,
+	TOO_MANY_REQUESTS: 426,
 
 	// Server Error - 5XX
 
 	INTERNAL_SERVER_ERROR: 500,
 	SERVICE_UNAVAILABLE: 503,
+} as const;
+
+const HTTP_STATUS_CODES_ = {
+	// Informational - 1XX
+
+	INFORMATIONAL: {},
+	// Successful - 2XX
+
+	SUCCESSFUL: {
+		OK: 200,
+		CREATED: 201,
+		ACCEPTED: 202,
+		NO_CONTENT: 204,
+	},
+	// Redirection - 3XX
+
+	REDIRECTION: {},
+	// Client Error - 4XX
+
+	CLIENT_ERROR: {
+		BAD_REQUEST: 400,
+		UNAUTHORIZED: 401,
+		NOT_FOUND: 404,
+		CONFLICT: 409,
+		TOO_MANY_REQUESTS: 426,
+	},
+	// Server Error - 5XX
+	SERVER_ERROR: {
+		INTERNAL_SERVER_ERROR: 500,
+		SERVICE_UNAVAILABLE: 503,
+	},
 } as const;
 
 export {

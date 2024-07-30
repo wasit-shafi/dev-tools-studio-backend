@@ -44,7 +44,7 @@
 			"@middlewares/*": ["src/api/shared/middlewares/*", "dist/api/shared/middlewares/*"],
 			"@models": ["src/api/shared/models/", "dist/api/shared/models"],
 			"@models/*": ["src/api/shared/models/*", "dist/api/shared/models/*"],
-			"@schemas": ["src/api/shared/schemas/", "dist/api/shared/schemas"],
+			"@schemas": ["src/api/shared/schemas", "dist/api/shared/schemas"],
 			"@schemas/*": ["src/api/shared/schemas/*", "dist/api/shared/schemas/*"],
 			"@utils": ["src/api/shared/utils", "dist/api/shared/utils"],
 			"@utils/*": ["src/api/shared/utils/*", "dist/api/shared/utils/*"],

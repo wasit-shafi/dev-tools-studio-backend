@@ -4,7 +4,10 @@ import type { NextFunction, Request, Response } from 'express';
 
 import { ApiError, ApiResponse, asyncHandler } from '@utils';
 
+import { _env } from '@config/environment';
 import { User } from '@models/user/user.model';
+
+import * as utils from '@utils/utils';
 import * as constants from '@utils/constants';
 
 const signup = asyncHandler(async (request: Request, response: Response) => {
@@ -48,16 +51,22 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 		return;
 	}
 
-	// console.log('user', user.password);
-	const match = await user.comparePassword(password);
-	// console.log('match :: ', match);
+	const passwordMatched = await user.comparePassword(password);
 
-	if (match) {
-		response.json({ token: 'signin valid password, you are loggedin' });
+	if (passwordMatched) {
+		const accessToken = user.generateAccessToken();
+		const refreshToken = user.generateRefreshToken();
+
+		const cookieOptions = { secure: true, httpOnly: true };
+		response
+			.cookie('accessToken', accessToken, cookieOptions)
+			.cookie('refreshToken', refreshToken, cookieOptions)
+			.json(new ApiResponse({ id: user._id, accessToken, refreshToken }));
 	} else {
-		response.json({ token: 'signin invalid password...you are not loggedin' });
+		response
+			.status(constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED)
+			.json(new ApiError('Invalid username/password', constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 	}
-	// update user cookies as well
 });
 
 const signout = asyncHandler(async (request: Request, response: Response) => {

@@ -21,6 +21,19 @@ const ROUTES = {
 	},
 } as const;
 
+const TIME: Record<string, Record<string, number>> = {
+	MS: {
+		SECOND: 1000,
+		MINUTE: 1000 * 60,
+		HOUR: 1000 * 60 * 60,
+		DAY: 1000 * 60 * 60 * 24,
+		MONTH: 1000 * 60 * 60 * 24 * 30, // 30 DAYS
+		YEAR: 1000 * 60 * 60 * 24 * 30 * 365, // 365 DAYS - NON LEAP YEARS
+	},
+};
+
+const DEFAULT_COOKIE_EXPIRY = TIME.MS.DAY * 15; // 15 DAYS
+
 const MODEL_NAMES: Record<string, string> = {
 	USER: 'User',
 } as const;
@@ -84,10 +97,12 @@ const HTTP_STATUS_CODES: Record<string, Record<string, number>> = {
 
 export {
 	DATABASE_NAME,
+	DEFAULT_COOKIE_EXPIRY,
 	HTTP_STATUS_CODES,
 	HTTP_STATUS_CODES_RANGES,
 	MODEL_NAMES,
 	ROUTES,
 	SALT_ROUNDS_FOR_PASSWORD,
 	STATUS_TYPES,
+	TIME,
 };

@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken';
+
 import { z } from 'zod';
 
 import bcrypt from 'bcrypt';
@@ -5,7 +7,7 @@ import bcrypt from 'bcrypt';
 import mongoose, { Schema } from 'mongoose';
 
 import * as constants from '@utils/constants';
-import { ApiError } from '@api/shared/utils';
+import { ApiError, asyncHandler } from '@api/shared/utils';
 
 import { _env } from '@environment';
 // import { userZodSchema } from '../../schema/user/user.schema';
@@ -24,6 +26,8 @@ interface IUser extends mongoose.Document {
 	updatedAt: Date;
 	// TODO: review how to avoid adding comparePassword in interface here...
 	comparePassword: Function;
+	generateAccessToken: Function;
+	generateRefreshToken: Function;
 }
 
 const userSchema: Schema<IUser> = new Schema(
@@ -103,21 +107,34 @@ userSchema.post('save', function (error: any, document: any, next: any) {
 	// console.log('document :: ', document);
 	// console.log('next :: ', next);
 
-	next(
-		error.code === 11000 ? next(new ApiError(error.errmsg, constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT)) : error
-	);
+	next(error.code === 11000 ? next(new ApiError(error.errmsg, constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT)) : error);
 });
 
 userSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
 	const user = this as IUser;
-	// console.log(
-	// 	'inside comparePassword :: candidatePassword :: ',
-	// 	candidatePassword,
-	// 	'__user.password :: ',
-	// 	user.password
-	// );
-
 	return bcrypt.compare(candidatePassword, user.password).catch(() => false);
+};
+
+userSchema.methods.generateAccessToken = function () {
+	const user = this as IUser;
+	const accessToken = jwt.sign(
+		{ data: { id: user._id, email: user.email, userName: user.userName } },
+		_env.get('ACCESS_TOKEN_SECRET') as string,
+		{
+			expiresIn: _env.get('ACCESS_TOKEN_EXPIRY') as string,
+		}
+	);
+
+	return accessToken;
+};
+
+userSchema.methods.generateRefreshToken = function () {
+	const user = this as IUser;
+	const refreshToken = jwt.sign({ data: { id: user._id } }, _env.get('REFRESH_TOKEN_SECRET') as string, {
+		expiresIn: _env.get('REFRESH_TOKEN_EXPIRY') as string,
+	});
+
+	return refreshToken;
 };
 
 export const User = mongoose.model<IUser>(constants.MODEL_NAMES.USER, userSchema);

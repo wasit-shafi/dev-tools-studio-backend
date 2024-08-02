@@ -25,15 +25,12 @@ const signup = asyncHandler(async (request: Request, response: Response) => {
 		country,
 	});
 	response
-		.status(constants.HTTP_STATUS_CODES.INFORMATIONAL.CREATED)
-		.json(new ApiResponse({ _id: newUser._id }, 'new user created', constants.HTTP_STATUS_CODES.INFORMATIONAL.CREATED));
+		.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED)
+		.json(new ApiResponse({ _id: newUser._id }, 'new user created', constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED));
 });
 
 const signin = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const { userName, email, password } = request.body;
-	// console.log('request.body :: ', request.body);
-
-	console.log({ userName, email, password });
 
 	// making sure user only send only userName or email not both
 
@@ -45,7 +42,6 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 
 	if (!user) {
 		// user not found
-		// response.json(new ApiError('Invalid username or password', constants.HTTP_STATUS_CODES.UNAUTHORIZED));
 		next(new ApiError('Invalid username or password', constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 
 		return;
@@ -63,9 +59,7 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 			.cookie('refreshToken', refreshToken, cookieOptions)
 			.json(new ApiResponse({ id: user._id, accessToken, refreshToken }));
 	} else {
-		response
-			.status(constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED)
-			.json(new ApiError('Invalid username/password', constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
+		next(new ApiError('Invalid username or password', constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 	}
 });
 

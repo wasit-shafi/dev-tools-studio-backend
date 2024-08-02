@@ -38,11 +38,11 @@ const MODEL_NAMES: Record<string, string> = {
 	USER: 'User',
 } as const;
 
-const STATUS_TYPES: Record<string, string> = {
-	FAIL: 'fail', // used for client side errors - 4XX
-	ERROR: 'error', // used for server side errors - 5XX
-	OK: 'ok', // used for all other types of responses other than 4xx or 5xx
-} as const;
+// const STATUS_TYPES: Record<string, string> = {
+// 	FAIL: 'fail', // used for client side errors - 4XX
+// 	ERROR: 'error', // used for server side errors - 5XX
+// 	OK: 'ok', // used for all other types of responses other than 4xx or 5xx
+// } as const;
 
 const HTTP_STATUS_CODES_RANGES: Record<string, number> = {
 	MIN_INFORMATION: 100,
@@ -103,6 +103,6 @@ export {
 	MODEL_NAMES,
 	ROUTES,
 	SALT_ROUNDS_FOR_PASSWORD,
-	STATUS_TYPES,
+	// STATUS_TYPES,
 	TIME,
 };

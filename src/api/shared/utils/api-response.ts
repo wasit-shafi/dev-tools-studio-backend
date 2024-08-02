@@ -6,7 +6,7 @@ class ApiResponse {
 	private message: string;
 	private success: boolean;
 
-	constructor(data: any, message: string = constants.STATUS_TYPES.OK, code: number = constants.HTTP_STATUS_CODES.INFORMATIONAL.OK) {
+	constructor(data: any, message: string = 'ok', code: number = constants.HTTP_STATUS_CODES.SUCCESSFUL.OK) {
 		this.code = code;
 		this.data = data;
 		this.message = message;

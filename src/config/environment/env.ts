@@ -1,10 +1,7 @@
 // TODO: handle injected env by some other service (not added in  __env object)
 const __env: Record<string, string | number | undefined> = {
 	// MONGO_SERVICE_NAME is only used when running from docker only for dev mode (environment variable injected from docker-compose.yml)
-	DATABASE_URI:
-		process.env.TS_NODE_DEV && process.env.MONGO_SERVICE_NAME
-			? process.env.MONGO_SERVICE_NAME
-			: process.env.DATABASE_URI,
+	DATABASE_URI: process.env.TS_NODE_DEV && process.env.MONGO_SERVICE_NAME ? process.env.MONGO_SERVICE_NAME : process.env.DATABASE_URI,
 	PORT: process.env.PORT,
 	CORS_ORIGIN: process.env.CORS_ORIGIN,
 	NODE_ENV: process.env.NODE_ENV,

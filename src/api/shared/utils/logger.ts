@@ -12,13 +12,7 @@ const consoleLogFormat = combine(
 
 const logger = createLogger({
 	level: 'info',
-	format: combine(
-		colorize({ all: true }),
-		prettyPrint(),
-		align(),
-		timestamp({ format: 'DD-MM-YYYY HH:mm:ss.SSS A' }),
-		consoleLogFormat
-	),
+	format: combine(colorize({ all: true }), prettyPrint(), align(), timestamp({ format: 'DD-MM-YYYY HH:mm:ss.SSS A' }), consoleLogFormat),
 	transports: [new transports.Console()],
 	defaultMeta: { service: 'DTS' },
 });

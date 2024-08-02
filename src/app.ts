@@ -59,9 +59,7 @@ app.get('/', (request: Request, response: Response) => {
 });
 
 app.all('*', (request: Request, response: Response, next: NextFunction) => {
-	next(
-		new ApiError(`Can't find ${request.originalUrl} on the server`, constants.HTTP_STATUS_CODES.CLIENT_ERROR.NOT_FOUND)
-	);
+	next(new ApiError(`Can't find ${request.originalUrl} on the server`, constants.HTTP_STATUS_CODES.CLIENT_ERROR.NOT_FOUND));
 });
 
 app.use(globalErrorController);

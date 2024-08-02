@@ -31,9 +31,7 @@ export const connectDatabase = async () => {
 			console.log('close');
 		});
 
-		const connectionString = `${_env.get('DATABASE_URI')}/${
-			constants.DATABASE_NAME
-		}?retryWrites=true&w=majority&appName=Cluster0`;
+		const connectionString = `${_env.get('DATABASE_URI')}/${constants.DATABASE_NAME}?retryWrites=true&w=majority&appName=Cluster0`;
 
 		// console.log('connectionString', connectionString);
 

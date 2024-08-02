@@ -1,4 +1,1 @@
-
-export class NodeMailerManager {
-  
-}
+export class NodeMailerManager {}

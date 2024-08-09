@@ -5,8 +5,10 @@ import YAML from 'yaml';
 import express from 'express';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 
 import swaggerUi from 'swagger-ui-express';
+import { rateLimit } from 'express-rate-limit';
 
 import type { Request, Response, NextFunction } from 'express';
 
@@ -20,22 +22,45 @@ import { ApiError, ApiResponse, logger } from '@utils';
 
 const app = express();
 
-const corsOrigin = _env.get('CORS_ORIGIN');
-if (corsOrigin && typeof corsOrigin === 'string') {
-	// TODO(wasit): review cors options later (specially for prod env)
+app.use(helmet());
 
-	const corsOptions = {
-		origin: corsOrigin,
+app.use(
+	cors({
 		credentials: true,
+		origin: _env.get('CORS_ORIGIN') as string,
 		optionsSuccessStatus: constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, // some legacy browsers (IE11, various SmartTVs) choke on 204
-	};
-	app.use(cors(corsOptions));
-}
+	})
+);
+
+const defaultApiRateLimiter = rateLimit({
+	windowMs: constants.TIME.MS.MINUTE * Number(_env.get('API_RATE_LIMITER_WINDOW_IN_MINUTE')),
+	limit: Number(_env.get('API_RATE_LIMITER_THRESHOLD_LIMIT')),
+	standardHeaders: 'draft-7',
+	// Disable the `X-RateLimit-*` headers.
+	legacyHeaders: false,
+	skip: (request: Request, response: Response) => {
+		// NOTE(wasit): used for testing purposes only in development env.
+		// return false;
+		return String(_env.get('API_RATE_LIMITER_IP_WHITELIST')).split(',').includes(String(request.ip));
+	},
+	handler: (request: Request, response: Response, next: NextFunction, options) => {
+		// console.log('options :: ', options);
+		next(
+			new ApiError(
+				`Too many requests, please try again later. (You exceeded ${_env.get('API_RATE_LIMITER_THRESHOLD_LIMIT')} Api requests per ${_env.get('API_RATE_LIMITER_WINDOW_IN_MINUTE')} minutes)`,
+				constants.HTTP_STATUS_CODES.CLIENT_ERROR.TOO_MANY_REQUESTS,
+				{ clientIp: request.ip }
+			)
+		);
+	},
+});
+
+app.use(defaultApiRateLimiter);
 
 app.use(morgan('dev'));
 
-app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
+app.use(express.json()); // for parsing application/json
+app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 app.use(cookieParser());
 
@@ -58,7 +83,7 @@ app.use('/api/v1', routerV1);
 app.use('/api/v2', routerV2);
 
 app.get('/', (request: Request, response: Response) => {
-	response.json(new ApiResponse({ healthCheck: 'Server on working fine' }));
+	response.json(new ApiResponse({ healthCheck: 'Server on working fine', yourIp: request.ip, requestProtocol: request.protocol }));
 });
 
 app.all('*', (request: Request, response: Response, next: NextFunction) => {

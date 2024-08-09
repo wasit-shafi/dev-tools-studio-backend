@@ -85,7 +85,7 @@ const HTTP_STATUS_CODES: Record<string, Record<string, number>> = {
 		UNAUTHORIZED: 401,
 		NOT_FOUND: 404,
 		CONFLICT: 409,
-		TOO_MANY_REQUESTS: 426,
+		TOO_MANY_REQUESTS: 429,
 	},
 	// Server Error - 5XX
 

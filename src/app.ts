@@ -8,7 +8,6 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 
 import swaggerUi from 'swagger-ui-express';
-import { rateLimit } from 'express-rate-limit';
 
 import type { Request, Response, NextFunction } from 'express';
 
@@ -18,7 +17,7 @@ import { routerV2 } from '@apiV2/router';
 import { _env } from '@environment';
 import * as constants from '@utils/constants';
 import { globalErrorController } from '@controllers';
-import { ApiError, ApiResponse, logger } from '@utils';
+import { ApiError, ApiResponse, globalApiRateLimiter, logger } from '@utils';
 
 const app = express();
 
@@ -32,30 +31,7 @@ app.use(
 	})
 );
 
-const defaultApiRateLimiter = rateLimit({
-	windowMs: constants.TIME.MS.MINUTE * Number(_env.get('API_RATE_LIMITER_WINDOW_IN_MINUTE')),
-	limit: Number(_env.get('API_RATE_LIMITER_THRESHOLD_LIMIT')),
-	standardHeaders: 'draft-7',
-	// Disable the `X-RateLimit-*` headers.
-	legacyHeaders: false,
-	skip: (request: Request, response: Response) => {
-		// NOTE(wasit): used for testing purposes only in development env.
-		// return false;
-		return String(_env.get('API_RATE_LIMITER_IP_WHITELIST')).split(',').includes(String(request.ip));
-	},
-	handler: (request: Request, response: Response, next: NextFunction, options) => {
-		// console.log('options :: ', options);
-		next(
-			new ApiError(
-				`Too many requests, please try again later. (You exceeded ${_env.get('API_RATE_LIMITER_THRESHOLD_LIMIT')} Api requests per ${_env.get('API_RATE_LIMITER_WINDOW_IN_MINUTE')} minutes)`,
-				constants.HTTP_STATUS_CODES.CLIENT_ERROR.TOO_MANY_REQUESTS,
-				{ clientIp: request.ip }
-			)
-		);
-	},
-});
-
-app.use(defaultApiRateLimiter);
+app.use(globalApiRateLimiter);
 
 app.use(morgan('dev'));
 

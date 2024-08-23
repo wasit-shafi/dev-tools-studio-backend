@@ -4,12 +4,14 @@ import { z } from 'zod';
 
 import bcrypt from 'bcrypt';
 
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
 
 import * as constants from '@utils/constants';
 import { ApiError, asyncHandler } from '@api/shared/utils';
 
 import { _env } from '@environment';
+import { devToolSchema } from '../dev-tool/dev-tool.model';
+
 // import { userZodSchema } from '../../schema/user/user.schema';
 
 interface IUser extends mongoose.Document {
@@ -21,7 +23,9 @@ interface IUser extends mongoose.Document {
 	password: string;
 	mobileNumber: string;
 	country: string;
-	devTools: [];
+	devTools: any;
+	roles: number[];
+	refreshTokens: string[];
 	createdAt: Date;
 	updatedAt: Date;
 	// TODO: review how to avoid adding comparePassword in interface here...
@@ -75,9 +79,13 @@ const userSchema: Schema<IUser> = new Schema(
 			type: String,
 			required: true,
 		},
-
-		devTools: {
-			type: [],
+		refreshTokens: {
+			type: [String],
+			required: true,
+			default: [],
+		},
+		roles: {
+			type: [Number],
 			required: true,
 		},
 	},

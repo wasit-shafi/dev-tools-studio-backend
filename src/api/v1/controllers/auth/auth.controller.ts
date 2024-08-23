@@ -10,11 +10,18 @@ import { User } from '@models/user/user.model';
 import * as utils from '@utils/utils';
 import * as constants from '@utils/constants';
 
-const signup = asyncHandler(async (request: Request, response: Response) => {
-	const { firstName = '', lastName = '', email = '', password = '', mobileNumber = '', country = '' } = request.body;
+const signup = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+	const { firstName, lastName, email, password, mobileNumber, country, roles } = request.body;
+
+	// TODO: append uuid to username
 	const userName = firstName + '_' + lastName;
 
-	// console.log('inside signup ... signup :: ', request.body);
+	const user = await User.findOne({ email });
+
+	if (user) {
+		next(new ApiError('Email Already Exists', constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT));
+		return;
+	}
 	const newUser = await User.create({
 		firstName,
 		lastName,
@@ -23,10 +30,29 @@ const signup = asyncHandler(async (request: Request, response: Response) => {
 		password,
 		mobileNumber,
 		country,
+		roles,
 	});
+	const accessToken = newUser.generateAccessToken();
+	const refreshToken = newUser.generateRefreshToken();
+	const cookieOptions = {
+		secure: true,
+		httpOnly: true,
+		// expires: new Date(Date.now() + 900000000),
+		// maxAge: 900000000000,
+		// domain: 'localhost',
+	};
+
 	response
 		.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED)
-		.json(new ApiResponse({ _id: newUser._id }, 'new user created', constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED));
+		.cookie('accessToken', accessToken, cookieOptions)
+		.cookie('refreshToken', refreshToken, cookieOptions)
+		.json(
+			new ApiResponse(
+				{ _id: newUser._id, accessToken, refreshToken },
+				'Congratulations!! Account Created Successfully',
+				constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED
+			)
+		);
 });
 
 const signin = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
@@ -53,7 +79,14 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 		const accessToken = user.generateAccessToken();
 		const refreshToken = user.generateRefreshToken();
 
-		const cookieOptions = { secure: true, httpOnly: true };
+		const cookieOptions = {
+			secure: true,
+			httpOnly: true,
+			// expires: new Date(Date.now() + 900000000),
+			// maxAge: 900000000000,
+			// domain: 'localhost',
+		};
+
 		response
 			.cookie('accessToken', accessToken, cookieOptions)
 			.cookie('refreshToken', refreshToken, cookieOptions)

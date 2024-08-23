@@ -36,6 +36,9 @@ const DEFAULT_COOKIE_EXPIRY = TIME.MS.DAY * 15; // 15 DAYS
 
 const MODEL_NAMES: Record<string, string> = {
 	USER: 'User',
+	ROLE: 'Role',
+	DEV_TOOL: 'DevTool',
+	EMAIL_TEMPLATE: 'EmailTemplate',
 } as const;
 
 // const STATUS_TYPES: Record<string, string> = {

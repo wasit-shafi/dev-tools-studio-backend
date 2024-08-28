@@ -25,6 +25,11 @@ const __env: Record<string, string | number | undefined> = {
 	REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
 	ACCESS_TOKEN_EXPIRY: process.env.ACCESS_TOKEN_EXPIRY,
 	REFRESH_TOKEN_EXPIRY: process.env.REFRESH_TOKEN_EXPIRY,
+
+	AWS_S3_BUCKET_NAME: process.env.AWS_S3_BUCKET_NAME,
+	AWS_S3_BUCKET_REGION: process.env.AWS_S3_BUCKET_REGION,
+	AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+	AWS_ACCESS_KEY_SECRET: process.env.AWS_ACCESS_KEY_SECRET,
 };
 
 export const _env = {

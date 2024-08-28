@@ -6,6 +6,7 @@ import express from 'express';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
 import swaggerUi from 'swagger-ui-express';
 
@@ -17,7 +18,7 @@ import { routerV2 } from '@apiV2/router';
 import { _env } from '@environment';
 import * as constants from '@utils/constants';
 import { globalErrorController } from '@controllers';
-import { ApiError, ApiResponse, globalApiRateLimiter, logger } from '@utils';
+import { ApiError, ApiResponse, asyncHandler, globalApiRateLimiter, logger } from '@utils';
 
 const app = express();
 
@@ -54,6 +55,29 @@ const swaggerOptions = {
 };
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions));
+// TODO: temporarily used here just for confirmation
+
+const s3Client = new S3Client({
+	region: _env.get('AWS_S3_BUCKET_REGION') as string,
+	credentials: {
+		accessKeyId: _env.get('AWS_ACCESS_KEY_ID') as string,
+		secretAccessKey: _env.get('AWS_ACCESS_KEY_SECRET') as string,
+	},
+});
+
+app.post(
+	'/upload',
+	asyncHandler(async (request: Request, response: Response) => {
+		const s3ClientResponse = await s3Client.send(
+			new PutObjectCommand({
+				Bucket: _env.get('AWS_S3_BUCKET_NAME') as string,
+				Key: 'sample.txt',
+				Body: 'sample text content',
+			})
+		);
+		response.send({ ...s3ClientResponse });
+	})
+);
 
 app.use('/api/v1', routerV1);
 app.use('/api/v2', routerV2);

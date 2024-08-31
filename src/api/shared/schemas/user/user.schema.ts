@@ -44,7 +44,7 @@ export const userZodSchema = z.object({
 		required_error: 'Country is required',
 		invalid_type_error: 'Country must be a string',
 	}),
-	refreshTokens: z.string().array().optional(),
+	refreshTokens: z.string().array().nonempty().optional(),
 	roles: z
 		.number({
 			required_error: 'Role is required',

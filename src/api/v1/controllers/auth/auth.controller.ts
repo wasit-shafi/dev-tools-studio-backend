@@ -104,4 +104,11 @@ const resetPassword = asyncHandler(async (request: Request, response: Response) 
 	response.json({ message: 'reset-password' });
 });
 
+const refreshToken = asyncHandler(async (request: Request, response: Response) => {
+	response.json({
+		accessToken: 'new_access_token',
+		refreshToken: 'new_refresh_token',
+	});
+});
+
 export const authController = { signup, signin, signout, resetPassword };

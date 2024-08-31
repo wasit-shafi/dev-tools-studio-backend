@@ -38,7 +38,7 @@ const userSchema: Schema<IUser> = new Schema(
 	{
 		firstName: {
 			type: String,
-			required: true,
+			required: [true, 'firstName is required'],
 		},
 
 		lastName: {

@@ -95,6 +95,7 @@ const HTTP_STATUS_CODES: Record<string, Record<string, number>> = {
 	SERVER_ERROR: {
 		INTERNAL_SERVER_ERROR: 500,
 		SERVICE_UNAVAILABLE: 503,
+		SMTP_ERROR: 554,
 	},
 } as const;
 

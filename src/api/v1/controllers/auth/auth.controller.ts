@@ -11,8 +11,7 @@ import * as utils from '@utils/utils';
 import * as constants from '@utils/constants';
 
 const signup = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
-	const { firstName, lastName, email, password, mobileNumber, country, roles } = request.body;
-
+	const { firstName, lastName, email, password, mobileNumber, country } = request.body;
 	// TODO: append uuid to username
 	const userName = firstName + '_' + lastName;
 
@@ -30,7 +29,7 @@ const signup = asyncHandler(async (request: Request, response: Response, next: N
 		password,
 		mobileNumber,
 		country,
-		roles,
+		roles: [constants.USER_ROLES.APP_USER],
 	});
 	const accessToken = newUser.generateAccessToken();
 	const refreshToken = newUser.generateRefreshToken();

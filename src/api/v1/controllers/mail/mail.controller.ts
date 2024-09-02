@@ -41,7 +41,7 @@ const sendMail: RequestHandler = async (request: Request, response: Response, ne
 		const info = await transporter.sendMail(payLoad);
 		// console.log('info :: ', info);
 
-		response.json({ message: `Email sent successfully ${info}` });
+		response.json({ message: `Email sent successfully` });
 	} catch (error) {
 		next(new ApiError(error as string, constants.HTTP_STATUS_CODES.SERVER_ERROR.SERVER_ERROR));
 	}

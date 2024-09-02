@@ -45,13 +45,14 @@ export const userZodSchema = z.object({
 		invalid_type_error: 'Country must be a string',
 	}),
 	refreshTokens: z.string().array().nonempty().optional(),
-	roles: z
-		.number({
-			required_error: 'Role is required',
-			invalid_type_error: 'Role must be a number',
-		})
-		.array()
-		.nonempty({ message: 'User should have at-least one role' }),
+	// don't take input from user
+	// roles: z
+	// 	.number({
+	// 		required_error: 'Role is required',
+	// 		invalid_type_error: 'Role must be a number',
+	// 	})
+	// 	.array()
+	// 	.nonempty({ message: 'User should have at-least one role' }),
 
 	createdAt: z.string().datetime().optional(),
 	updatedAt: z.string().datetime().optional(),

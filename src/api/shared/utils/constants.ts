@@ -98,6 +98,13 @@ const HTTP_STATUS_CODES: Record<string, Record<string, number>> = {
 		SMTP_ERROR: 554,
 	},
 } as const;
+// TODO: Review where to use the db constants or should we prefer enums
+
+const USER_ROLES: Record<string, number> = {
+	SUPER_ADMIN: 1,
+	ADMIN: 2,
+	APP_USER: 3,
+} as const;
 
 export {
 	DATABASE_NAME,
@@ -109,4 +116,5 @@ export {
 	SALT_ROUNDS_FOR_PASSWORD,
 	// STATUS_TYPES,
 	TIME,
+	USER_ROLES,
 };

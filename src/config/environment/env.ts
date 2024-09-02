@@ -30,6 +30,9 @@ const __env: Record<string, string | number | undefined> = {
 	AWS_S3_BUCKET_REGION: process.env.AWS_S3_BUCKET_REGION,
 	AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
 	AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+
+	REDIS_HOST: process.env.REDIS_HOST,
+	REDIS_PORT: process.env.REDIS_PORT,
 };
 
 export const _env = {

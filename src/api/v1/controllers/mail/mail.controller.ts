@@ -5,11 +5,20 @@ import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import { _env } from '@environment';
 import { ApiError } from '@api/shared/utils';
 import * as constants from '@utils/constants';
+import { messagingQueues } from 'src/bullmq';
 
 const sendMail: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {
 	try {
 		const { to = '', subject = '', salutation = '', body = '', closing = '', signature = '', dateTimeLocal = '' } = request.body;
 		const date = new Date(dateTimeLocal);
+
+		const task = messagingQueues.emailQueue.add(
+			constants.MESSAGING_QUEUES.EMAIL,
+			{ message: 'Hello World', dateTimeLocal, params: request.body },
+			{ delay: 5000 }
+		);
+
+		// console.log('task :: ', task);
 
 		// console.log({ dateTimeLocal, date });
 

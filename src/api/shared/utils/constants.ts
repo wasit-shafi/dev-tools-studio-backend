@@ -1,3 +1,4 @@
+import { messagingQueues } from './../../../bullmq';
 const DATABASE_NAME: string = 'dev-tools-studio';
 
 const SALT_ROUNDS_FOR_PASSWORD: number = 10;
@@ -106,6 +107,10 @@ const USER_ROLES: Record<string, number> = {
 	APP_USER: 3,
 } as const;
 
+const MESSAGING_QUEUES: Record<string, string> = {
+	EMAIL: 'EMAIL',
+} as const;
+
 export {
 	DATABASE_NAME,
 	DEFAULT_COOKIE_EXPIRY,
@@ -117,4 +122,5 @@ export {
 	// STATUS_TYPES,
 	TIME,
 	USER_ROLES,
+	MESSAGING_QUEUES,
 };

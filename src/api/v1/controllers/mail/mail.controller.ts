@@ -1,5 +1,3 @@
-import nodemailer from 'nodemailer';
-
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
 
 import { _env } from '@environment';
@@ -9,48 +7,44 @@ import { messagingQueues } from 'src/bullmq';
 
 const sendMail: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {
 	try {
-		const { to = '', subject = '', salutation = '', body = '', closing = '', signature = '', dateTimeLocal = '' } = request.body;
-		const date = new Date(dateTimeLocal);
+		const { to, subject, salutation, body, closing, signature, dateTimeLocal, confirmationMail } = request.body;
 
-		const task = messagingQueues.emailQueue.add(
-			constants.MESSAGING_QUEUES.EMAIL,
-			{ message: 'Hello World', dateTimeLocal, params: request.body },
-			{ delay: 5000 }
-		);
+		const targetDateAndTime = new Date(dateTimeLocal);
+		const delay = Number(targetDateAndTime) - Number(new Date());
 
-		// console.log('task :: ', task);
+		if (delay < 0) {
+			return next(
+				new ApiError('Invalid date/time (cannot send mail to past date)', constants.HTTP_STATUS_CODES.CLIENT_ERROR.NOT_ACCEPTABLE)
+			);
+		}
 
-		// console.log({ dateTimeLocal, date });
-
-		const transporter = nodemailer.createTransport({
-			host: 'smtp.gmail.com',
-			port: 465,
-			// Use `true` for port 465, `false` for all other ports
-			secure: true,
-			auth: {
-				user: _env.get('NODE_MAILER_TRANSPORTER_AUTH_USER') as string,
-				pass: _env.get('NODE_MAILER_TRANSPORTER_AUTH_PASS') as string,
-			},
-		});
 		const html = `<p>\
 										<b>SALUTATION:</b> ${salutation}<br/>\
 										<b>BODY:</b><pre>${body}</pre><br/>\
 										<b>CLOSING:</b> ${closing}<br/>\
 										<b>SIGNATURE:</b> ${signature}<br/>\
-										<b>DATE:</b>	${date.toString()}<br/>\
+										<b>DATE:</b>	${targetDateAndTime.toString()}<br/>\
 										<b>DATE TIME LOCAL:</b>	${dateTimeLocal}\
 									</p>`;
 
-		const payLoad = {
+		const emailPayLoad = {
 			from: `Wasit Shafi 👻<${_env.get('NODE_MAILER_TRANSPORTER_AUTH_USER')}>`, // sender address
 			to,
 			subject,
 			html,
 		};
-		const info = await transporter.sendMail(payLoad);
-		// console.log('info :: ', info);
 
-		response.json({ message: `Email sent successfully` });
+		const task = messagingQueues.emailQueue.add(
+			constants.MESSAGING_QUEUES.EMAIL,
+			{
+				emailPayLoad,
+				confirmationMail,
+			},
+			{ delay }
+		);
+		// console.log('task :: ', task);
+
+		response.json({ message: `Your Email has been scheduled successfully` });
 	} catch (error) {
 		next(new ApiError(error as string, constants.HTTP_STATUS_CODES.SERVER_ERROR.SERVER_ERROR));
 	}

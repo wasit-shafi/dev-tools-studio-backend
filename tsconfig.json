@@ -32,6 +32,8 @@
 		"paths": {
 			"@api": ["src/api", "dist/api"],
 			"@api/*": ["src/api/*", "dist/api/*"],
+			"@messageQueue": ["src/message-queue/", "dist/message-queue"],
+			"@messageQueue/*": ["src/message-queue/*", "dist/message-queue/*"],
 			"@controllers": ["src/api/shared/controllers", "dist/api/shared/controllers"],
 			"@controllers/*": ["src/api/shared/controllers/*", "dist/api/shared/controllers/*"],
 			"@shared": ["src/api/shared", "dist/api/shared"],

@@ -1,4 +1,3 @@
-import { messagingQueues } from './../../../bullmq';
 const DATABASE_NAME: string = 'dev-tools-studio';
 
 const SALT_ROUNDS_FOR_PASSWORD: number = 10;
@@ -112,7 +111,13 @@ const MESSAGING_QUEUES: Record<string, string> = {
 	EMAIL: 'EMAIL',
 } as const;
 
+const BACKOFF_STRATEGY_TYPE = {
+	FIXED: 'fixed',
+	EXPONENTIAL: 'exponential', // retry after '2 ^ (attempts - 1) * delay' milliseconds
+};
+
 export {
+	BACKOFF_STRATEGY_TYPE,
 	DATABASE_NAME,
 	DEFAULT_COOKIE_EXPIRY,
 	HTTP_STATUS_CODES,

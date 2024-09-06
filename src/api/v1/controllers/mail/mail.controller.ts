@@ -3,7 +3,7 @@ import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import { _env } from '@environment';
 import { ApiError } from '@api/shared/utils';
 import * as constants from '@utils/constants';
-import { messagingQueues } from 'src/bullmq';
+import { emailQueue } from '@messageQueue';
 
 const sendMail: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {
 	try {
@@ -34,7 +34,7 @@ const sendMail: RequestHandler = async (request: Request, response: Response, ne
 			html,
 		};
 
-		const task = messagingQueues.emailQueue.add(
+		const task = await emailQueue.add(
 			constants.MESSAGING_QUEUES.EMAIL,
 			{
 				emailPayLoad,

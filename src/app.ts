@@ -20,6 +20,8 @@ import * as constants from '@utils/constants';
 import { globalErrorController } from '@controllers';
 import { ApiError, ApiResponse, asyncHandler, globalApiRateLimiter, logger } from '@utils';
 
+import { serverAdapter } from './bull-board/create-board';
+
 const app = express();
 
 app.use(helmet());
@@ -78,6 +80,9 @@ app.post(
 		response.send({ ...s3ClientResponse });
 	})
 );
+// bull board dashboard ui for bullmq queues
+
+app.use('/ui', serverAdapter.getRouter());
 
 app.use('/api/v1', routerV1);
 app.use('/api/v2', routerV2);

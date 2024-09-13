@@ -4,7 +4,7 @@ import { connectDatabase } from './api/shared/database';
 
 connectDatabase()
 	.then(() => {
-		const port = _env.get('PORT');
+		const port = _env.get('EXPRESS_PORT');
 		app.listen(port, () => {
 			console.log(`Server is running on port ${port}`);
 		});

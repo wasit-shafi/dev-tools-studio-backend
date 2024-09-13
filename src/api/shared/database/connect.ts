@@ -5,7 +5,7 @@ import * as constants from '@utils/constants';
 
 export const connectDatabase = async () => {
 	console.log({
-		port: _env.get('PORT'),
+		port: _env.get('EXPRESS_PORT'),
 		cors: _env.get('CORS_ORIGIN'),
 		nodeEnv: _env.get('NODE_ENV'),
 		dbUri: _env.get('DATABASE_URI'),

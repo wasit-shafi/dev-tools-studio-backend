@@ -1,7 +1,7 @@
 services:
-  backend:
+  express_service:
     image: 'dev-tools-studio-backend:v1.0.0'
-    container_name: dev-tools-studio-backend-prod-container
+    container_name: dts_prod_express_container
     build:
       context: '.'
       dockerfile: Dockerfile.prod

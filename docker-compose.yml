@@ -1,8 +1,8 @@
 services:
   # service 1: mongo
 
-  mongo:
-    container_name: mongodb-container
+  mongo_service:
+    container_name: dts_dev_mongo_container
     image: mongo:latest
     ports:
       # Note: 27018 is exposed to client (as most of the time i have multiple connection opened at time,)
@@ -12,22 +12,22 @@ services:
   # service 2: redis for bullmq
 
   redis_service:
-    container_name: redis-container
+    container_name: dts_dev_redis_container
     image: redis:latest
     ports:
       - 6379:6397
   # service 3: GUI for redis
 
-  redis_insight:
+  redis_insight_service:
     image: redis/redisinsight:latest
-    container_name: redis-insight
+    container_name: dts_dev_redis_insight_container
     ports:
       - 5540:5540
-  # service 4: express backend
 
-  backend:
+  # service 4: express backend
+  express_service:
     image: 'dev-tools-studio-backend:v1.0.0'
-    container_name: dev-tools-studio-backend-dev-container
+    container_name: dts_dev_express_container
     build:
       context: '.'
       dockerfile: Dockerfile
@@ -36,11 +36,11 @@ services:
     env_file:
       - './src/config/environment/dev.env'
     environment:
-      MONGO_SERVICE_NAME: 'mongodb://mongo:27017'
+      MONGO_SERVICE_NAME: 'mongodb://mongo_service:27017'
       REDIS_SERVICE_NAME: 'redis_service'
     depends_on:
       - redis_service
-      - mongo
+      - mongo_service
     develop:
       watch:
         - action: sync+restart

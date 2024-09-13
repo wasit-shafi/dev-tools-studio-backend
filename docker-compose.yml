@@ -9,7 +9,21 @@ services:
       - 27018:27017
     volumes:
       - mongoData:/data/db
-  # service 2: backend
+  # service 2: redis for bullmq
+
+  redis_service:
+    container_name: redis-container
+    image: redis:latest
+    ports:
+      - 6379:6397
+  # service 3: GUI for redis
+
+  redis_insight:
+    image: redis/redisinsight:latest
+    container_name: redis-insight
+    ports:
+      - 5540:5540
+  # service 4: express backend
 
   backend:
     image: 'dev-tools-studio-backend:v1.0.0'
@@ -23,7 +37,9 @@ services:
       - './src/config/environment/dev.env'
     environment:
       MONGO_SERVICE_NAME: 'mongodb://mongo:27017'
+      REDIS_SERVICE_NAME: 'redis_service'
     depends_on:
+      - redis_service
       - mongo
     develop:
       watch:

@@ -47,7 +47,7 @@ const signup = asyncHandler(async (request: Request, response: Response, next: N
 		.cookie('refreshToken', refreshToken, cookieOptions)
 		.json(
 			new ApiResponse(
-				{ _id: newUser._id, accessToken, refreshToken },
+				{ _id: newUser._id, accessToken, refreshToken, roles: newUser.roles },
 				'Congratulations!! Account Created Successfully',
 				constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED
 			)
@@ -89,7 +89,7 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 		response
 			.cookie('accessToken', accessToken, cookieOptions)
 			.cookie('refreshToken', refreshToken, cookieOptions)
-			.json(new ApiResponse({ id: user._id, accessToken, refreshToken }));
+			.json(new ApiResponse({ id: user._id, accessToken, refreshToken, roles: user.roles }));
 	} else {
 		next(new ApiError('Invalid username or password', constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 	}

@@ -31,8 +31,9 @@ const __env: Record<string, string | number | undefined> = {
 	AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
 	AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
 
-	REDIS_HOST: process.env.REDIS_HOST,
+	REDIS_HOST: process.env.TS_NODE_DEV && process.env.REDIS_SERVICE_NAME ? process.env.REDIS_SERVICE_NAME : process.env.REDIS_HOST,
 	REDIS_PORT: process.env.REDIS_PORT,
+	REDIS_USER_PASSWORD: process.env.REDIS_USER_PASSWORD,
 };
 
 export const _env = {

@@ -16,6 +16,7 @@ createBullBoard({
 			boardTitle: 'Dev Tools Studio',
 			boardLogo: {
 				path: 'https://res.cloudinary.com/dtlx6i2m7/image/upload/v1725672016/dev-tools-studio/t35fx73zvnjoe29bz5mc.jpg',
+				// path: '../public/img_4.jpeg',
 				width: '50px',
 				height: '50px',
 			},

@@ -126,7 +126,7 @@ userSchema.methods.comparePassword = async function (candidatePassword: string):
 userSchema.methods.generateAccessToken = function () {
 	const user = this as IUser;
 	const accessToken = jwt.sign(
-		{ data: { id: user._id, email: user.email, userName: user.userName } },
+		{ data: { id: user._id, email: user.email, userName: user.userName, roles: user.roles } },
 		_env.get('ACCESS_TOKEN_SECRET') as string,
 		{
 			expiresIn: _env.get('ACCESS_TOKEN_EXPIRY') as string,

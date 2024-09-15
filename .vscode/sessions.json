@@ -15,6 +15,13 @@
           "autoExecuteCommands": false
         },
         {
+          "name": "Redis",
+          "commands": [
+            "docker run -p 6379:6379 -d --name=redis redis && clear && docker ps -a"
+          ],
+          "autoExecuteCommands": false
+        },
+        {
           "name": "Terminal",
           "commands": [
             ""

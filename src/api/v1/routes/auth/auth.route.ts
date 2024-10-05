@@ -11,7 +11,7 @@ import * as constants from '@utils/constants';
 
 export const authRouter = Router();
 
-authRouter.post(constants.ROUTES.AUTH_ROUTER.SIGNUP, validate(userZodSchema), authController.signup);
+authRouter.post(constants.ROUTES.AUTH_ROUTER.SIGNUP, validateReCaptchaResponse, validate(userZodSchema), authController.signup);
 
 authRouter.post(constants.ROUTES.AUTH_ROUTER.SIGNIN, validateReCaptchaResponse, authController.signin);
 

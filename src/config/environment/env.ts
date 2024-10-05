@@ -34,6 +34,8 @@ const __env: Record<string, string | number | undefined> = {
 	REDIS_HOST: process.env.TS_NODE_DEV && process.env.REDIS_SERVICE_NAME ? process.env.REDIS_SERVICE_NAME : process.env.REDIS_HOST,
 	REDIS_PORT: process.env.REDIS_PORT,
 	REDIS_USER_PASSWORD: process.env.REDIS_USER_PASSWORD,
+
+	RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY,
 };
 
 export const _env = {

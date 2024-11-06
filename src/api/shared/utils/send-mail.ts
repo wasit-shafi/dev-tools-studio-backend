@@ -21,9 +21,7 @@ const transporter = nodemailer.createTransport({
 	},
 });
 
-const sendMail = async (params: IMailPayload) => {
+export const sendMail = async (params: IMailPayload) => {
 	const info = await transporter.sendMail(params);
 	// console.log('info :: ', info);
 };
-
-export { sendMail };

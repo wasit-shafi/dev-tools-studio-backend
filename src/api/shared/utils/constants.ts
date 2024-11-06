@@ -1,12 +1,14 @@
-const DATABASE_NAME: string = 'dev-tools-studio';
+export const DATABASE_NAME: string = 'dev-tools-studio';
 
-const SALT_ROUNDS_FOR_PASSWORD: number = 10;
+export const SALT_ROUNDS_FOR_PASSWORD: number = 10;
+
+export const OTP_LENGTH: number = 6;
 
 // TODO: check correct way for defining object of objects or string
 // { [key: string]: string }
 // const ROUTES: { [key: string]: string | { [key: string]: string } } = {
 // const ROUTES: Record<string, string | Record<string, string>> = {
-const ROUTES = {
+export const ROUTES = {
 	// LOGIN: '/login',
 	// LOGOUT: '/logout',
 	USER: '/user',
@@ -21,7 +23,7 @@ const ROUTES = {
 	},
 } as const;
 
-const TIME: Record<string, Record<string, number>> = {
+export const TIME: Record<string, Record<string, number>> = {
 	MS: {
 		SECOND: 1000,
 		MINUTE: 1000 * 60,
@@ -32,9 +34,9 @@ const TIME: Record<string, Record<string, number>> = {
 	},
 };
 
-const DEFAULT_COOKIE_EXPIRY = TIME.MS.DAY * 15; // 15 DAYS
+export const DEFAULT_COOKIE_EXPIRY = TIME.MS.DAY * 15; // 15 DAYS
 
-const MODEL_NAMES: Record<string, string> = {
+export const MODEL_NAMES: Record<string, string> = {
 	USER: 'User',
 	ROLE: 'Role',
 	DEV_TOOL: 'DevTool',
@@ -47,7 +49,7 @@ const MODEL_NAMES: Record<string, string> = {
 // 	OK: 'ok', // used for all other types of responses other than 4xx or 5xx
 // } as const;
 
-const HTTP_STATUS_CODES_RANGES: Record<string, number> = {
+export let HTTP_STATUS_CODES_RANGES: Record<string, number> = {
 	MIN_INFORMATION: 100,
 	MAX_INFORMATION: 199,
 
@@ -64,7 +66,7 @@ const HTTP_STATUS_CODES_RANGES: Record<string, number> = {
 	MAX_SERVER_ERROR: 599,
 } as const;
 
-const HTTP_STATUS_CODES: Record<string, Record<string, number>> = {
+export const HTTP_STATUS_CODES: Record<string, Record<string, number>> = {
 	// Information - 1XX
 
 	INFORMATIONAL: {
@@ -102,32 +104,17 @@ const HTTP_STATUS_CODES: Record<string, Record<string, number>> = {
 } as const;
 // TODO: Review where to use the db constants or should we prefer enums
 
-const USER_ROLES: Record<string, number> = {
+export const USER_ROLES: Record<string, number> = {
 	SUPER_ADMIN: 1,
 	ADMIN: 2,
 	APP_USER: 3,
 } as const;
 
-const MESSAGING_QUEUES: Record<string, string> = {
+export const MESSAGING_QUEUES: Record<string, string> = {
 	EMAIL: 'EMAIL',
 } as const;
 
-const BACKOFF_STRATEGY_TYPE = {
+export const BACKOFF_STRATEGY_TYPE = {
 	FIXED: 'fixed',
 	EXPONENTIAL: 'exponential', // retry after '2 ^ (attempts - 1) * delay' milliseconds
-};
-
-export {
-	BACKOFF_STRATEGY_TYPE,
-	DATABASE_NAME,
-	DEFAULT_COOKIE_EXPIRY,
-	HTTP_STATUS_CODES,
-	HTTP_STATUS_CODES_RANGES,
-	MODEL_NAMES,
-	ROUTES,
-	SALT_ROUNDS_FOR_PASSWORD,
-	// STATUS_TYPES,
-	TIME,
-	USER_ROLES,
-	MESSAGING_QUEUES,
 };

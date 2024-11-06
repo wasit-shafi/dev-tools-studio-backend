@@ -22,7 +22,7 @@ import { ApiError, ApiResponse, asyncHandler, globalApiRateLimiter, logger } fro
 
 import { serverAdapter } from './bull-board/create-board';
 
-const app = express();
+export const app = express();
 
 app.use(helmet());
 
@@ -96,5 +96,3 @@ app.all('*', (request: Request, response: Response, next: NextFunction) => {
 });
 
 app.use(globalErrorController);
-
-export { app };

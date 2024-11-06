@@ -1,6 +1,6 @@
 import { _env } from '@environment';
 
-const redisConnectionConfig: any = {
+export const redisConnectionConfig: any = {
 	host: String(_env.get('REDIS_HOST')),
 	port: Number(_env.get('REDIS_PORT')),
 };
@@ -10,5 +10,3 @@ if (_env.get('NODE_ENV') == 'production') {
 }
 
 // console.log('redisConnectionConfig :: ', redisConnectionConfig);
-
-export { redisConnectionConfig };

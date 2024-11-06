@@ -5,7 +5,7 @@ import { ApiError } from '@utils';
 import { _env } from '@environment';
 import * as constants from '@utils/constants';
 
-const globalApiRateLimiter = rateLimit({
+export const globalApiRateLimiter = rateLimit({
 	windowMs: constants.TIME.MS.MINUTE * Number(_env.get('API_RATE_LIMITER_WINDOW_IN_MINUTE')),
 	limit: Number(_env.get('API_RATE_LIMITER_THRESHOLD_LIMIT')),
 	standardHeaders: 'draft-7',
@@ -29,7 +29,7 @@ const globalApiRateLimiter = rateLimit({
 	},
 });
 
-const apiRateLimiterStrict = rateLimit({
+export const apiRateLimiterStrict = rateLimit({
 	windowMs: constants.TIME.MS.MINUTE * Number(_env.get('API_RATE_LIMITER_WINDOW_IN_MINUTE_STRICT')),
 	limit: Number(_env.get('API_RATE_LIMITER_THRESHOLD_LIMIT_STRICT')),
 	standardHeaders: 'draft-7',
@@ -48,5 +48,3 @@ const apiRateLimiterStrict = rateLimit({
 		);
 	},
 });
-
-export { globalApiRateLimiter, apiRateLimiterStrict };

@@ -1,6 +1,6 @@
 import * as constants from '@utils/constants';
 
-class ApiResponse {
+export class ApiResponse {
 	private data: any;
 	private code: number;
 	private message: string;
@@ -13,5 +13,3 @@ class ApiResponse {
 		this.success = code < constants.HTTP_STATUS_CODES_RANGES.MIN_CLIENT_ERROR;
 	}
 }
-
-export { ApiResponse };

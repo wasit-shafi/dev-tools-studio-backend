@@ -8,11 +8,9 @@ type ReCaptchaSiteVerifyErrorCodes =
 	| 'bad-request' // The request is invalid or malformed.
 	| 'timeout-or-duplicate'; // The response is no longer valid: either is too old or has been used previously.
 
-interface IReCaptchaSiteVerifyResponse {
+export interface IReCaptchaSiteVerifyResponse {
 	success: boolean;
 	challenge_ts: string; // timestamp of the challenge load (ISO format yyyy-MM-dd'T'HH:mm:ssZZ)
 	hostname: string; // the hostname of the site where the reCAPTCHA was solved
 	'error-codes': ReCaptchaSiteVerifyErrorCodes[]; // optional
 }
-
-export { IReCaptchaSiteVerifyResponse };

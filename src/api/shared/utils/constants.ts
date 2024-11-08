@@ -4,6 +4,13 @@ export const SALT_ROUNDS_FOR_PASSWORD: number = 10;
 
 export const OTP_LENGTH: number = 6;
 
+export const NODE_ENV = {
+	PRODUCTION: 'production',
+	DEVELOPMENT: 'development',
+} as const;
+
+export const RE_CAPTCHA_SITE_VERIFY_BASE_URL: string = 'https://www.google.com/recaptcha/api/siteverify';
+
 // TODO: check correct way for defining object of objects or string
 // { [key: string]: string }
 // const ROUTES: { [key: string]: string | { [key: string]: string } } = {
@@ -15,7 +22,7 @@ export const ROUTES = {
 	MAIL: '/mail',
 	AUTH: '/auth',
 
-	AUTH_ROUTER: {
+	AUTH_ROUTES: {
 		SIGNUP: '/signup',
 		SIGNIN: '/signin',
 		SIGNOUT: '/signout',

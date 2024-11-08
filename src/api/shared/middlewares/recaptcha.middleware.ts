@@ -7,6 +7,11 @@ import * as constants from '@utils/constants';
 import { IReCaptchaSiteVerifyResponse } from '@interfaces';
 
 export const validateReCaptchaResponse: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+	if (!('reCaptchaResponse' in request.body)) {
+		next(new ApiError('ReCaptcha not provided', constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
+		return;
+	}
+
 	const { reCaptchaResponse } = request.body;
 
 	if (!reCaptchaResponse) {
@@ -19,6 +24,11 @@ export const validateReCaptchaResponse: RequestHandler = asyncHandler(async (req
 		return;
 	}
 
+	if (_env.get('NODE_ENV') == constants.NODE_ENV.DEVELOPMENT) {
+		next();
+		return;
+	}
+
 	// Create a new URLSearchParams object
 	const reCaptchaParams = new URLSearchParams({
 		secret: _env.get('RECAPTCHA_SECRET_KEY') as string,
@@ -26,7 +36,7 @@ export const validateReCaptchaResponse: RequestHandler = asyncHandler(async (req
 		remoteip: request.ip as string,
 	});
 
-	const recaptchaSiteVerifyResponse = await fetch(`https://www.google.com/recaptcha/api/siteverify?${reCaptchaParams}`, {
+	const recaptchaSiteVerifyResponse = await fetch(`${constants.RE_CAPTCHA_SITE_VERIFY_BASE_URL}?${reCaptchaParams}`, {
 		method: 'POST',
 	});
 

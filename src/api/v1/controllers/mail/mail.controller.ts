@@ -27,7 +27,7 @@ const sendMail: RequestHandler = async (request: Request, response: Response, ne
 										<b>DATE TIME LOCAL:</b>	${dateTimeLocal}\
 									</p>`;
 
-		const emailPayLoad = {
+		const emailPayload = {
 			from: `Wasit Shafi 👻<${_env.get('NODE_MAILER_TRANSPORTER_AUTH_USER')}>`, // sender address
 			to,
 			subject,
@@ -37,7 +37,7 @@ const sendMail: RequestHandler = async (request: Request, response: Response, ne
 		const task = await emailQueue.add(
 			constants.MESSAGING_QUEUES.EMAIL,
 			{
-				emailPayLoad,
+				emailPayload,
 				confirmationMail,
 			},
 			{ delay }

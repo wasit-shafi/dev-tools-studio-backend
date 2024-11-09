@@ -1,4 +1,6 @@
 import jwt from 'jsonwebtoken';
+import fs from 'fs';
+import ejs from 'ejs';
 
 import type { NextFunction, Request, Response } from 'express';
 
@@ -9,6 +11,9 @@ import { User } from '@models/user/user.model';
 
 import * as utils from '@utils/utils';
 import * as constants from '@utils/constants';
+import { sendMail } from '@api/shared/utils/send-mail';
+import path from 'path';
+import { emailQueue } from '@messageQueue';
 
 const signup = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const { firstName, lastName, email, password, mobileNumber, country } = request.body;
@@ -100,6 +105,21 @@ const signout = asyncHandler(async (request: Request, response: Response) => {
 });
 
 const resetPassword = asyncHandler(async (request: Request, response: Response) => {
+	const templateString = fs.readFileSync(path.join(__dirname, '../../../../templates/reset-password.ejs'), 'utf-8');
+
+	const emailPayload = {
+		from: `Dev Tools Studio <noReply@devToolsStudio.com>`,
+		to: request.body.email,
+		subject: 'OTP Verification DTS',
+		html: ejs.render(templateString, {
+			otp: '123456',
+		}),
+	};
+
+	await emailQueue.add(constants.MESSAGING_QUEUES.EMAIL, {
+		emailPayload,
+	});
+
 	response.json({ message: 'reset-password' });
 });
 

@@ -112,7 +112,7 @@ const resetPassword = asyncHandler(async (request: Request, response: Response) 
 		to: request.body.email,
 		subject: 'OTP Verification DTS',
 		html: ejs.render(templateString, {
-			otp: '123456',
+			otp: utils.generateOtp(),
 		}),
 	};
 

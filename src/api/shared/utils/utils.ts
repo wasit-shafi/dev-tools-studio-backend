@@ -1,11 +1,15 @@
 import * as constants from '@utils/constants';
+import otpGenerator from 'otp-generator';
 
-// import cryptoRandomString from 'crypto-random-string';
+interface IOtpGeneratorOptions {
+	digits?: boolean;
+	lowerCaseAlphabets?: boolean;
+	upperCaseAlphabets?: boolean;
+	specialChars?: boolean;
+}
 
-export const generateOtp = (): string => {
-	// TODO: review once more issue with crypto-random-string
-	// return cryptoRandomString({ length: constants.OTP_LENGTH });
-	return '123456';
+export const generateOtp = (otpLength = constants.DEFAULT_OTP_LENGTH, otpOptions: IOtpGeneratorOptions = {}): string => {
+	return otpGenerator.generate(otpLength, otpOptions);
 };
 
 export const generateCookieOptions = (

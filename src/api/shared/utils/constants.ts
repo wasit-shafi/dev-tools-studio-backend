@@ -41,7 +41,9 @@ export const TIME: Record<string, Record<string, number>> = {
 	},
 };
 
-export const DEFAULT_COOKIE_EXPIRY = TIME.MS.DAY * 15; // 15 DAYS
+export const DEFAULT_COOKIE_EXPIRY: number = TIME.MS.DAY * 15; // 15 DAYS
+
+export const DEFAULT_OTP_LENGTH: number = 8;
 
 export const MODEL_NAMES: Record<string, string> = {
 	USER: 'User',
@@ -56,7 +58,7 @@ export const MODEL_NAMES: Record<string, string> = {
 // 	OK: 'ok', // used for all other types of responses other than 4xx or 5xx
 // } as const;
 
-export let HTTP_STATUS_CODES_RANGES: Record<string, number> = {
+export const HTTP_STATUS_CODES_RANGES: Record<string, number> = {
 	MIN_INFORMATION: 100,
 	MAX_INFORMATION: 199,
 

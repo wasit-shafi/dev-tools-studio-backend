@@ -3,6 +3,7 @@ import { emailQueue } from '@messageQueue';
 import { createBullBoard } from '@bull-board/api';
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
 import { ExpressAdapter } from '@bull-board/express';
+import { _env } from '@environment';
 
 export const serverAdapter = new ExpressAdapter();
 
@@ -13,22 +14,21 @@ createBullBoard({
 	serverAdapter,
 	options: {
 		uiConfig: {
-			boardTitle: 'Dev Tools Studio',
+			boardTitle: 'DTS',
 			boardLogo: {
-				path: 'https://res.cloudinary.com/dtlx6i2m7/image/upload/v1725672016/dev-tools-studio/t35fx73zvnjoe29bz5mc.jpg',
-				// path: '../public/img_4.jpeg',
-				width: '50px',
-				height: '50px',
+				path: '/dev-tools-studio-logo.jpg',
 			},
+			// TODO(Wasit): update/config the url later once deployed on aws
+
 			miscLinks: [
-				{ text: 'Frontend App', url: 'http://localhost:4200' },
-				// { text: 'Logout', url: '/logout' },
+				{ text: 'Goto Frontend', url: `${_env.get('CORS_ORIGIN')}` },
+				{ text: 'Goto Backend', url: `http://localhost:${_env.get('EXPRESS_PORT')}` },
 			],
-			// TODO: check why it's not working
-			// favIcon: {
-			// 	default: '../public/favicon.svg',
-			// 	alternative: 'public/favicon.svg',
-			// },
+
+			favIcon: {
+				default: '/favicon.svg',
+				alternative: '/favicon.ico',
+			},
 		},
 	},
 });

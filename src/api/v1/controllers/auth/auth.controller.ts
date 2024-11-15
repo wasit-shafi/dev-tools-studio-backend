@@ -1,17 +1,17 @@
 import jwt from 'jsonwebtoken';
+
 import fs from 'fs';
 import ejs from 'ejs';
 
 import type { NextFunction, Request, Response } from 'express';
 
-import { ApiError, ApiResponse, asyncHandler } from '@utils';
+import { ApiError, ApiResponse, asyncHandler, messages } from '@utils';
 
 import { _env } from '@config/environment';
 import { User } from '@models/user/user.model';
 
 import * as utils from '@utils/utils';
 import * as constants from '@utils/constants';
-import { sendMail } from '@api/shared/utils/send-mail';
 import path from 'path';
 import { emailQueue } from '@messageQueue';
 
@@ -23,7 +23,7 @@ const signup = asyncHandler(async (request: Request, response: Response, next: N
 	const user = await User.findOne({ email });
 
 	if (user) {
-		next(new ApiError('Email Already Exists', constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT));
+		next(new ApiError(messages.AUTH.EMAIL_EXISTS_ERROR, constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT));
 		return;
 	}
 	const newUser = await User.create({
@@ -53,7 +53,7 @@ const signup = asyncHandler(async (request: Request, response: Response, next: N
 		.json(
 			new ApiResponse(
 				{ _id: newUser._id, accessToken, refreshToken, roles: newUser.roles },
-				'Congratulations!! Account Created Successfully',
+				messages.AUTH.SIGNUP_SUCCESS,
 				constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED
 			)
 		);
@@ -65,14 +65,14 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 	// making sure user only send only userName or email not both
 
 	if ('userName' in request.body && 'email' in request.body) {
-		next(new ApiError('userName and email for login not allowed', constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT));
+		next(new ApiError(messages.AUTH.EMAIL_AND_USERNAME_CONFLICT_FOR_SIGNIN, constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT));
 	}
 
 	const user = await User.findOne({ $or: [{ email: email }, { userName: userName }] });
 
 	if (!user) {
 		// user not found
-		next(new ApiError('Invalid username or password', constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
+		next(new ApiError(messages.AUTH.INVALID_USERNAME_OR_PASSWORD, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 
 		return;
 	}
@@ -96,12 +96,12 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 			.cookie('refreshToken', refreshToken, cookieOptions)
 			.json(new ApiResponse({ id: user._id, accessToken, refreshToken, roles: user.roles }));
 	} else {
-		next(new ApiError('Invalid username or password', constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
+		next(new ApiError(messages.AUTH.INVALID_USERNAME_OR_PASSWORD, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 	}
 });
 
 const signout = asyncHandler(async (request: Request, response: Response) => {
-	response.json({ message: 'signout' });
+	response.json({ message: messages.AUTH.SIGNOUT_SUCCESS });
 });
 
 const resetPassword = asyncHandler(async (request: Request, response: Response) => {
@@ -120,7 +120,7 @@ const resetPassword = asyncHandler(async (request: Request, response: Response) 
 		emailPayload,
 	});
 
-	response.json({ message: 'reset-password' });
+	response.json({ message: messages.AUTH.RESET_PASSWORD_SUCCESS });
 });
 
 const refreshToken = asyncHandler(async (request: Request, response: Response) => {

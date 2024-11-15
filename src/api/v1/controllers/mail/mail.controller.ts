@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
 
 import { _env } from '@environment';
-import { ApiError } from '@api/shared/utils';
+import { ApiError, messages } from '@api/shared/utils';
 import * as constants from '@utils/constants';
 import { emailQueue } from '@messageQueue';
 
@@ -13,9 +13,7 @@ const sendMail: RequestHandler = async (request: Request, response: Response, ne
 		const delay = Number(targetDateAndTime) - Number(new Date());
 
 		if (delay < 0) {
-			return next(
-				new ApiError('Invalid date/time (cannot send mail to past date)', constants.HTTP_STATUS_CODES.CLIENT_ERROR.NOT_ACCEPTABLE)
-			);
+			return next(new ApiError(messages.COMMON.INVALID_DATE_AND_TIME, constants.HTTP_STATUS_CODES.CLIENT_ERROR.NOT_ACCEPTABLE));
 		}
 
 		const html = `<p>\
@@ -44,7 +42,7 @@ const sendMail: RequestHandler = async (request: Request, response: Response, ne
 		);
 		// console.log('task :: ', task);
 
-		response.json({ message: `Your Email has been scheduled successfully` });
+		response.json({ message: messages.BULL_MQ.EMAIL.EMAIL_SCHEDULED_SUCCESS });
 	} catch (error) {
 		next(new ApiError(error as string, constants.HTTP_STATUS_CODES.SERVER_ERROR.SERVER_ERROR));
 	}

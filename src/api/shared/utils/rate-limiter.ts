@@ -1,7 +1,7 @@
 import { rateLimit } from 'express-rate-limit';
 import type { Request, Response, NextFunction } from 'express';
 
-import { ApiError } from '@utils';
+import { ApiError, messages } from '@utils';
 import { _env } from '@environment';
 import * as constants from '@utils/constants';
 
@@ -21,7 +21,7 @@ export const globalApiRateLimiter = rateLimit({
 		// console.log('options :: ', options);
 		next(
 			new ApiError(
-				`Too many requests, please try again later. (You exceeded ${_env.get('API_RATE_LIMITER_THRESHOLD_LIMIT')} Api requests per ${_env.get('API_RATE_LIMITER_WINDOW_IN_MINUTE')} minutes)`,
+				`${messages.HTTP_STATUS.CLIENT.TOO_MANY_REQUEST} (You exceeded ${_env.get('API_RATE_LIMITER_THRESHOLD_LIMIT')} Api requests per ${_env.get('API_RATE_LIMITER_WINDOW_IN_MINUTE')} minutes)`,
 				constants.HTTP_STATUS_CODES.CLIENT_ERROR.TOO_MANY_REQUESTS,
 				{ clientIp: request.ip }
 			)
@@ -41,7 +41,7 @@ export const apiRateLimiterStrict = rateLimit({
 	handler: (request: Request, response: Response, next: NextFunction, options) => {
 		next(
 			new ApiError(
-				`Too many requests, please try again later. (You exceeded ${_env.get('API_RATE_LIMITER_THRESHOLD_LIMIT_STRICT')} Api requests per ${_env.get('API_RATE_LIMITER_WINDOW_IN_MINUTE_STRICT')} minutes)`,
+				`${messages.HTTP_STATUS.CLIENT.TOO_MANY_REQUEST} (You exceeded ${_env.get('API_RATE_LIMITER_THRESHOLD_LIMIT_STRICT')} Api requests per ${_env.get('API_RATE_LIMITER_WINDOW_IN_MINUTE_STRICT')} minutes)`,
 				constants.HTTP_STATUS_CODES.CLIENT_ERROR.TOO_MANY_REQUESTS,
 				{ clientIp: request.ip }
 			)

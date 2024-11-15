@@ -6,7 +6,7 @@ import { _env } from '@environment';
 import { mailRouter, userRouter, authRouter } from './routes';
 
 import * as constants from '@utils/constants';
-import { ApiError, asyncHandler } from '@api/shared/utils';
+import { ApiError, asyncHandler, messages } from '@api/shared/utils';
 import jwt from 'jsonwebtoken';
 import { User } from '@api/shared/models';
 
@@ -29,7 +29,7 @@ const verifyJWT: RequestHandler = async (request: Request, response: Response, n
 		const accessToken = request.cookies.accessToken || request.headers.authorization?.split('Bearer ')[1] || request.body.accessToken;
 
 		if (!accessToken) {
-			next(new ApiError('You are not authorized', constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
+			next(new ApiError(messages.HTTP_STATUS.CLIENT.UNAUTHORIZED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 			return;
 		}
 
@@ -38,14 +38,14 @@ const verifyJWT: RequestHandler = async (request: Request, response: Response, n
 		const user = await User.findById(decoded.data.id);
 
 		if (!user) {
-			next(new ApiError('You are not authorized', constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
+			next(new ApiError(messages.HTTP_STATUS.CLIENT.UNAUTHORIZED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 			return;
 		}
 
 		request.user = user;
 		return next();
 	} catch (err) {
-		next(new ApiError('You are not authorized', constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
+		next(new ApiError(messages.HTTP_STATUS.CLIENT.UNAUTHORIZED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 		return;
 	}
 };

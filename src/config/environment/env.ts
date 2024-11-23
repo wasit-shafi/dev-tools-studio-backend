@@ -26,10 +26,13 @@ const __env: Record<string, string | number | undefined> = {
 	ACCESS_TOKEN_EXPIRY: process.env.ACCESS_TOKEN_EXPIRY,
 	REFRESH_TOKEN_EXPIRY: process.env.REFRESH_TOKEN_EXPIRY,
 
-	AWS_S3_BUCKET_NAME: process.env.AWS_S3_BUCKET_NAME,
-	AWS_S3_BUCKET_REGION: process.env.AWS_S3_BUCKET_REGION,
 	AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
 	AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+
+	AWS_S3_BUCKET_NAME: process.env.AWS_S3_BUCKET_NAME,
+	AWS_S3_BUCKET_REGION: process.env.AWS_S3_BUCKET_REGION,
+
+	AWS_SNS_REGION: process.env.AWS_SNS_REGION,
 
 	REDIS_HOST: process.env.TS_NODE_DEV && process.env.REDIS_SERVICE_NAME ? process.env.REDIS_SERVICE_NAME : process.env.REDIS_HOST,
 	REDIS_PORT: process.env.REDIS_PORT,

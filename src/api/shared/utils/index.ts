@@ -6,4 +6,5 @@ export * from './logger';
 export * from './messages';
 export * from './rate-limiter';
 export * from './send-mail';
+export * from './send-sms';
 export * from './utils';

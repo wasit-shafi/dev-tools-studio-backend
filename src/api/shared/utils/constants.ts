@@ -127,3 +127,12 @@ export const BACKOFF_STRATEGY_TYPE = {
 	FIXED: 'fixed',
 	EXPONENTIAL: 'exponential', // retry after '2 ^ (attempts - 1) * delay' milliseconds
 };
+
+export const SMS_MESSAGE_TYPE = {
+	PROMOTIONAL: 'Promotional',
+	TRANSACTIONAL: 'Transactional',
+} as const;
+
+// NOTE(wasit): In AWS SNS 'Promotional' is the default sms type
+
+export const DEFAULT_SMS_TYPE = SMS_MESSAGE_TYPE.TRANSACTIONAL;

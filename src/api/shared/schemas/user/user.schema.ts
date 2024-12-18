@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import * as constants from '@utils/constants';
+
 export const userZodSchema = z.object({
 	firstName: z
 		.string({
@@ -36,6 +38,21 @@ export const userZodSchema = z.object({
 		.trim()
 		.min(8, { message: 'Password must be at least 8 characters' })
 		.max(100, { message: "Password can't be more than 100 characters" }),
+	countryCode: z
+		.string({
+			required_error: 'Country Code is required',
+			invalid_type_error: 'Country Code must be a string',
+		})
+		.min(2, { message: 'Country Code must be at least 2 characters' })
+		.refine(
+			(countryCode) => {
+				return constants.COUNTRY_METADATA.some((country) => country.isdCode === countryCode);
+			},
+			{
+				message: 'Invalid ISD Country Code.',
+			}
+		),
+
 	mobileNumber: z.string({
 		required_error: 'Mobile Number is required',
 		invalid_type_error: 'Mobile Number must be a string',

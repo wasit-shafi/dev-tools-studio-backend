@@ -21,6 +21,7 @@ interface IUser extends mongoose.Document {
 	displayName: string;
 	email: string;
 	password: string;
+	countryCode: string;
 	mobileNumber: string;
 	country: string;
 	devTools: any;
@@ -70,6 +71,11 @@ const userSchema: Schema<IUser> = new Schema(
 			required: true,
 		},
 
+		countryCode: {
+			type: String,
+			required: true,
+		},
+
 		mobileNumber: {
 			type: String,
 			required: true,
@@ -114,6 +120,7 @@ userSchema.post('save', function (error: any, document: any, next: any) {
 	// console.log('error :: ', error);
 	// console.log('document :: ', document);
 	// console.log('next :: ', next);
+	// TODO: handle here what to to with duplicate errors
 
 	next(error.code === 11000 ? next(new ApiError(error.errmsg, constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT)) : error);
 });

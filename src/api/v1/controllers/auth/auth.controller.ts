@@ -5,7 +5,7 @@ import ejs from 'ejs';
 
 import type { NextFunction, Request, Response } from 'express';
 
-import { ApiError, ApiResponse, asyncHandler, messages } from '@utils';
+import { ApiError, ApiResponse, asyncHandler, messages, sendSms } from '@utils';
 
 import { _env } from '@config/environment';
 import { User } from '@models/user/user.model';
@@ -16,7 +16,7 @@ import path from 'path';
 import { emailQueue } from '@messageQueue';
 
 const signup = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
-	const { firstName, lastName, email, password, mobileNumber, country } = request.body;
+	const { firstName, lastName, email, password, countryCode, mobileNumber, country } = request.body;
 	// TODO: append uuid to username
 	const userName = firstName + '_' + lastName;
 
@@ -32,31 +32,15 @@ const signup = asyncHandler(async (request: Request, response: Response, next: N
 		userName,
 		email,
 		password,
+		countryCode,
 		mobileNumber,
 		country,
 		roles: [constants.USER_ROLES.APP_USER],
 	});
-	const accessToken = newUser.generateAccessToken();
-	const refreshToken = newUser.generateRefreshToken();
-	const cookieOptions = {
-		secure: true,
-		httpOnly: true,
-		// expires: new Date(Date.now() + 900000000),
-		// maxAge: 900000000000,
-		// domain: 'localhost',
-	};
 
 	response
 		.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED)
-		.cookie('accessToken', accessToken, cookieOptions)
-		.cookie('refreshToken', refreshToken, cookieOptions)
-		.json(
-			new ApiResponse(
-				{ _id: newUser._id, accessToken, refreshToken, roles: newUser.roles },
-				messages.AUTH.SIGNUP_SUCCESS,
-				constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED
-			)
-		);
+		.json(new ApiResponse({ _id: newUser._id }, messages.AUTH.SIGNUP_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED));
 });
 
 const signin = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {

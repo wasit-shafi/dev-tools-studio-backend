@@ -1,18 +1,11 @@
-import jwt from 'jsonwebtoken';
-
-import { z } from 'zod';
-
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import mongoose, { Schema } from 'mongoose';
+import { v7 as uuidv7 } from 'uuid';
 
-import mongoose, { Schema, Types } from 'mongoose';
-
-import * as constants from '@utils/constants';
 import { ApiError, asyncHandler } from '@api/shared/utils';
-
 import { _env } from '@environment';
-import { devToolSchema } from '../dev-tool/dev-tool.model';
-
-// import { userZodSchema } from '../../schema/user/user.schema';
+import * as constants from '@utils/constants';
 
 interface IUser extends mongoose.Document {
 	firstName: string;
@@ -39,7 +32,7 @@ const userSchema: Schema<IUser> = new Schema(
 	{
 		firstName: {
 			type: String,
-			required: [true, 'firstName is required'],
+			required: [true, 'First Name is required'],
 		},
 
 		lastName: {
@@ -50,14 +43,17 @@ const userSchema: Schema<IUser> = new Schema(
 		displayName: {
 			type: String,
 			default: function () {
-				const _this = this as any;
-				return _this.firstName + ' ' + _this.lastName;
+				return `${this.firstName.toLowerCase()} ${this.lastName.toLowerCase()}`;
 			},
 		},
 
 		userName: {
 			type: String,
 			required: true,
+			unique: true,
+			default: function () {
+				return `${this.firstName.toLowerCase()}-${this.lastName.toLowerCase()}-${uuidv7()}`;
+			},
 		},
 
 		email: {

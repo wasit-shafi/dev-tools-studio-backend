@@ -1,24 +1,19 @@
-import jwt from 'jsonwebtoken';
-
-import fs from 'fs';
 import ejs from 'ejs';
+import fs from 'fs';
+import jwt from 'jsonwebtoken';
+import path from 'path';
+
+import { _env } from '@config/environment';
+import { emailQueue } from '@messageQueue';
+import { User } from '@models/user/user.model';
+import { ApiError, ApiResponse, asyncHandler, messages, sendSms } from '@utils';
+import * as constants from '@utils/constants';
+import * as utils from '@utils/utils';
 
 import type { NextFunction, Request, Response } from 'express';
 
-import { ApiError, ApiResponse, asyncHandler, messages, sendSms } from '@utils';
-
-import { _env } from '@config/environment';
-import { User } from '@models/user/user.model';
-
-import * as utils from '@utils/utils';
-import * as constants from '@utils/constants';
-import path from 'path';
-import { emailQueue } from '@messageQueue';
-
 const signup = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const { firstName, lastName, email, password, countryCode, mobileNumber, country } = request.body;
-	// TODO: append uuid to username
-	const userName = firstName + '_' + lastName;
 
 	const user = await User.findOne({ email });
 
@@ -26,15 +21,15 @@ const signup = asyncHandler(async (request: Request, response: Response, next: N
 		next(new ApiError(messages.AUTH.EMAIL_EXISTS_ERROR, constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT));
 		return;
 	}
+
 	const newUser = await User.create({
+		country,
+		countryCode,
+		email,
 		firstName,
 		lastName,
-		userName,
-		email,
-		password,
-		countryCode,
 		mobileNumber,
-		country,
+		password,
 		roles: [constants.USER_ROLES.APP_USER],
 	});
 

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import ejs from 'ejs';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
@@ -11,7 +12,6 @@ import * as constants from '@utils/constants';
 import * as utils from '@utils/utils';
 
 import type { NextFunction, Request, Response } from 'express';
-
 const signup = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const { firstName, lastName, email, password, countryCode, mobileNumber, country } = request.body;
 
@@ -83,23 +83,62 @@ const signout = asyncHandler(async (request: Request, response: Response) => {
 	response.json({ message: messages.AUTH.SIGNOUT_SUCCESS });
 });
 
-const resetPassword = asyncHandler(async (request: Request, response: Response) => {
-	const templateString = fs.readFileSync(path.join(__dirname, '../../../../templates/reset-password.ejs'), 'utf-8');
+const forgotPassword = asyncHandler(async (request: Request, response: Response) => {
+	const { email } = request.body;
 
-	const emailPayload = {
-		from: `Dev Tools Studio <noReply@devToolsStudio.com>`,
-		to: request.body.email,
-		subject: 'OTP Verification DTS',
-		html: ejs.render(templateString, {
-			otp: utils.generateOtp(),
-		}),
-	};
-
-	await emailQueue.add(constants.MESSAGING_QUEUES.EMAIL, {
-		emailPayload,
+	const user = await User.findOne({
+		email,
 	});
 
-	response.json({ message: messages.AUTH.RESET_PASSWORD_SUCCESS });
+	if (user) {
+		const templateString = fs.readFileSync(path.join(__dirname, '../../../../templates/reset-password.ejs'), 'utf-8');
+
+		const resetPasswordLink = `${_env.get('FE_BASE_URL')}/reset-password?token=${user.generateResetPasswordToken()}`;
+		await user.save();
+
+		await emailQueue.add(constants.MESSAGING_QUEUES.EMAIL, {
+			emailOptions: {
+				from: `Dev Tools Studio<noReply@devToolsStudio.com>`,
+				to: email,
+				subject: 'Reset Your Password',
+				html: ejs.render(templateString, {
+					firstName: user.firstName,
+					resetPasswordLink,
+					when: 'Dec 29, 2024 01:00 AM India Standard Time',
+					device: 'Mozilla Firefox Windows (Desktop)',
+					near: 'National Capital Territory of Delhi, India',
+				}),
+			},
+		});
+	}
+
+	response.json(
+		new ApiResponse(
+			null,
+			'If an account with this email exists, a password reset link has been sent. Please check your inbox and follow the instructions.'
+		)
+	);
+});
+
+const resetPassword = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+	const { password } = request.body;
+	const { token = '' } = request.params;
+
+	const user = await User.findOne({
+		passwordResetToken: crypto.createHash('sha256').update(token).digest('hex'),
+		passwordResetExpires: { $gt: Date.now() },
+	});
+
+	if (user) {
+		user.password = password;
+		user.passwordResetToken = null;
+		user.passwordResetExpires = null;
+		user.passwordChangedAt = new Date();
+		await user.save();
+		return response.json(new ApiResponse(null, 'Password reset successful, please login with your new password'));
+	}
+
+	next(new ApiError('This password reset attempt is no longer valid, please request a new link and try again', 400));
 });
 
 const refreshToken = asyncHandler(async (request: Request, response: Response) => {
@@ -109,4 +148,4 @@ const refreshToken = asyncHandler(async (request: Request, response: Response) =
 	});
 });
 
-export const authController = { signup, signin, signout, resetPassword };
+export const authController = { signup, signin, signout, resetPassword, forgotPassword };

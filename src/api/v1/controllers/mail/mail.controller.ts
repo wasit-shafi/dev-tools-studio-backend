@@ -1,9 +1,9 @@
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
 
-import { _env } from '@environment';
 import { ApiError, messages } from '@api/shared/utils';
-import * as constants from '@utils/constants';
+import { _env } from '@environment';
 import { emailQueue } from '@messageQueue';
+import * as constants from '@utils/constants';
 
 const sendMail: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {
 	try {
@@ -25,8 +25,8 @@ const sendMail: RequestHandler = async (request: Request, response: Response, ne
 										<b>DATE TIME LOCAL:</b>	${dateTimeLocal}\
 									</p>`;
 
-		const emailPayload = {
-			from: `Wasit Shafi 👻<${_env.get('NODE_MAILER_TRANSPORTER_AUTH_USER')}>`, // sender address
+		const emailOptions = {
+			from: `Wasit Shafi 👻<${_env.get('NODE_MAILER_TRANSPORT_AUTH_USER')}>`, // sender address
 			to,
 			subject,
 			html,
@@ -35,7 +35,7 @@ const sendMail: RequestHandler = async (request: Request, response: Response, ne
 		const task = await emailQueue.add(
 			constants.MESSAGING_QUEUES.EMAIL,
 			{
-				emailPayload,
+				emailOptions,
 				confirmationMail,
 			},
 			{ delay }

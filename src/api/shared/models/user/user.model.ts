@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import mongoose, { Schema } from 'mongoose';
 import { v7 as uuidv7 } from 'uuid';
@@ -24,8 +25,13 @@ interface IUser extends mongoose.Document {
 	updatedAt: Date;
 	// TODO: review how to avoid adding comparePassword in interface here...
 	comparePassword: Function;
-	generateAccessToken: Function;
-	generateRefreshToken: Function;
+	generateAccessToken: () => string;
+	generateRefreshToken: () => string;
+	generateResetPasswordToken: () => string;
+
+	passwordChangedAt: Date | null;
+	passwordResetExpires: Date | null;
+	passwordResetToken: string | null;
 }
 
 const userSchema: Schema<IUser> = new Schema(
@@ -90,6 +96,15 @@ const userSchema: Schema<IUser> = new Schema(
 			type: [Number],
 			required: true,
 		},
+		passwordChangedAt: {
+			type: Date,
+		},
+		passwordResetExpires: {
+			type: Date,
+		},
+		passwordResetToken: {
+			type: String,
+		},
 	},
 	{ timestamps: true }
 );
@@ -146,6 +161,17 @@ userSchema.methods.generateRefreshToken = function () {
 	});
 
 	return refreshToken;
+};
+
+userSchema.methods.generateResetPasswordToken = function () {
+	const resetPasswordToken = crypto.randomBytes(64).toString('hex');
+
+	// saving the hashed resetPasswordToken in the database, so that even if the token which is saved in db gets exposed/leaked, no now is able to use it directly to reset password of the user
+	this.passwordResetToken = crypto.createHash('sha256').update(resetPasswordToken).digest('hex');
+
+	this.passwordResetExpires = Date.now() + constants.TIME.MS.MINUTE * 5; // valid for 5 mins only;
+
+	return resetPasswordToken;
 };
 
 export const User = mongoose.model<IUser>(constants.MODEL_NAMES.USER, userSchema);

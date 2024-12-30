@@ -1,8 +1,8 @@
 import { Worker } from 'bullmq';
 
-import * as constants from '@utils/constants';
-import { redisConnectionConfig } from '@messageQueue';
 import { sendMail } from '@api/shared/utils/send-mail';
+import { redisConnectionConfig } from '@messageQueue';
+import * as constants from '@utils/constants';
 
 // TODO: handle how to manage spinning more workers on demand
 
@@ -15,7 +15,7 @@ const emailWorker = new Worker(
 		// 	time: new Date().getTime(),
 		// 	// job,
 		// });
-		sendMail(job.data.emailPayload);
+		sendMail(job.data.emailOptions);
 	},
 	{
 		connection: redisConnectionConfig,

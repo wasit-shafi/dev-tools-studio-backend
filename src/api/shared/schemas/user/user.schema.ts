@@ -82,6 +82,32 @@ export const userZodSchema = z
 		updatedAt: z.string().datetime().optional(),
 	})
 	.refine((userData) => userData.password === userData.confirmPassword, {
-		message: "Passwords don't match",
+		message: "Passwords & Confirm Password don't match, please try again.",
+		path: ['confirm'], // path of error
+	});
+
+export const resetPasswordZodSchema = z
+	.object({
+		password: z
+			.string({
+				required_error: 'Password is required',
+				invalid_type_error: 'Password must be a string',
+			})
+			.trim(),
+		confirmPassword: z
+			.string({
+				required_error: 'Confirm Password is required',
+				invalid_type_error: 'Confirm Password must be a string',
+			})
+			.trim(),
+		reCaptchaResponse: z
+			.string({
+				required_error: 'reCaptchaResponse is required',
+				invalid_type_error: 'reCaptchaResponse must be a string',
+			})
+			.trim(),
+	})
+	.refine((data) => data.password === data.confirmPassword, {
+		message: "Passwords & Confirm Password don't match, please try again.",
 		path: ['confirm'], // path of error
 	});

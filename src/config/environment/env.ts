@@ -16,8 +16,8 @@ const __env: Record<string, string | number | undefined> = {
 
 	TS_NODE_DEV: process.env.TS_NODE_DEV,
 
-	NODE_MAILER_TRANSPORTER_AUTH_USER: process.env.NODE_MAILER_TRANSPORTER_AUTH_USER,
-	NODE_MAILER_TRANSPORTER_AUTH_PASS: process.env.NODE_MAILER_TRANSPORTER_AUTH_PASS,
+	NODE_MAILER_TRANSPORT_AUTH_USER: process.env.NODE_MAILER_TRANSPORT_AUTH_USER,
+	NODE_MAILER_TRANSPORT_AUTH_PASS: process.env.NODE_MAILER_TRANSPORT_AUTH_PASS,
 
 	SALT_ROUNDS: process.env.SALT_ROUNDS,
 
@@ -39,6 +39,8 @@ const __env: Record<string, string | number | undefined> = {
 	REDIS_USER_PASSWORD: process.env.REDIS_USER_PASSWORD,
 
 	RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY,
+
+	FE_BASE_URL: process.env.FE_BASE_URL,
 };
 
 export const _env = {

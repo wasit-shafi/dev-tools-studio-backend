@@ -1,4 +1,4 @@
-import { type RequestHandler } from 'express';
+import { RequestHandler } from 'express';
 
 export const validate =
 	(schema: any): RequestHandler =>
@@ -13,5 +13,6 @@ export const validate =
 		} catch (error: any) {
 			console.log('error: ', error);
 			response.status(400).json({ message: error.errors[0].message });
+			return;
 		}
 	};

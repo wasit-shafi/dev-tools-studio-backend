@@ -18,16 +18,16 @@ export const RE_CAPTCHA_SITE_VERIFY_BASE_URL: string = 'https://www.google.com/r
 export const ROUTES = {
 	// LOGIN: '/login',
 	// LOGOUT: '/logout',
-	USER: '/user',
-	MAIL: '/mail',
-	AUTH: '/auth',
+	_USER: '/user',
+	_MAIL: '/mail',
+	_AUTH: '/auth',
 
 	AUTH_ROUTES: {
-		SIGNUP: '/signup',
-		SIGNIN: '/signin',
-		SIGNOUT: '/signout',
-		FORGOT_PASSWORD: '/forgot-password',
-		RESET_PASSWORD: '/reset-password',
+		_SIGNUP: '/signup',
+		_SIGNIN: '/signin',
+		_SIGNOUT: '/signout',
+		_FORGOT_PASSWORD: '/forgot-password',
+		_RESET_PASSWORD: '/reset-password',
 	},
 } as const;
 

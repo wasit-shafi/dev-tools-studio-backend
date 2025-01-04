@@ -1,7 +1,6 @@
 import crypto from 'crypto';
 import ejs from 'ejs';
 import fs from 'fs';
-import jwt from 'jsonwebtoken';
 import path from 'path';
 
 import { _env } from '@config/environment';
@@ -81,9 +80,10 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 
 const signout = asyncHandler(async (request: Request, response: Response) => {
 	response.json({ message: messages.AUTH.SIGNOUT_SUCCESS });
+	return;
 });
 
-const forgotPassword = asyncHandler(async (request: Request, response: Response) => {
+const forgotPassword = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const { email } = request.body;
 
 	const user = await User.findOne({
@@ -118,6 +118,7 @@ const forgotPassword = asyncHandler(async (request: Request, response: Response)
 			'If an account with this email exists, a password reset link has been sent. Please check your inbox and follow the instructions.'
 		)
 	);
+	return;
 });
 
 const resetPassword = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
@@ -135,7 +136,8 @@ const resetPassword = asyncHandler(async (request: Request, response: Response, 
 		user.passwordResetExpires = null;
 		user.passwordChangedAt = new Date();
 		await user.save();
-		return response.json(new ApiResponse(null, 'Password reset successful, please login with your new password'));
+		response.json(new ApiResponse(null, 'Password reset successful, please login with your new password'));
+		return;
 	}
 
 	next(new ApiError('This password reset attempt is no longer valid, please request a new link and try again', 400));
@@ -146,6 +148,7 @@ const refreshToken = asyncHandler(async (request: Request, response: Response) =
 		accessToken: 'new_access_token',
 		refreshToken: 'new_refresh_token',
 	});
+	return;
 });
 
-export const authController = { signup, signin, signout, resetPassword, forgotPassword };
+export const authController = { signup, signin, signout, forgotPassword, resetPassword };

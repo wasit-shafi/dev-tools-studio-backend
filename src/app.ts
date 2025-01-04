@@ -1,26 +1,24 @@
-import fs from 'fs';
-import path from 'path';
-import cors from 'cors';
-import YAML from 'yaml';
-import express from 'express';
-import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import express from 'express';
+import fs from 'fs';
 import helmet from 'helmet';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-
+import morgan from 'morgan';
+import path from 'path';
 import swaggerUi from 'swagger-ui-express';
-
-import type { Request, Response, NextFunction } from 'express';
+import YAML from 'yaml';
 
 import { routerV1 } from '@apiV1/router';
 import { routerV2 } from '@apiV2/router';
-
-import { _env } from '@environment';
-import * as constants from '@utils/constants';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { globalErrorController } from '@controllers';
+import { _env } from '@environment';
 import { ApiError, ApiResponse, asyncHandler, globalApiRateLimiter, logger } from '@utils';
+import * as constants from '@utils/constants';
 
 import { serverAdapter } from './bull-board/create-board';
+
+import type { Request, Response, NextFunction } from 'express';
 
 export const app = express();
 
@@ -80,6 +78,7 @@ app.post(
 			})
 		);
 		response.send({ ...s3ClientResponse });
+		return;
 	})
 );
 // bull board dashboard ui for bullmq queues
@@ -91,6 +90,7 @@ app.use('/api/v2', routerV2);
 
 app.get('/', (request: Request, response: Response) => {
 	response.json(new ApiResponse({ healthCheck: 'Server on working fine', yourIp: request.ip, requestProtocol: request.protocol }));
+	return;
 });
 
 app.all('*', (request: Request, response: Response, next: NextFunction) => {

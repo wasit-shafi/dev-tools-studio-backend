@@ -1,19 +1,20 @@
 import { Router } from 'express';
+import jwt from 'jsonwebtoken';
+
+import { User } from '@api/shared/models';
+import { ApiError, asyncHandler, messages } from '@api/shared/utils';
+import { _env } from '@environment';
+import * as constants from '@utils/constants';
+
+import { authRouter, mailRouter, userRouter } from './routes';
 
 import type { RequestHandler, Request, Response, NextFunction } from 'express';
-
-import { _env } from '@environment';
-import { mailRouter, userRouter, authRouter } from './routes';
-
-import * as constants from '@utils/constants';
-import { ApiError, asyncHandler, messages } from '@api/shared/utils';
-import jwt from 'jsonwebtoken';
-import { User } from '@api/shared/models';
 
 const router = Router();
 
 router.get('/say-hello', (request, response) => {
 	response.json({ message: `Hello World - V1(${_env.get('NODE_ENV')})` });
+	return;
 });
 
 const verifyJWT: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {
@@ -50,10 +51,10 @@ const verifyJWT: RequestHandler = async (request: Request, response: Response, n
 	}
 };
 
-router.use(constants.ROUTES.USER, verifyJWT, userRouter);
+router.use(constants.ROUTES._USER, verifyJWT, userRouter);
 
-router.use(constants.ROUTES.MAIL, mailRouter);
+router.use(constants.ROUTES._MAIL, mailRouter);
 
-router.use(constants.ROUTES.AUTH, authRouter);
+router.use(constants.ROUTES._AUTH, authRouter);
 
 export const routerV1 = router;

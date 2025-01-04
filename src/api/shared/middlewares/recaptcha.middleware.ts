@@ -1,10 +1,9 @@
-import { ApiError, asyncHandler, messages } from '@utils';
-
-import { type Request, Response, RequestHandler, NextFunction } from 'express';
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 
 import { _env } from '@environment';
-import * as constants from '@utils/constants';
 import { IReCaptchaSiteVerifyResponse } from '@interfaces';
+import { ApiError, asyncHandler, messages } from '@utils';
+import * as constants from '@utils/constants';
 
 export const validateReCaptchaResponse: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	if (!('reCaptchaResponse' in request.body)) {

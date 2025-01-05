@@ -25,9 +25,9 @@ export const validateReCaptchaResponse: RequestHandler = asyncHandler(async (req
 
 	// Create a new URLSearchParams object
 	const reCaptchaParams = new URLSearchParams({
-		secret: _env.get('RECAPTCHA_SECRET_KEY') as string,
+		secret: String(_env.get('RECAPTCHA_SECRET_KEY')),
 		response: reCaptchaResponse,
-		remoteip: request.ip as string,
+		remoteip: String(request.ip),
 	});
 
 	const recaptchaSiteVerifyResponse = await fetch(`${constants.RE_CAPTCHA_SITE_VERIFY_BASE_URL}?${reCaptchaParams}`, {

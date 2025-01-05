@@ -34,9 +34,20 @@ const verifyJWT: RequestHandler = async (request: Request, response: Response, n
 			return;
 		}
 
-		const accessTokenSecret = _env.get('ACCESS_TOKEN_SECRET') as string;
-		const decoded: any = await jwt.verify(accessToken, accessTokenSecret);
-		const user = await User.findById(decoded.data.id);
+		let user = null;
+		const accessTokenSecret = String(_env.get('ACCESS_TOKEN_SECRET'));
+		const decoded: unknown = await jwt.verify(accessToken, accessTokenSecret);
+
+		if (
+			decoded !== null &&
+			typeof decoded == 'object' &&
+			'data' in decoded &&
+			decoded.data !== null &&
+			typeof decoded.data == 'object' &&
+			'id' in decoded.data
+		) {
+			user = await User.findById(decoded.data.id);
+		}
 
 		if (!user) {
 			next(new ApiError(messages.HTTP_STATUS.CLIENT.UNAUTHORIZED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));

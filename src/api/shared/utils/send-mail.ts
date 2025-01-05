@@ -16,8 +16,8 @@ const nodemailerTransport = nodemailer.createTransport({
 	// Use `true` for port 465, `false` for all other ports
 	secure: true,
 	auth: {
-		user: _env.get('NODE_MAILER_TRANSPORT_AUTH_USER') as string,
-		pass: _env.get('NODE_MAILER_TRANSPORT_AUTH_PASS') as string,
+		user: String(_env.get('NODE_MAILER_TRANSPORT_AUTH_USER')),
+		pass: String(_env.get('NODE_MAILER_TRANSPORT_AUTH_PASS')),
 	},
 });
 

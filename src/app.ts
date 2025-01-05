@@ -27,7 +27,7 @@ app.use(helmet());
 app.use(
 	cors({
 		credentials: true,
-		origin: _env.get('CORS_ORIGIN') as string,
+		origin: String(_env.get('CORS_ORIGIN')),
 		optionsSuccessStatus: constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, // some legacy browsers (IE11, various SmartTVs) choke on 204
 	})
 );
@@ -60,10 +60,10 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOp
 // TODO: temporarily used here just for confirmation
 
 const s3Client = new S3Client({
-	region: _env.get('AWS_S3_BUCKET_REGION') as string,
+	region: String(_env.get('AWS_S3_BUCKET_REGION')),
 	credentials: {
-		accessKeyId: _env.get('AWS_ACCESS_KEY_ID') as string,
-		secretAccessKey: _env.get('AWS_SECRET_ACCESS_KEY') as string,
+		accessKeyId: String(_env.get('AWS_ACCESS_KEY_ID')),
+		secretAccessKey: String(_env.get('AWS_SECRET_ACCESS_KEY')),
 	},
 });
 
@@ -72,7 +72,7 @@ app.post(
 	asyncHandler(async (request: Request, response: Response) => {
 		const s3ClientResponse = await s3Client.send(
 			new PutObjectCommand({
-				Bucket: _env.get('AWS_S3_BUCKET_NAME') as string,
+				Bucket: String(_env.get('AWS_S3_BUCKET_NAME')),
 				Key: 'sample.txt',
 				Body: 'sample text content',
 			})

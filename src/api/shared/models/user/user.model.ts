@@ -1,14 +1,14 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Document, Error, ErrorHandlingMiddlewareWithOption, Schema } from 'mongoose';
 import { v7 as uuidv7 } from 'uuid';
 
 import { ApiError, asyncHandler } from '@api/shared/utils';
 import { _env } from '@environment';
 import * as constants from '@utils/constants';
 
-interface IUser extends mongoose.Document {
+export interface IUser {
 	firstName: string;
 	lastName: string;
 	userName: string;
@@ -20,21 +20,22 @@ interface IUser extends mongoose.Document {
 	country: string;
 	devTools: any;
 	roles: number[];
+	passwordChangedAt: Date | null;
+	passwordResetExpires: Date | null;
+	passwordResetToken: string | null;
 	refreshTokens: string[];
 	createdAt: Date;
 	updatedAt: Date;
-	// TODO: review how to avoid adding comparePassword in interface here...
+}
+
+export interface IUserDocument extends IUser, mongoose.Document {
 	comparePassword: Function;
 	generateAccessToken: () => string;
 	generateRefreshToken: () => string;
 	generateResetPasswordToken: () => string;
-
-	passwordChangedAt: Date | null;
-	passwordResetExpires: Date | null;
-	passwordResetToken: string | null;
 }
 
-const userSchema: Schema<IUser> = new Schema(
+const userSchema: Schema<IUserDocument> = new Schema(
 	{
 		firstName: {
 			type: String,
@@ -110,7 +111,7 @@ const userSchema: Schema<IUser> = new Schema(
 );
 
 userSchema.pre('save', async function (next) {
-	let user = this as IUser;
+	let user = this as IUserDocument;
 
 	if (!user.isModified('password')) {
 		return next();
@@ -127,7 +128,7 @@ userSchema.pre('save', async function (next) {
 	return next();
 });
 
-userSchema.post('save', function (error: any, document: any, next: any) {
+userSchema.post('save', function (error: any, document: Document, next: Function) {
 	// console.log('error :: ', error);
 	// console.log('document :: ', document);
 	// console.log('next :: ', next);
@@ -137,17 +138,17 @@ userSchema.post('save', function (error: any, document: any, next: any) {
 });
 
 userSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
-	const user = this as IUser;
+	const user = this as IUserDocument;
 	return bcrypt.compare(candidatePassword, user.password).catch(() => false);
 };
 
 userSchema.methods.generateAccessToken = function () {
-	const user = this as IUser;
+	const user = this as IUserDocument;
 	const accessToken = jwt.sign(
 		{ data: { id: user._id, email: user.email, userName: user.userName, roles: user.roles } },
-		_env.get('ACCESS_TOKEN_SECRET') as string,
+		String(_env.get('ACCESS_TOKEN_SECRET')),
 		{
-			expiresIn: _env.get('ACCESS_TOKEN_EXPIRY') as string,
+			expiresIn: String(_env.get('ACCESS_TOKEN_EXPIRY')),
 		}
 	);
 
@@ -155,9 +156,9 @@ userSchema.methods.generateAccessToken = function () {
 };
 
 userSchema.methods.generateRefreshToken = function () {
-	const user = this as IUser;
-	const refreshToken = jwt.sign({ data: { id: user._id } }, _env.get('REFRESH_TOKEN_SECRET') as string, {
-		expiresIn: _env.get('REFRESH_TOKEN_EXPIRY') as string,
+	const user = this as IUserDocument;
+	const refreshToken = jwt.sign({ data: { id: user._id } }, String(_env.get('REFRESH_TOKEN_SECRET')), {
+		expiresIn: String(_env.get('REFRESH_TOKEN_EXPIRY')),
 	});
 
 	return refreshToken;
@@ -174,4 +175,4 @@ userSchema.methods.generateResetPasswordToken = function () {
 	return resetPasswordToken;
 };
 
-export const User = mongoose.model<IUser>(constants.MODEL_NAMES.USER, userSchema);
+export const User = mongoose.model<IUserDocument>(constants.MODEL_NAMES.USER, userSchema);

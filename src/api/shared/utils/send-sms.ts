@@ -1,7 +1,5 @@
+import { PublishCommand, SetSMSAttributesCommand, SNSClient } from '@aws-sdk/client-sns';
 import { _env } from '@config/environment';
-
-import { SNSClient, PublishCommand, SetSMSAttributesCommand } from '@aws-sdk/client-sns';
-
 import * as constants from '@utils/constants';
 
 /*
@@ -17,10 +15,10 @@ interface ISendSms {
 }
 
 const snsClientConfig = {
-	region: _env.get('AWS_SNS_REGION') as string,
+	region: String(_env.get('AWS_SNS_REGION')),
 	credentials: {
-		accessKeyId: _env.get('AWS_ACCESS_KEY_ID') as string,
-		secretAccessKey: _env.get('AWS_SECRET_ACCESS_KEY') as string,
+		accessKeyId: String(_env.get('AWS_ACCESS_KEY_ID')),
+		secretAccessKey: String(_env.get('AWS_SECRET_ACCESS_KEY')),
 	},
 };
 

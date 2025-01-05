@@ -1,12 +1,12 @@
 import * as constants from '@utils/constants';
 
 export class ApiResponse {
-	private data: any;
-	private code: number;
-	private message: string;
-	private success: boolean;
+	private readonly data: unknown;
+	private readonly code: number;
+	private readonly message: string;
+	private readonly success: boolean;
 
-	constructor(data: any, message: string = 'ok', code: number = constants.HTTP_STATUS_CODES.SUCCESSFUL.OK) {
+	constructor(data: unknown, message: string = 'ok', code: number = constants.HTTP_STATUS_CODES.SUCCESSFUL.OK) {
 		this.code = code;
 		this.data = data;
 		this.message = message;

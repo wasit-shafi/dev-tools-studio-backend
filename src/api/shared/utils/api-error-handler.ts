@@ -4,9 +4,9 @@ export class ApiError extends Error {
 	status: string = '';
 	code: number = 0;
 	isOperational: boolean = false;
-	data: any = {};
+	data: unknown = {};
 
-	constructor(message: string, code: number, data: any = null) {
+	constructor(message: string, code: number, data: unknown = null) {
 		super(message); // calling the constructor of base Error class
 		this.data = data;
 		this.code = code;

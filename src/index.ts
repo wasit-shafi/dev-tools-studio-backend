@@ -1,11 +1,12 @@
-import { app } from './app';
 import { _env } from '@environment';
+
 import { connectDatabase } from './api/shared/database';
+import { app } from './app';
 
 connectDatabase()
 	.then(() => {
 		const port = _env.get('EXPRESS_PORT');
-		app.listen(port, () => {
+		app.listen({ port }, () => {
 			console.log(`Server is running on port ${port}`);
 		});
 	})

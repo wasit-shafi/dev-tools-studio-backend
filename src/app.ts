@@ -3,6 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import fs from 'fs';
 import helmet from 'helmet';
+import ipinfo, { defaultIPSelector } from 'ipinfo-express';
 import morgan from 'morgan';
 import path from 'path';
 import swaggerUi from 'swagger-ui-express';
@@ -34,9 +35,19 @@ app.use(
 
 app.use(globalApiRateLimiter);
 
+// For more info refer docs: https://github.com/ipinfo/node-express?tab=readme-ov-file#-ipinfo-nodejs-express-client-library
+
+app.use(
+	ipinfo({
+		token: String(_env.get('IP_INFO_ACCESS_TOKEN')),
+		cache: null,
+		timeout: 5000,
+		ipSelector: _env.get('NODE_ENV') == constants.NODE_ENV.PRODUCTION ? defaultIPSelector : constants.mockIpSelector,
+	})
+);
 // app.set('view engine', 'ejs');
 
-app.use(morgan('dev'));
+app.use(morgan(':method :url :status [:date[iso]] [:date[iso]]'));
 
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -57,7 +68,6 @@ const swaggerOptions = {
 };
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions));
-// TODO: temporarily used here just for confirmation
 
 const s3Client = new S3Client({
 	region: String(_env.get('AWS_S3_BUCKET_REGION')),

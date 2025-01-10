@@ -41,6 +41,8 @@ const __env: Record<string, string | number | undefined> = {
 	RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY,
 
 	FE_BASE_URL: process.env.FE_BASE_URL,
+
+	IP_INFO_ACCESS_TOKEN: process.env.IP_INFO_ACCESS_TOKEN,
 };
 
 export const _env = {

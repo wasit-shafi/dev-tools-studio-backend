@@ -1,5 +1,6 @@
-import * as constants from '@utils/constants';
 import otpGenerator from 'otp-generator';
+
+import * as constants from '@utils/constants';
 
 interface IOtpGeneratorOptions {
 	digits?: boolean;
@@ -38,4 +39,15 @@ export const generateCookieOptions = (
 	};
 	// console.log('cookieOptions :: ', cookieOptions);
 	return cookieOptions;
+};
+
+/**
+ * utility function to get the random numbers
+ *
+ * @param min - the minimum random number value
+ * @param  max - the maximum random number value
+ * @returns radom value within range [min, max]
+ */
+export const randomInteger: (min: number, max: number) => number = (min, max) => {
+	return Math.floor(Math.random() * (max - min + 1) + min);
 };

@@ -96,6 +96,10 @@ const forgotPassword = asyncHandler(async (request: Request, response: Response,
 		const resetPasswordLink = `${_env.get('FE_BASE_URL')}/reset-password?token=${user.generateResetPasswordToken()}`;
 		await user.save();
 
+		const when = new Date().toUTCString();
+		const device = utils.getDeviceInfoString(request.headers['user-agent'] || '');
+		const near = utils.getIpInfoString(request.ipinfo);
+
 		await emailQueue.add(constants.MESSAGING_QUEUES.EMAIL, {
 			emailOptions: {
 				from: `Dev Tools Studio<noReply@devToolsStudio.com>`,
@@ -104,9 +108,9 @@ const forgotPassword = asyncHandler(async (request: Request, response: Response,
 				html: ejs.render(templateString, {
 					firstName: user.firstName,
 					resetPasswordLink,
-					when: 'Dec 29, 2024 01:00 AM India Standard Time',
-					device: 'Mozilla Firefox Windows (Desktop)',
-					near: 'National Capital Territory of Delhi, India',
+					when,
+					device,
+					near,
 				}),
 			},
 		});

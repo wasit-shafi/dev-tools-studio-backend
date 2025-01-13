@@ -42,12 +42,12 @@ app.use(
 		token: String(_env.get('IP_INFO_ACCESS_TOKEN')),
 		cache: null,
 		timeout: 5000,
-		ipSelector: _env.get('NODE_ENV') == constants.NODE_ENV.PRODUCTION ? defaultIPSelector : constants.mockIpSelector,
+		ipSelector: _env.get('NODE_ENV') === constants.NODE_ENV.PRODUCTION ? defaultIPSelector : constants.mockIpSelector,
 	})
 );
 // app.set('view engine', 'ejs');
 
-app.use(morgan(':method :url :status [:date[iso]] [:date[iso]]'));
+app.use(morgan(':method :url :status :date[iso]'));
 
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded

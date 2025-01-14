@@ -88,7 +88,6 @@ app.post(
 			})
 		);
 		response.send({ ...s3ClientResponse });
-		return;
 	})
 );
 // bull board dashboard ui for bullmq queues
@@ -100,7 +99,6 @@ app.use('/api/v2', routerV2);
 
 app.get('/', (request: Request, response: Response) => {
 	response.json(new ApiResponse({ healthCheck: 'Server on working fine', yourIp: request.ip, requestProtocol: request.protocol }));
-	return;
 });
 
 app.all('*', (request: Request, response: Response, next: NextFunction) => {

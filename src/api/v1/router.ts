@@ -14,7 +14,6 @@ const router = Router();
 
 router.get('/say-hello', (request, response) => {
 	response.json({ message: `Hello World - V1(${_env.get('NODE_ENV')})` });
-	return;
 });
 
 const verifyJWT: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {

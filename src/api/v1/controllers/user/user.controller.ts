@@ -7,7 +7,6 @@ import { asyncHandler } from '@utils';
 const getUsers = asyncHandler(async (request: Request, response: Response) => {
 	const allUsers = await User.find({});
 	response.json(allUsers);
-	return;
 });
 
 export const userController = { getUsers };

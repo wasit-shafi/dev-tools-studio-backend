@@ -80,7 +80,6 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 
 const signout = asyncHandler(async (request: Request, response: Response) => {
 	response.json({ message: messages.AUTH.SIGNOUT_SUCCESS });
-	return;
 });
 
 const forgotPassword = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {

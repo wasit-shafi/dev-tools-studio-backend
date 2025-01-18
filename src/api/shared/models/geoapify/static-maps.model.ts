@@ -1,0 +1,1 @@
+// for more info refer official docs: https://apidocs.geoapify.com/docs/maps/static/#about

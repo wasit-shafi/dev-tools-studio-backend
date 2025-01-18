@@ -43,6 +43,8 @@ const __env: Record<string, string | number | undefined> = {
 	FE_BASE_URL: process.env.FE_BASE_URL,
 
 	IP_INFO_ACCESS_TOKEN: process.env.IP_INFO_ACCESS_TOKEN,
+
+	GEOAPIFY_API_KEY: process.env.GEOAPIFY_API_KEY,
 };
 
 export const _env = {

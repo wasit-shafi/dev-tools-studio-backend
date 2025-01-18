@@ -1,4 +1,4 @@
-import { format, createLogger, transports } from 'winston';
+import { createLogger, format, transports } from 'winston';
 
 // NOTE(wasit): For more info refer https://betterstack.com/community/guides/logging/how-to-install-setup-and-use-winston-and-morgan-to-log-node-js-applications/
 

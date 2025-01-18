@@ -16,5 +16,4 @@ export const globalErrorController: ErrorRequestHandler = (error, _, response, n
 		// status: error.status,
 		success: false,
 	});
-	return;
 };

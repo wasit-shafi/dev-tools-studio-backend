@@ -83,7 +83,10 @@ const signout = asyncHandler(async (request: Request, response: Response) => {
 });
 
 const forgotPassword = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
-	const { email } = request.body;
+	const {
+		ipinfo,
+		body: { email },
+	} = request;
 
 	const user = await User.findOne({
 		email,
@@ -97,7 +100,20 @@ const forgotPassword = asyncHandler(async (request: Request, response: Response,
 
 		const when = new Date().toUTCString();
 		const device = utils.getDeviceInfoString(request.headers['user-agent'] || '');
-		const near = utils.getIpInfoString(request.ipinfo);
+		const near = utils.getIpInfoString(ipinfo);
+
+		const latitude = ipinfo && !ipinfo?.bogon ? ipinfo.loc.split(',')[0] : '';
+		const longitude = ipinfo && !ipinfo?.bogon ? ipinfo.loc.split(',')[1] : '';
+
+		const staticMapUrl = utils.getStaticMapUrl({
+			latitude,
+			longitude,
+		});
+		const googleMapUrl = utils.getGoogleMapUrl({
+			latitude,
+			longitude,
+		});
+		const countryFlagUrl = utils.getCountryFlagUrl('20x15', ipinfo?.countryCode);
 
 		await emailQueue.add(constants.MESSAGING_QUEUES.EMAIL, {
 			emailOptions: {
@@ -110,6 +126,9 @@ const forgotPassword = asyncHandler(async (request: Request, response: Response,
 					when,
 					device,
 					near,
+					staticMapUrl,
+					googleMapUrl,
+					countryFlagUrl,
 				}),
 			},
 		});

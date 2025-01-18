@@ -14,7 +14,7 @@ import { routerV2 } from '@apiV2/router';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { globalErrorController } from '@controllers';
 import { _env } from '@environment';
-import { ApiError, ApiResponse, asyncHandler, globalApiRateLimiter, logger } from '@utils';
+import { ApiError, ApiResponse, asyncHandler, globalApiRateLimiter } from '@utils';
 import * as constants from '@utils/constants';
 
 import { serverAdapter } from './bull-board/create-board';
@@ -41,7 +41,7 @@ app.use(
 	ipinfo({
 		token: String(_env.get('IP_INFO_ACCESS_TOKEN')),
 		cache: null,
-		timeout: 5000,
+		timeout: constants.IP_INFO_REQUESTS_TIMEOUT,
 		ipSelector: _env.get('NODE_ENV') === constants.NODE_ENV.PRODUCTION ? defaultIPSelector : constants.mockIpSelector,
 	})
 );

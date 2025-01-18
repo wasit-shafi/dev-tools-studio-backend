@@ -1,3 +1,4 @@
+import { ICountryMetaData } from '@models';
 import * as utils from '@utils/utils';
 
 export const DATABASE_NAME: string = 'dev-tools-studio';
@@ -5,6 +6,12 @@ export const DATABASE_NAME: string = 'dev-tools-studio';
 export const SALT_ROUNDS_FOR_PASSWORD: number = 10;
 
 export const OTP_LENGTH: number = 6;
+
+export const FLAG_CDN_BASE_URL = 'https://flagcdn.com';
+export const GOOGLE_MAPS_BASE_URL = 'http://maps.google.com';
+export const GEOAPIFY_MAPS_BASE_URL = 'https://maps.geoapify.com/v1';
+
+export const IP_INFO_REQUESTS_TIMEOUT: number = 6000; //6 seconds (default is 5 seconds)
 
 export const NODE_ENV = {
 	PRODUCTION: 'production',
@@ -249,7 +256,7 @@ export const mockIpSelector = (): string => {
 
 // Referred from https://www.html-code-generator.com/javascript/array/country-names
 
-export const COUNTRY_METADATA = [
+export const COUNTRY_METADATA: ICountryMetaData[] = [
 	{
 		name: 'Afghanistan',
 		code: 'AF',

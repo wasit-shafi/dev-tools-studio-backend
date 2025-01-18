@@ -1,9 +1,10 @@
 import { rateLimit } from 'express-rate-limit';
-import type { Request, Response, NextFunction } from 'express';
 
-import { ApiError, messages } from '@utils';
 import { _env } from '@environment';
+import { ApiError, messages } from '@utils';
 import * as constants from '@utils/constants';
+
+import type { Request, Response, NextFunction } from 'express';
 
 export const globalApiRateLimiter = rateLimit({
 	windowMs: constants.TIME.MS.MINUTE * Number(_env.get('API_RATE_LIMITER_WINDOW_IN_MINUTE')),
@@ -12,9 +13,8 @@ export const globalApiRateLimiter = rateLimit({
 	// Disable the `X-RateLimit-*` headers.
 	legacyHeaders: false,
 	skip: (request: Request, response: Response) => {
-		// NOTE(wasit): used for testing purposes only in development env.
-		// return false;
-		return String(_env.get('API_RATE_LIMITER_IP_WHITELIST')).split(',').includes(String(request.ip));
+		// return String(_env.get('API_RATE_LIMITER_IP_WHITELIST')).split(',').includes(String(request.ip));
+		return false;
 	},
 	handler: (request: Request, response: Response, next: NextFunction, options) => {
 		// TODO: create a new transport for logging request details like ip in separate db.
@@ -35,8 +35,8 @@ export const apiRateLimiterStrict = rateLimit({
 	standardHeaders: 'draft-7',
 	legacyHeaders: false,
 	skip: (request: Request, response: Response) => {
-		// return false;
-		return String(_env.get('API_RATE_LIMITER_IP_WHITELIST')).split(',').includes(String(request.ip));
+		// return String(_env.get('API_RATE_LIMITER_IP_WHITELIST')).split(',').includes(String(request.ip));
+		return false;
 	},
 	handler: (request: Request, response: Response, next: NextFunction, options) => {
 		next(

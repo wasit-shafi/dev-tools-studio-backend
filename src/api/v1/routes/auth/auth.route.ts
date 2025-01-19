@@ -3,13 +3,14 @@ import { Router } from 'express';
 import { authController } from '@apiV1Controllers/auth/auth.controller';
 import { _env } from '@environment';
 import { validate, validateReCaptchaResponse } from '@middlewares';
-import { resetPasswordZodSchema, userZodSchema } from '@schemas/user/user.schema';
+import { resetPasswordZodSchema, signupZodSchema } from '@schemas';
 import { apiRateLimiterStrict } from '@utils';
 import * as constants from '@utils/constants';
 
 export const authRouter = Router();
 
-authRouter.post(constants.ROUTES.AUTH_ROUTES._SIGNUP, validate(userZodSchema), validateReCaptchaResponse, authController.signup);
+//
+authRouter.post(constants.ROUTES.AUTH_ROUTES._SIGNUP, validate(signupZodSchema), validateReCaptchaResponse, authController.signup);
 
 authRouter.post(constants.ROUTES.AUTH_ROUTES._SIGNIN, validateReCaptchaResponse, authController.signin);
 

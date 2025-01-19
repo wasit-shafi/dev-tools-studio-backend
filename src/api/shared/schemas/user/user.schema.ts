@@ -1,8 +1,9 @@
 import { z } from 'zod';
 
+import { messages } from '@utils';
 import * as constants from '@utils/constants';
 
-export const userZodSchema = z
+export const signupZodSchema = z
 	.object({
 		firstName: z
 			.string({
@@ -21,8 +22,7 @@ export const userZodSchema = z
 			.trim()
 			.min(3, { message: 'Last Name must be at least 3 characters' })
 			.max(20, { message: "Last Name can't be more than 20 characters" }),
-		userName: z.string().optional(),
-		displayName: z.string().optional(),
+
 		email: z
 			.string({
 				required_error: 'Email is required',
@@ -31,6 +31,7 @@ export const userZodSchema = z
 			.email({
 				message: 'You have entered invalid email address',
 			}),
+
 		password: z
 			.string({
 				required_error: 'Password is required',
@@ -39,12 +40,14 @@ export const userZodSchema = z
 			.trim()
 			.min(8, { message: 'Password must be at least 8 characters' })
 			.max(100, { message: "Password can't be more than 100 characters" }),
+
 		confirmPassword: z
 			.string({
 				required_error: 'Confirm Password is required',
 				invalid_type_error: 'Confirm Password must be a string',
 			})
 			.trim(),
+
 		countryCode: z
 			.string({
 				required_error: 'Country Code is required',
@@ -64,22 +67,16 @@ export const userZodSchema = z
 			required_error: 'Mobile Number is required',
 			invalid_type_error: 'Mobile Number must be a string',
 		}),
+
 		country: z.string({
 			required_error: 'Country is required',
 			invalid_type_error: 'Country must be a string',
 		}),
-		refreshTokens: z.string().array().nonempty().optional(),
-		// don't take input from user
-		// roles: z
-		// 	.number({
-		// 		required_error: 'Role is required',
-		// 		invalid_type_error: 'Role must be a number',
-		// 	})
-		// 	.array()
-		// 	.nonempty({ message: 'User should have at-least one role' }),
-
-		createdAt: z.string().datetime().optional(),
-		updatedAt: z.string().datetime().optional(),
+		
+		reCaptcha: z.string({
+			required_error: messages.AUTH.RE_CAPTCHA_NOT_PROVIDED,
+			invalid_type_error: 'reCaptcha must be a string',
+		}),
 	})
 	.refine((userData) => userData.password === userData.confirmPassword, {
 		message: "Passwords & Confirm Password don't match, please try again.",
@@ -100,10 +97,10 @@ export const resetPasswordZodSchema = z
 				invalid_type_error: 'Confirm Password must be a string',
 			})
 			.trim(),
-		reCaptchaResponse: z
+		reCaptcha: z
 			.string({
-				required_error: 'reCaptchaResponse is required',
-				invalid_type_error: 'reCaptchaResponse must be a string',
+				required_error: 'reCaptcha is required',
+				invalid_type_error: 'reCaptcha must be a string',
 			})
 			.trim(),
 	})

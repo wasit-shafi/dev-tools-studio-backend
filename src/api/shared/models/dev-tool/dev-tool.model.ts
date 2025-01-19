@@ -1,7 +1,7 @@
 import mongoose, { Types } from 'mongoose';
+import { any } from 'zod';
 
 import * as constants from '@utils/constants';
-import { any } from 'zod';
 
 interface IDevTool extends mongoose.Document {
 	// emailTemplates: mongoose.Types.ObjectId;
@@ -9,7 +9,7 @@ interface IDevTool extends mongoose.Document {
 	palettes: any;
 }
 
-export const devToolSchema = new mongoose.Schema<IDevTool>({
+const devToolSchema = new mongoose.Schema<IDevTool>({
 	// emailTemplates: {
 	// 	type: mongoose.Schema.Types.ObjectId,
 	// 	ref: constants.MODEL_NAMES.EMAIL_TEMPLATE,
@@ -25,4 +25,4 @@ export const devToolSchema = new mongoose.Schema<IDevTool>({
 	},
 });
 
-export const DevTool = mongoose.model<IDevTool>(constants.MODEL_NAMES.ROLE, devToolSchema);
+export const DevTool = mongoose.model<IDevTool>(constants.MODEL_NAMES.DEV_TOOL, devToolSchema);

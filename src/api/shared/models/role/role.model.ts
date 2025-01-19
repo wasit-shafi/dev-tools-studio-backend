@@ -18,4 +18,4 @@ const roleSchema = new mongoose.Schema<IRole>({
 	},
 });
 
-export const Roles = mongoose.model<IRole>(constants.MODEL_NAMES.ROLE, roleSchema);
+export const Role = mongoose.model<IRole>(constants.MODEL_NAMES.ROLE, roleSchema);

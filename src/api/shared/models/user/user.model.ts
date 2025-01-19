@@ -1,23 +1,28 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import mongoose, { Document, Error, ErrorHandlingMiddlewareWithOption, Schema } from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 import { v7 as uuidv7 } from 'uuid';
 
 import { ApiError, asyncHandler } from '@api/shared/utils';
 import { _env } from '@environment';
 import * as constants from '@utils/constants';
 
-export interface IUser {
+export interface IUserSignUp {
 	firstName: string;
 	lastName: string;
-	userName: string;
-	displayName: string;
 	email: string;
 	password: string;
+	confirmPassword: string;
 	countryCode: string;
-	mobileNumber: string;
 	country: string;
+	mobileNumber: string;
+	reCaptcha: string;
+}
+
+export interface IUser extends Omit<IUserSignUp , 'confirmPassword'> {
+	userName: string;
+	displayName: string;
 	devTools: any;
 	roles: number[];
 	passwordChangedAt: Date | null;
@@ -88,21 +93,26 @@ const userSchema: Schema<IUserDocument> = new Schema(
 			type: String,
 			required: true,
 		},
+
 		refreshTokens: {
 			type: [String],
 			required: true,
 			default: [],
 		},
+
 		roles: {
 			type: [Number],
 			required: true,
 		},
+
 		passwordChangedAt: {
 			type: Date,
 		},
+
 		passwordResetExpires: {
 			type: Date,
 		},
+
 		passwordResetToken: {
 			type: String,
 		},

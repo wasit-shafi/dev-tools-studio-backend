@@ -6,14 +6,16 @@ import { ApiError, asyncHandler, messages } from '@utils';
 import * as constants from '@utils/constants';
 
 export const validateReCaptchaResponse: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
-	if (!('reCaptchaResponse' in request.body)) {
+	// Additional Check, already using zod validations
+	
+	if (!('reCaptcha' in request.body)) {
 		next(new ApiError(messages.AUTH.RE_CAPTCHA_NOT_PROVIDED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
 		return;
 	}
 
-	const { reCaptchaResponse } = request.body;
+	const { reCaptcha } = request.body;
 
-	if (!reCaptchaResponse) {
+	if (!reCaptcha) {
 		next(new ApiError(messages.AUTH.RE_CAPTCHA_RESPONSE_EMPTY, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
 		return;
 	}
@@ -26,7 +28,7 @@ export const validateReCaptchaResponse: RequestHandler = asyncHandler(async (req
 	// Create a new URLSearchParams object
 	const reCaptchaParams = new URLSearchParams({
 		secret: String(_env.get('RECAPTCHA_SECRET_KEY')),
-		response: reCaptchaResponse,
+		response: reCaptcha,
 		remoteip: String(request.ip),
 	});
 

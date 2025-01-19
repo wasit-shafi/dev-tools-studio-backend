@@ -2,7 +2,7 @@ import otpGenerator from 'otp-generator';
 import { UAParser } from 'ua-parser-js';
 
 import { _env } from '@config/environment';
-import { IGoogleMapParams, IStaticMapParams } from '@models';
+import { IGoogleMapParams, IStaticMapParams } from '@interfaces';
 import * as constants from '@utils/constants';
 
 interface IOtpGeneratorOptions {

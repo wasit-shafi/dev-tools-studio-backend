@@ -1,4 +1,4 @@
-import { ICountryMetaData } from '@models';
+import { ICountryMetaData } from '@interfaces';
 import * as utils from '@utils/utils';
 
 export const DATABASE_NAME: string = 'dev-tools-studio';

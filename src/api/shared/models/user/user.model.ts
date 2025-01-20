@@ -20,7 +20,8 @@ export interface IUserSignUp {
 	reCaptcha: string;
 }
 
-export interface IUser extends Omit<IUserSignUp , 'confirmPassword'> {
+export interface IUser extends Omit<IUserSignUp, 'confirmPassword'> {
+	test: string;
 	userName: string;
 	displayName: string;
 	devTools: any;

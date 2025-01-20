@@ -21,8 +21,10 @@ export const messages = {
 			EMAIL_SCHEDULED_SUCCESS: 'Your Email has been scheduled successfully',
 		},
 	},
-	COMMON: {
+	SHARED: {
+		DATABASE_CONNECTION_ERROR: 'Failed to connect with database',
 		INVALID_DATE_AND_TIME: 'Invalid date/time',
+		SCHEMA_VALIDATION_ERROR: 'Something went wrong while parsing/validating request',
 		SOMETHING_WENT_WRONG: 'Something went wrong. Please try again.',
 	},
 	ERROR: {},
@@ -36,4 +38,4 @@ export const messages = {
 		SERVER: {},
 	},
 	USER: {},
-};
+} as const;

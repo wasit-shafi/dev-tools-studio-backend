@@ -2,7 +2,7 @@ import otpGenerator from 'otp-generator';
 import { UAParser } from 'ua-parser-js';
 
 import { _env } from '@config/environment';
-import { IGoogleMapParams, IStaticMapParams } from '@interfaces';
+import { IGoogleMapParams, IStaticMapParams, TFlagCdnIconSizeValues } from '@interfaces';
 import * as constants from '@utils/constants';
 
 interface IOtpGeneratorOptions {
@@ -113,7 +113,7 @@ export const getGoogleMapUrl = (params: IGoogleMapParams): string => {
 };
 // For more info refer: https://flagpedia.net/download/api
 
-export const getCountryFlagUrl = (flagSize: any, countryCode: string): string => {
+export const getCountryFlagUrl = (flagSize: TFlagCdnIconSizeValues, countryCode: string): string => {
 	let flagUrl = '';
 
 	if (flagSize && countryCode) {

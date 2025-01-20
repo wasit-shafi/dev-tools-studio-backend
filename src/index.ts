@@ -11,6 +11,7 @@ connectDatabase()
 		});
 	})
 	.catch((error) => {
-		console.error('Something Went Wrong :', error);
-		process.exit(1);
+		console.error(error);
+		
+		process.exit(1); // terminating the process
 	});

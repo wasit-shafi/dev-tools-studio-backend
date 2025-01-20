@@ -12,6 +12,46 @@ export const GOOGLE_MAPS_BASE_URL = 'http://maps.google.com';
 export const GEOAPIFY_MAPS_BASE_URL = 'https://maps.geoapify.com/v1';
 
 export const IP_INFO_REQUESTS_TIMEOUT: number = 6000; //6 seconds (default is 5 seconds)
+// Refer official docs for sizes: https://flagpedia.net/download/api
+
+export const FLAG_CDN_ICON_SIZE = {
+	W16H12: '16x12',
+	W20H15: '20x15',
+	W24H18: '24x18',
+	W28H21: '28x21',
+	W32H24: '32x24',
+	W36H27: '36x27',
+	W40H30: '40x30',
+	W48H36: '48x36',
+	W56H42: '56x42',
+	W60H45: '60x45',
+	W64H48: '64x48',
+	W72H54: '72x54',
+	W80H60: '80x60',
+	W84H63: '84x63',
+	W96H72: '96x72',
+	W108H81: '108x81',
+	W112H84: '112x84',
+	W120H90: '120x90',
+	W128H96: '128x96',
+	W144H108: '144x108',
+	W160H120: '160x120',
+	W192H144: '192x144',
+	W224H168: '224x168',
+	W256H192: '256x192',
+} as const;
+// For more info refer : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof#description
+
+export const TYPES = {
+	UNDEFINED: 'undefined',
+	BOOLEAN: 'boolean',
+	NUMBER: 'number',
+	BIGINT: 'bigint',
+	STRING: 'string',
+	SYMBOL: 'symbol',
+	FUNCTION: 'function',
+	OBJECT: 'object',
+} as const;
 
 export const NODE_ENV = {
 	PRODUCTION: 'production',

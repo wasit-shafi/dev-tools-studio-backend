@@ -13,7 +13,7 @@ const sendMail: RequestHandler = async (request: Request, response: Response, ne
 		const delay = Number(targetDateAndTime) - Number(new Date());
 
 		if (delay < 0) {
-			return next(new ApiError(messages.COMMON.INVALID_DATE_AND_TIME, constants.HTTP_STATUS_CODES.CLIENT_ERROR.NOT_ACCEPTABLE));
+			return next(new ApiError(messages.SHARED.INVALID_DATE_AND_TIME, constants.HTTP_STATUS_CODES.CLIENT_ERROR.NOT_ACCEPTABLE));
 		}
 
 		const html = `<p>\
@@ -48,7 +48,7 @@ const sendMail: RequestHandler = async (request: Request, response: Response, ne
 		next(
 			new ApiError(
 				'Something went wrong, while sending email, please try again after some time',
-				constants.HTTP_STATUS_CODES.SERVER_ERROR.SERVER_ERROR
+				constants.HTTP_STATUS_CODES.SERVER_ERROR.SMTP_ERROR
 			)
 		);
 	}

@@ -39,10 +39,10 @@ const verifyJWT: RequestHandler = async (request: Request, response: Response, n
 
 		if (
 			decoded !== null &&
-			typeof decoded == 'object' &&
+			decoded instanceof Object &&
 			'data' in decoded &&
 			decoded.data !== null &&
-			typeof decoded.data == 'object' &&
+			decoded.data instanceof Object &&
 			'id' in decoded.data
 		) {
 			user = await User.findById(decoded.data.id);

@@ -113,7 +113,8 @@ const forgotPassword = asyncHandler(async (request: Request, response: Response,
 			latitude,
 			longitude,
 		});
-		const countryFlagUrl = utils.getCountryFlagUrl('20x15', ipinfo?.countryCode);
+
+		const countryFlagUrl = utils.getCountryFlagUrl(constants.FLAG_CDN_ICON_SIZE.W20H15, ipinfo?.countryCode);
 
 		await emailQueue.add(constants.MESSAGING_QUEUES.EMAIL, {
 			emailOptions: {

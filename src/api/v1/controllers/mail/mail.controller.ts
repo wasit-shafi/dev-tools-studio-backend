@@ -43,14 +43,8 @@ const sendMail: RequestHandler = async (request: Request, response: Response, ne
 		// console.log('task :: ', task);
 
 		response.json({ message: messages.BULL_MQ.EMAIL.EMAIL_SCHEDULED_SUCCESS });
-		return;
 	} catch (error: unknown) {
-		next(
-			new ApiError(
-				'Something went wrong, while sending email, please try again after some time',
-				constants.HTTP_STATUS_CODES.SERVER_ERROR.SMTP_ERROR
-			)
-		);
+		next(new ApiError(messages.SHARED.SMTP_ERROR, constants.HTTP_STATUS_CODES.SERVER_ERROR.SMTP_ERROR));
 	}
 };
 

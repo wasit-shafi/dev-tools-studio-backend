@@ -14,7 +14,7 @@ import { routerV2 } from '@apiV2/router';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { globalErrorController } from '@controllers';
 import { _env } from '@environment';
-import { ApiError, ApiResponse, asyncHandler, globalApiRateLimiter } from '@utils';
+import { ApiError, ApiResponse, asyncHandler, globalApiRateLimiter, messages } from '@utils';
 import * as constants from '@utils/constants';
 
 import { serverAdapter } from './bull-board/create-board';
@@ -98,7 +98,9 @@ app.use('/api/v1', routerV1);
 app.use('/api/v2', routerV2);
 
 app.get('/', (request: Request, response: Response) => {
-	response.json(new ApiResponse({ healthCheck: 'Server on working fine', yourIp: request.ip, requestProtocol: request.protocol }));
+	response.json(
+		new ApiResponse({ healthCheck: messages.SHARED.SERVER_HEALTH_CHECK, yourIp: request.ip, requestProtocol: request.protocol })
+	);
 });
 
 app.all('*', (request: Request, response: Response, next: NextFunction) => {

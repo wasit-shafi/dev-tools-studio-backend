@@ -135,13 +135,7 @@ const forgotPassword = asyncHandler(async (request: Request, response: Response,
 		});
 	}
 
-	response.json(
-		new ApiResponse(
-			null,
-			'If an account with this email exists, a password reset link has been sent. Please check your inbox and follow the instructions.'
-		)
-	);
-	return;
+	response.json(new ApiResponse(null, messages.AUTH.PASSWORD_RESET_MAIL_SENT));
 });
 
 const resetPassword = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
@@ -159,11 +153,11 @@ const resetPassword = asyncHandler(async (request: Request, response: Response, 
 		user.passwordResetExpires = null;
 		user.passwordChangedAt = new Date();
 		await user.save();
-		response.json(new ApiResponse(null, 'Password reset successful, please login with your new password'));
+		response.json(new ApiResponse(null, messages.AUTH.RESET_PASSWORD_SUCCESS));
 		return;
 	}
 
-	next(new ApiError('This password reset attempt is no longer valid, please request a new link and try again', 400));
+	next(new ApiError(messages.AUTH.INVALID_RESET_PASSWORD_ATTEMPT, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
 });
 
 const refreshToken = asyncHandler(async (request: Request, response: Response) => {
@@ -171,7 +165,6 @@ const refreshToken = asyncHandler(async (request: Request, response: Response) =
 		accessToken: 'new_access_token',
 		refreshToken: 'new_refresh_token',
 	});
-	return;
 });
 
 export const authController = { signup, signin, signout, forgotPassword, resetPassword };

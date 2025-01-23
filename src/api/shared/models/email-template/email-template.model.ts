@@ -2,17 +2,7 @@ import mongoose from 'mongoose';
 
 import * as constants from '@utils/constants';
 
-interface IEmailTemplate extends mongoose.Document {
-	subject: string;
-	salutation: string;
-	body: string;
-	closing: string;
-	signature: string;
-	usedCount: number;
-	lastUsedTimestamp: Date;
-}
-
-const emailTemplateSchema = new mongoose.Schema<IEmailTemplate>({
+const emailTemplateSchema = new mongoose.Schema({
 	subject: {
 		type: String,
 		required: true,
@@ -44,4 +34,4 @@ const emailTemplateSchema = new mongoose.Schema<IEmailTemplate>({
 	},
 });
 
-export const EmailTemplate = mongoose.model<IEmailTemplate>(constants.MODEL_NAMES.EMAIL_TEMPLATE, emailTemplateSchema);
+export const EmailTemplate = mongoose.model(constants.MODEL_NAMES.EMAIL_TEMPLATE, emailTemplateSchema);

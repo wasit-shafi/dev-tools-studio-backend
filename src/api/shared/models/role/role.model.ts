@@ -2,12 +2,7 @@ import mongoose from 'mongoose';
 
 import * as constants from '@utils/constants';
 
-interface IRole extends mongoose.Document {
-	role: number;
-	type: string;
-}
-
-const roleSchema = new mongoose.Schema<IRole>({
+const roleSchema = new mongoose.Schema({
 	role: {
 		type: Number,
 		required: true,
@@ -18,4 +13,4 @@ const roleSchema = new mongoose.Schema<IRole>({
 	},
 });
 
-export const Role = mongoose.model<IRole>(constants.MODEL_NAMES.ROLE, roleSchema);
+export const Role = mongoose.model(constants.MODEL_NAMES.ROLE, roleSchema);

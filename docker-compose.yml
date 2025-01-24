@@ -5,7 +5,7 @@ services:
     container_name: dts_dev_mongo_container
     image: mongo:latest
     ports:
-      # Note: 27018 is exposed to client (as most of the time i have multiple connection opened at time,)
+      # NOTE(WASIT): 27018 is exposed to client (as most of the time i have multiple connection opened at time,)
       - 27018:27017
     volumes:
       - mongoData:/data/db

@@ -13,7 +13,8 @@ const sendMail: RequestHandler = async (request: Request, response: Response, ne
 		const delay = Number(targetDateAndTime) - Number(new Date());
 
 		if (delay < 0) {
-			return next(new ApiError(messages.SHARED.INVALID_DATE_AND_TIME, constants.HTTP_STATUS_CODES.CLIENT_ERROR.NOT_ACCEPTABLE));
+			next(new ApiError(messages.SHARED.INVALID_DATE_AND_TIME, constants.HTTP_STATUS_CODES.CLIENT_ERROR.NOT_ACCEPTABLE));
+			return;
 		}
 
 		const html = `<p>\
@@ -45,6 +46,7 @@ const sendMail: RequestHandler = async (request: Request, response: Response, ne
 		response.json({ message: messages.BULL_MQ.EMAIL.EMAIL_SCHEDULED_SUCCESS });
 	} catch (error: unknown) {
 		next(new ApiError(messages.SHARED.SMTP_ERROR, constants.HTTP_STATUS_CODES.SERVER_ERROR.SMTP_ERROR));
+		return;
 	}
 };
 

@@ -10,7 +10,7 @@ export class ApiError extends Error {
 		super(message); // calling the constructor of base Error class
 		this.data = data;
 		this.code = code;
-		// TODO(review): if there is any need of status when we are already sending code in response
+		// TODO(WASIT): review if there is any need of status when we are already sending code in response
 		// this.status =
 		// 	code >= constants.HTTP_STATUS_CODES_RANGES.MIN_CLIENT_ERROR && code <= constants.HTTP_STATUS_CODES_RANGES.MAX_CLIENT_ERROR
 		// 		? constants.STATUS_TYPES.FAIL

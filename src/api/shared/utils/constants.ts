@@ -42,6 +42,8 @@ export const FLAG_CDN_ICON_SIZE = {
 } as const;
 // For more info refer : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof#description
 
+// TODO(WASIT): review why it was not working to replace  typeof string
+// : Record<string, 'undefined' | 'boolean' | 'number' | 'bigint' | 'string' | 'symbol' | 'function' | 'object'>
 export const TYPES = {
 	UNDEFINED: 'undefined',
 	BOOLEAN: 'boolean',
@@ -60,7 +62,7 @@ export const NODE_ENV = {
 
 export const RE_CAPTCHA_SITE_VERIFY_BASE_URL: string = 'https://www.google.com/recaptcha/api/siteverify';
 
-// TODO: check correct way for defining object of objects or string
+// TODO(WASIT): check correct way for defining object of objects or string
 // { [key: string]: string }
 // const ROUTES: { [key: string]: string | { [key: string]: string } } = {
 // const ROUTES: Record<string, string | Record<string, string>> = {
@@ -95,7 +97,8 @@ export const DEFAULT_COOKIE_EXPIRY: number = TIME.MS.DAY * 15; // 15 DAYS
 
 export const DEFAULT_OTP_LENGTH: number = 8;
 
-export const MODEL_NAMES: Record<string, string> = {
+// : Record<string, string>
+export const MODEL_NAMES = {
 	USER: 'User',
 	ROLE: 'Role',
 	DEV_TOOL: 'DevTool',
@@ -125,7 +128,9 @@ export const HTTP_STATUS_CODES_RANGES: Record<string, number> = {
 	MAX_SERVER_ERROR: 599,
 } as const;
 
-export const HTTP_STATUS_CODES: Record<string, Record<string, number>> = {
+// TODO(WASIT): review why by using Record, auto complete/intellisense is not working
+// :Record<string, Record<string, number>>
+export const HTTP_STATUS_CODES = {
 	// Information - 1XX
 
 	INFORMATIONAL: {
@@ -161,7 +166,7 @@ export const HTTP_STATUS_CODES: Record<string, Record<string, number>> = {
 		SMTP_ERROR: 554,
 	},
 } as const;
-// TODO: Review where to use the db constants or should we prefer enums
+// TODO(WASIT): Review where to use the db constants or should we prefer enums
 
 export const USER_ROLES: Record<string, number> = {
 	SUPER_ADMIN: 1,
@@ -183,7 +188,7 @@ export const SMS_MESSAGE_TYPE = {
 	TRANSACTIONAL: 'Transactional',
 } as const;
 
-// NOTE(wasit): In AWS SNS 'Promotional' is the default sms type
+// NOTE(WASIT): In AWS SNS 'Promotional' is the default sms type
 
 export const DEFAULT_SMS_TYPE = SMS_MESSAGE_TYPE.TRANSACTIONAL;
 

@@ -9,6 +9,8 @@ declare global {
 	namespace Express {
 		interface Request {
 			user: IUserDocument;
+			// TODO(WASIT): what should be type of ipInfo...?
+
 			ipinfo: any;
 		}
 	}

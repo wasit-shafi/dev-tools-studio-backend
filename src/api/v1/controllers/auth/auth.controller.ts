@@ -44,6 +44,7 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 
 	if ('userName' in request.body && 'email' in request.body) {
 		next(new ApiError(messages.AUTH.EMAIL_AND_USERNAME_CONFLICT_FOR_SIGNIN, constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT));
+		return;
 	}
 
 	const user = await User.findOne({ $or: [{ email: email }, { userName: userName }] });
@@ -51,7 +52,6 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 	if (!user) {
 		// user not found
 		next(new ApiError(messages.AUTH.INVALID_USERNAME_OR_PASSWORD, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
-
 		return;
 	}
 

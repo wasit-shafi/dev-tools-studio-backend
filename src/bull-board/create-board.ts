@@ -1,9 +1,8 @@
-import { emailQueue } from '@messageQueue';
-
 import { createBullBoard } from '@bull-board/api';
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
 import { ExpressAdapter } from '@bull-board/express';
 import { _env } from '@environment';
+import { emailQueue } from '@messageQueue';
 
 export const serverAdapter = new ExpressAdapter();
 
@@ -18,7 +17,7 @@ createBullBoard({
 			boardLogo: {
 				path: '/dev-tools-studio-logo.jpg',
 			},
-			// TODO(Wasit): update/config the url later once deployed on aws
+			// TODO(WASIT): update/config the url later once deployed on aws
 
 			miscLinks: [
 				{ text: 'Goto Frontend', url: `${_env.get('CORS_ORIGIN')}` },

@@ -1,6 +1,6 @@
 import { createLogger, format, transports } from 'winston';
 
-// NOTE(wasit): For more info refer https://betterstack.com/community/guides/logging/how-to-install-setup-and-use-winston-and-morgan-to-log-node-js-applications/
+// NOTE(WASIT): For more info refer https://betterstack.com/community/guides/logging/how-to-install-setup-and-use-winston-and-morgan-to-log-node-js-applications/
 
 const { combine, prettyPrint, align, timestamp, colorize, printf } = format;
 

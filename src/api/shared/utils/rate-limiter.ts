@@ -17,7 +17,7 @@ export const globalApiRateLimiter = rateLimit({
 		return false;
 	},
 	handler: (request: Request, response: Response, next: NextFunction, options) => {
-		// TODO: create a new transport for logging request details like ip in separate db.
+		// TODO(WASIT): create a new transport for logging request details like ip in separate db.
 		// console.log('options :: ', options);
 		next(
 			new ApiError(

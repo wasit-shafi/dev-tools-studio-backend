@@ -4,6 +4,7 @@ export * from './async-handler';
 export * from './constants';
 export * from './logger';
 export * from './messages';
+export * from './mongodb-errors';
 export * from './rate-limiter';
 export * from './send-mail';
 export * from './send-sms';

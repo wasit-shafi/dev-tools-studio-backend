@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import mongoose, { Document, Schema } from 'mongoose';
 import { v7 as uuidv7 } from 'uuid';
 
-import { ApiError, asyncHandler } from '@api/shared/utils';
+import { ApiError, asyncHandler, messages, MONGODB_ERRORS } from '@api/shared/utils';
 import { _env } from '@environment';
 import * as constants from '@utils/constants';
 
@@ -88,7 +88,7 @@ const userSchema = new Schema(
 		},
 	},
 	{
-		// NOTE: why methods are written inside schema and not outside, refer https://mongoosejs.com/docs/guide.html#methods
+		// NOTE(WASIT): why methods are written inside schema and not outside, refer https://mongoosejs.com/docs/guide.html#methods
 
 		methods: {
 			async comparePassword(candidatePassword: string): Promise<boolean> {
@@ -138,7 +138,8 @@ userSchema.pre('save', async function (next) {
 	let user = this;
 
 	if (!user.isModified('password')) {
-		return next();
+		next();
+		return;
 	}
 
 	const saltRounds: number = Number(_env.get('SALT_ROUNDS'));
@@ -149,16 +150,41 @@ userSchema.pre('save', async function (next) {
 
 	user.password = hashedPassword;
 
-	return next();
+	next();
 });
 
-userSchema.post('save', function (error: any, document: Document, next: Function) {
-	// console.log('error :: ', error);
-	// console.log('document :: ', document);
-	// console.log('next :: ', next);
-	// TODO: handle here what to to with duplicate errors
+userSchema.post('save', function (error: unknown, document: Document, next: Function) {
+	// console.log('\n\nerror :: ', error);
+	// console.log('\n\ndocument :: ', document);
 
-	next(error.code === 11000 ? next(new ApiError(error.errmsg, constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT)) : error);
+	// backup handling of error if some use-case is not covered from the zod validations/express controllers
+
+	if (error) {
+		let mongodbErrorCode: number = -1;
+		let errorMessage: string;
+		let errorCode: number;
+
+		if (error instanceof Object && 'code' in error && typeof error.code === 'number') {
+			mongodbErrorCode = error.code;
+		}
+
+		switch (mongodbErrorCode) {
+			case MONGODB_ERRORS.DUPLICATE_KEY:
+				errorMessage = messages.SHARED.DUPLICATE_ENTRY_FOUND;
+				errorCode = constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT;
+				break;
+
+			default:
+				errorMessage = messages.SHARED.SOMETHING_WENT_WRONG;
+				errorCode = constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST;
+
+				console.log('default case of switch: mongodbErrorCode :', mongodbErrorCode);
+		}
+		next(new ApiError(errorMessage, errorCode));
+		return;
+	}
+
+	next();
 });
 
 export const User = mongoose.model(constants.MODEL_NAMES.USER, userSchema);

@@ -14,6 +14,7 @@ export const validate =
 
 			request.body = parsedBody;
 			next();
+			return;
 		} catch (error: unknown) {
 			let message: string = '';
 

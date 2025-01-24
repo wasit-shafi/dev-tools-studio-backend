@@ -24,7 +24,7 @@ const verifyJWT: RequestHandler = async (request: Request, response: Response, n
 		// 	accessTokenFromBody: request.body.accessToken,
 		// });
 
-		// TODO: review the order for access token
+		// TODO(WASIT): review the order for access token
 
 		const accessToken = request.cookies.accessToken || request.headers.authorization?.split('Bearer ')[1] || request.body.accessToken;
 
@@ -54,7 +54,8 @@ const verifyJWT: RequestHandler = async (request: Request, response: Response, n
 		}
 
 		request.user = user;
-		return next();
+		next();
+		return;
 	} catch (err) {
 		next(new ApiError(messages.HTTP_STATUS.CLIENT.UNAUTHORIZED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 		return;

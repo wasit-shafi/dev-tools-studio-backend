@@ -56,12 +56,12 @@ app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// NOTE(wasit): in production build openapi.yaml will not be there due to tsc so have to explicitly copy that, for more info refer below links
+// NOTE(WASIT): in production build openapi.yaml will not be there due to tsc so have to explicitly copy that, for more info refer below links
 // https://stackoverflow.com/questions/74322223/typescript-build-output-misses-some-files
 // https://www.darraghoriordan.com/2021/01/03/copying-missing-files-typescript-build-deploy
 const swaggerDocument = YAML.parse(fs.readFileSync(path.join(__dirname, 'config/swagger/openapi.yaml'), 'utf8'));
 
-// TODO: review swaggerOptions later for more configuration
+// TODO(WASIT): review swaggerOptions later for more configuration
 
 const swaggerOptions = {
 	explorer: true,

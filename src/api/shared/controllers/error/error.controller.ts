@@ -1,6 +1,7 @@
 import type { ErrorRequestHandler } from 'express';
 
 import { _env } from '@config/environment';
+import { messages } from '@utils';
 import * as constants from '@utils/constants';
 
 export const globalErrorController: ErrorRequestHandler = (error, _, response, next) => {
@@ -8,15 +9,14 @@ export const globalErrorController: ErrorRequestHandler = (error, _, response, n
 		console.log('globalErrorController :: error ::', error);
 	}
 
-	error.code = error.code || constants.HTTP_STATUS_CODES.SERVER_ERROR.INTERNAL_SERVER_ERROR;
-	// error.status = error.status || constants.STATUS_TYPES.ERROR;
-	error.data = error?.data || null;
+	const code: number = error.code ?? constants.HTTP_STATUS_CODES.SERVER_ERROR.INTERNAL_SERVER_ERROR;
+	const message: string = error.message ?? messages.SHARED.SOMETHING_WENT_WRONG;
+	const data: unknown = error?.data ?? null;
 
 	response.status(error.code).json({
-		code: error.code,
-		data: error.data,
-		message: error.message,
-		// status: error.status,
 		success: false,
+		code,
+		message,
+		data,
 	});
 };

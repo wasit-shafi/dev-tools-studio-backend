@@ -39,33 +39,15 @@ export const FLAG_CDN_ICON_SIZE = {
 	W192H144: '192x144',
 	W224H168: '224x168',
 	W256H192: '256x192',
-} as const;
-// For more info refer : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof#description
-
-// TODO(WASIT): review why it was not working to replace  typeof string
-// : Record<string, 'undefined' | 'boolean' | 'number' | 'bigint' | 'string' | 'symbol' | 'function' | 'object'>
-export const TYPES = {
-	UNDEFINED: 'undefined',
-	BOOLEAN: 'boolean',
-	NUMBER: 'number',
-	BIGINT: 'bigint',
-	STRING: 'string',
-	SYMBOL: 'symbol',
-	FUNCTION: 'function',
-	OBJECT: 'object',
-} as const;
+} as const satisfies Record<string, string>;
 
 export const NODE_ENV = {
 	PRODUCTION: 'production',
 	DEVELOPMENT: 'development',
-} as const;
+} as const satisfies Record<string, string>;
 
 export const RE_CAPTCHA_SITE_VERIFY_BASE_URL: string = 'https://www.google.com/recaptcha/api/siteverify';
 
-// TODO(WASIT): check correct way for defining object of objects or string
-// { [key: string]: string }
-// const ROUTES: { [key: string]: string | { [key: string]: string } } = {
-// const ROUTES: Record<string, string | Record<string, string>> = {
 export const ROUTES = {
 	// LOGIN: '/login',
 	// LOGOUT: '/logout',
@@ -80,9 +62,9 @@ export const ROUTES = {
 		_FORGOT_PASSWORD: '/forgot-password',
 		_RESET_PASSWORD: '/reset-password',
 	},
-} as const;
+} as const satisfies Record<string, string | Record<string, string>>;
 
-export const TIME: Record<string, Record<string, number>> = {
+export const TIME = {
 	MS: {
 		SECOND: 1000,
 		MINUTE: 1000 * 60,
@@ -91,27 +73,20 @@ export const TIME: Record<string, Record<string, number>> = {
 		MONTH: 1000 * 60 * 60 * 24 * 30, // 30 DAYS
 		YEAR: 1000 * 60 * 60 * 24 * 30 * 365, // 365 DAYS - NON LEAP YEARS
 	},
-};
+} as const satisfies Record<string, Record<string, number>>;
 
 export const DEFAULT_COOKIE_EXPIRY: number = TIME.MS.DAY * 15; // 15 DAYS
 
 export const DEFAULT_OTP_LENGTH: number = 8;
 
-// : Record<string, string>
 export const MODEL_NAMES = {
 	USER: 'User',
 	ROLE: 'Role',
 	DEV_TOOL: 'DevTool',
 	EMAIL_TEMPLATE: 'EmailTemplate',
-} as const;
+} as const satisfies Record<string, string>;
 
-// const STATUS_TYPES: Record<string, string> = {
-// 	FAIL: 'fail', // used for client side errors - 4XX
-// 	ERROR: 'error', // used for server side errors - 5XX
-// 	OK: 'ok', // used for all other types of responses other than 4xx or 5xx
-// } as const;
-
-export const HTTP_STATUS_CODES_RANGES: Record<string, number> = {
+export const HTTP_STATUS_CODES_RANGES = {
 	MIN_INFORMATION: 100,
 	MAX_INFORMATION: 199,
 
@@ -126,10 +101,8 @@ export const HTTP_STATUS_CODES_RANGES: Record<string, number> = {
 
 	MIN_SERVER_ERROR: 500,
 	MAX_SERVER_ERROR: 599,
-} as const;
+} as const satisfies Record<string, number>;
 
-// TODO(WASIT): review why by using Record, auto complete/intellisense is not working
-// :Record<string, Record<string, number>>
 export const HTTP_STATUS_CODES = {
 	// Information - 1XX
 
@@ -165,28 +138,27 @@ export const HTTP_STATUS_CODES = {
 		SERVICE_UNAVAILABLE: 503,
 		SMTP_ERROR: 554,
 	},
-} as const;
-// TODO(WASIT): Review where to use the db constants or should we prefer enums
+} as const satisfies Record<string, Record<string, number>>;
 
-export const USER_ROLES: Record<string, number> = {
+export const USER_ROLES = {
 	SUPER_ADMIN: 1,
 	ADMIN: 2,
 	APP_USER: 3,
-} as const;
+} as const satisfies Record<string, number>;
 
-export const MESSAGING_QUEUES: Record<string, string> = {
+export const MESSAGING_QUEUES = {
 	EMAIL: 'EMAIL',
-} as const;
+} as const satisfies Record<string, string>;
 
 export const BACKOFF_STRATEGY_TYPE = {
 	FIXED: 'fixed',
 	EXPONENTIAL: 'exponential', // retry after '2 ^ (attempts - 1) * delay' milliseconds
-};
+} as const satisfies Record<string, string>;
 
 export const SMS_MESSAGE_TYPE = {
 	PROMOTIONAL: 'Promotional',
 	TRANSACTIONAL: 'Transactional',
-} as const;
+} as const satisfies Record<string, string>;
 
 // NOTE(WASIT): In AWS SNS 'Promotional' is the default sms type
 

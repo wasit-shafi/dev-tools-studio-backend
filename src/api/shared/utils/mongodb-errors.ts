@@ -6,4 +6,4 @@ export const MONGODB_ERRORS = {
 	DUPLICATE_KEY: 11000,
 	NETWORK_ERROR: 89,
 	UNAUTHORIZED: 13,
-} as const;
+} as const satisfies Record<string, number>;

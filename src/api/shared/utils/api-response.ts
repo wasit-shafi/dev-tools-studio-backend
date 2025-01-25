@@ -7,7 +7,7 @@ export class ApiResponse {
 
 	private readonly message: string;
 
-	constructor(data: unknown, message: string = 'ok', code: number = constants.HTTP_STATUS_CODES.SUCCESSFUL.OK) {
+	constructor(message: string, code: number, data: unknown = null) {
 		this.success = code < constants.HTTP_STATUS_CODES_RANGES.MIN_CLIENT_ERROR;
 		this.code = code;
 		this.message = message;

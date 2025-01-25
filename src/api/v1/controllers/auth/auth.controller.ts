@@ -34,7 +34,7 @@ const signup = asyncHandler(async (request: Request, response: Response, next: N
 
 	response
 		.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED)
-		.json(new ApiResponse({ _id: newUser._id }, messages.AUTH.SIGNUP_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED));
+		.json(new ApiResponse(messages.AUTH.SIGNUP_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED, { _id: newUser._id }));
 });
 
 const signin = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
@@ -72,7 +72,14 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 		response
 			.cookie('accessToken', accessToken, cookieOptions)
 			.cookie('refreshToken', refreshToken, cookieOptions)
-			.json(new ApiResponse({ id: user._id, accessToken, refreshToken, roles: user.roles }));
+			.json(
+				new ApiResponse('', constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, {
+					id: user._id,
+					accessToken,
+					refreshToken,
+					roles: user.roles,
+				})
+			);
 	} else {
 		next(new ApiError(messages.AUTH.INVALID_USERNAME_OR_PASSWORD, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 	}
@@ -135,7 +142,7 @@ const forgotPassword = asyncHandler(async (request: Request, response: Response,
 		});
 	}
 
-	response.json(new ApiResponse(null, messages.AUTH.PASSWORD_RESET_MAIL_SENT));
+	response.json(new ApiResponse(messages.AUTH.PASSWORD_RESET_MAIL_SENT, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
 });
 
 const resetPassword = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
@@ -153,7 +160,7 @@ const resetPassword = asyncHandler(async (request: Request, response: Response, 
 		user.passwordResetExpires = null;
 		user.passwordChangedAt = new Date();
 		await user.save();
-		response.json(new ApiResponse(null, messages.AUTH.RESET_PASSWORD_SUCCESS));
+		response.json(new ApiResponse(messages.AUTH.PASSWORD_RESET_MAIL_SENT, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
 		return;
 	}
 

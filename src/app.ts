@@ -99,7 +99,11 @@ app.use('/api/v2', routerV2);
 
 app.get('/', (request: Request, response: Response) => {
 	response.json(
-		new ApiResponse({ healthCheck: messages.SHARED.SERVER_HEALTH_CHECK, yourIp: request.ip, requestProtocol: request.protocol })
+		new ApiResponse('', constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, {
+			healthCheck: messages.SHARED.SERVER_HEALTH_CHECK,
+			yourIp: request.ip,
+			requestProtocol: request.protocol,
+		})
 	);
 });
 

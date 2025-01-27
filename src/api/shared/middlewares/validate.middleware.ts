@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { Schema } from 'zod';
 
-import { messages } from '@api/shared/utils';
+import { ApiError, messages } from '@utils';
 import * as constants from '@utils/constants';
 
 export const validate =
@@ -24,6 +24,6 @@ export const validate =
 				message = messages.SHARED.SCHEMA_VALIDATION_ERROR;
 			}
 
-			response.status(constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST).json({ message });
+			next(new ApiError(message, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
 		}
 	};

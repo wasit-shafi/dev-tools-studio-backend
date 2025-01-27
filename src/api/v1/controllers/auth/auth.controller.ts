@@ -5,7 +5,7 @@ import path from 'path';
 
 import { _env } from '@config/environment';
 import { emailQueue } from '@messageQueue';
-import { User } from '@models/user/user.model';
+import { User } from '@models';
 import { ApiError, ApiResponse, asyncHandler, messages, sendSms } from '@utils';
 import * as constants from '@utils/constants';
 import * as utils from '@utils/utils';

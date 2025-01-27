@@ -3,7 +3,7 @@
 // https://stackoverflow.com/a/68957230/10249156
 // https://blog.logrocket.com/extend-express-request-object-typescript/
 
-import { IUser, IUserDocument } from '@api/shared/models';
+import { IUserDocument } from '@api/shared/models';
 
 declare global {
 	namespace Express {

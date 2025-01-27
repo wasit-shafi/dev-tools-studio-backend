@@ -4,8 +4,8 @@ import jwt from 'jsonwebtoken';
 import mongoose, { Document, Schema } from 'mongoose';
 import { v7 as uuidv7 } from 'uuid';
 
-import { ApiError, asyncHandler, messages, MONGODB_ERRORS } from '@api/shared/utils';
 import { _env } from '@environment';
+import { ApiError, asyncHandler, messages, MONGODB_ERRORS } from '@utils';
 import * as constants from '@utils/constants';
 
 const userSchema = new Schema(

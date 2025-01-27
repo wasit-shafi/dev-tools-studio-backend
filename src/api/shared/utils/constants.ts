@@ -79,6 +79,8 @@ export const DEFAULT_COOKIE_EXPIRY: number = TIME.MS.DAY * 15; // 15 DAYS
 
 export const DEFAULT_OTP_LENGTH: number = 8;
 
+// NOTE(WASIT): Mongoose automatically changes singular model name to plural form, as well as transforms it to lowercase. eg User => users
+
 export const MODEL_NAMES = {
 	USER: 'User',
 	ROLE: 'Role',

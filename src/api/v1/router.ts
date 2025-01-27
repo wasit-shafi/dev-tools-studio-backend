@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 
-import { User } from '@api/shared/models';
-import { ApiError, asyncHandler, messages } from '@api/shared/utils';
 import { _env } from '@environment';
+import { User } from '@models';
+import { ApiError, asyncHandler, messages } from '@utils';
 import * as constants from '@utils/constants';
 
 import { authRouter, mailRouter, userRouter } from './routes';

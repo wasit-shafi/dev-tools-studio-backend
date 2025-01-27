@@ -13,7 +13,7 @@ export const globalErrorController: ErrorRequestHandler = (error, _, response, n
 	const message: string = error.message ?? messages.SHARED.SOMETHING_WENT_WRONG;
 	const data: unknown = error?.data ?? null;
 
-	response.status(error.code).json({
+	response.status(code).json({
 		success: false,
 		code,
 		message,

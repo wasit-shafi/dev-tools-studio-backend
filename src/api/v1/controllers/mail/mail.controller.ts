@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
 
-import { ApiError, messages } from '@api/shared/utils';
 import { _env } from '@environment';
 import { emailQueue } from '@messageQueue';
+import { ApiError, messages } from '@utils';
 import * as constants from '@utils/constants';
 
 const sendMail: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {

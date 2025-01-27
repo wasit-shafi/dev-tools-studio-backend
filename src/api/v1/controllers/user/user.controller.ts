@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 
 import { _env } from '@environment';
-import { User } from '@models/user/user.model';
+import { User } from '@models';
 import { asyncHandler } from '@utils';
 
 const getUsers = asyncHandler(async (request: Request, response: Response) => {

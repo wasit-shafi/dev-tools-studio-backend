@@ -1,17 +1,11 @@
-// NOTE(WASIT): Refer for more info:
-// https://stackoverflow.com/a/47448486/10249156
+// Referred below links for adding custom properties:
 // https://stackoverflow.com/a/68957230/10249156
-// https://blog.logrocket.com/extend-express-request-object-typescript/
+// https://stackoverflow.com/a/40762463/10249156
 
-import { IUserDocument } from '@api/shared/models';
-
-declare global {
-	namespace Express {
-		interface Request {
-			user: IUserDocument;
-			// TODO(WASIT): what should be type of ipInfo...?
-
-			ipinfo: any;
-		}
+declare namespace Express {
+	export interface Request {
+		//  TODO(WASIT): review types for user & ipinfo
+		user: any;
+		ipinfo: any;
 	}
 }

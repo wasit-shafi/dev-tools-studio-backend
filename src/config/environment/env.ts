@@ -1,5 +1,6 @@
 // TODO(WASIT): handle injected env by some other service (not added in  __env object)
-const __env: Record<string, string | number | undefined> = {
+
+const __env = {
 	// MONGO_SERVICE_NAME is only used when running from docker only for dev mode (environment variable injected from docker-compose.yml)
 
 	DATABASE_URI: process.env.TS_NODE_DEV && process.env.MONGO_SERVICE_NAME ? process.env.MONGO_SERVICE_NAME : process.env.DATABASE_URI,
@@ -45,25 +46,22 @@ const __env: Record<string, string | number | undefined> = {
 	IP_INFO_ACCESS_TOKEN: process.env.IP_INFO_ACCESS_TOKEN,
 
 	GEOAPIFY_API_KEY: process.env.GEOAPIFY_API_KEY,
-};
+} as const;
 
 export const _env = {
-	get(key: string): string | number | undefined {
-		if (!key || typeof key !== 'string') {
-			throw new Error("Key should be of type 'string'(length >= 0) for accessing environment variables");
-		}
+	get(key: keyof typeof __env): string {
+		// if (!key || typeof key !== 'string') {
+		// 	throw new Error("Key should be of type 'string'(length >= 0) for accessing environment variables");
+		// }
 
-		if (!Object.keys(__env).includes(key)) {
-			// throw new Error('Invalid key for accessing environment variables');
+		// if (!(key in __env)) {
+		// 	if (key in process.env) {
+		// 		return process.env[key];
+		// 	}
 
-			if (Object.keys(process.env).includes(key)) {
-				return process.env[key];
-			}
+		// 	throw new Error(`Invalid key for accessing environment variables, key =${key}`);
+		// }
 
-			console.error('Invalid key for accessing environment variables, key = ', key);
-		}
-
-		//  may return undefined, as i have avoided throwing error now
-		return __env[key];
+		return __env[key] ?? '';
 	},
 };

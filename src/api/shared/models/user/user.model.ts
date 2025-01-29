@@ -5,7 +5,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 import { v7 as uuidv7 } from 'uuid';
 
 import { _env } from '@environment';
-import { ApiError, asyncHandler, messages, MONGODB_ERRORS } from '@utils';
+import { ApiError, asyncHandler, messages, MONGODB_ERROR_CODES } from '@utils';
 import * as constants from '@utils/constants';
 
 const userSchema = new Schema(
@@ -169,7 +169,7 @@ userSchema.post('save', function (error: unknown, document: Document, next: Func
 		}
 
 		switch (mongodbErrorCode) {
-			case MONGODB_ERRORS.DUPLICATE_KEY:
+			case MONGODB_ERROR_CODES.DUPLICATE_KEY:
 				errorMessage = messages.SHARED.DUPLICATE_ENTRY_FOUND;
 				errorCode = constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT;
 				break;

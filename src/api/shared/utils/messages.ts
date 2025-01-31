@@ -1,4 +1,4 @@
-export const messages = {
+export const MESSAGES = {
 	ADMIN: {},
 	AUTH: {
 		EMAIL_AND_USERNAME_CONFLICT_FOR_SIGNIN: 'Both userName and email for login not allowed',

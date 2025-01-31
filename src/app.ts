@@ -14,7 +14,7 @@ import { routerV2 } from '@apiV2/router';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { globalErrorController } from '@controllers';
 import { _env } from '@environment';
-import { ApiError, ApiResponse, asyncHandler, globalApiRateLimiter, messages } from '@utils';
+import { ApiError, ApiResponse, asyncHandler, globalApiRateLimiter, MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 
 import { serverAdapter } from './bull-board/create-board';
@@ -100,7 +100,7 @@ app.use('/api/v2', routerV2);
 app.get('/', (request: Request, response: Response) => {
 	response.json(
 		new ApiResponse('', constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, {
-			healthCheck: messages.SHARED.SERVER_HEALTH_CHECK,
+			healthCheck: MESSAGES.SHARED.SERVER_HEALTH_CHECK,
 			yourIp: request.ip,
 			requestProtocol: request.protocol,
 		})

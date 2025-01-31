@@ -5,7 +5,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 import { v7 as uuidv7 } from 'uuid';
 
 import { _env } from '@environment';
-import { ApiError, asyncHandler, messages, MONGODB_ERROR_CODES } from '@utils';
+import { ApiError, asyncHandler, MESSAGES, MONGODB_ERROR_CODES } from '@utils';
 import * as constants from '@utils/constants';
 
 const userSchema = new Schema(
@@ -170,12 +170,12 @@ userSchema.post('save', function (error: unknown, document: Document, next: Func
 
 		switch (mongodbErrorCode) {
 			case MONGODB_ERROR_CODES.DUPLICATE_KEY:
-				errorMessage = messages.SHARED.DUPLICATE_ENTRY_FOUND;
+				errorMessage = MESSAGES.SHARED.DUPLICATE_ENTRY_FOUND;
 				errorCode = constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT;
 				break;
 
 			default:
-				errorMessage = messages.SHARED.SOMETHING_WENT_WRONG;
+				errorMessage = MESSAGES.SHARED.SOMETHING_WENT_WRONG;
 				errorCode = constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST;
 
 				console.log('default case of switch: mongodbErrorCode :', mongodbErrorCode);

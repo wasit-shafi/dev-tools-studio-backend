@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { messages } from '@utils';
+import { MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 
 export const signupZodSchema = z
@@ -72,9 +72,9 @@ export const signupZodSchema = z
 			required_error: 'Country is required',
 			invalid_type_error: 'Country must be a string',
 		}),
-		
+
 		reCaptcha: z.string({
-			required_error: messages.AUTH.RE_CAPTCHA_NOT_PROVIDED,
+			required_error: MESSAGES.AUTH.RE_CAPTCHA_NOT_PROVIDED,
 			invalid_type_error: 'reCaptcha must be a string',
 		}),
 	})

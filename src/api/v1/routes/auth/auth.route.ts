@@ -1,16 +1,19 @@
 import { Router } from 'express';
 
 import { authController } from '@apiV1Controllers/auth/auth.controller';
-import { _env } from '@environment';
-import { validate, validateReCaptchaResponse } from '@middlewares';
-import { resetPasswordZodSchema, signupZodSchema } from '@schemas';
+import { validateReCaptchaResponse, validateRequestBody } from '@middlewares';
+import * as schemas from '@schemas';
 import { apiRateLimiterStrict } from '@utils';
 import * as constants from '@utils/constants';
 
 export const authRouter = Router();
 
-//
-authRouter.post(constants.ROUTES.AUTH_ROUTES._SIGNUP, validate(signupZodSchema), validateReCaptchaResponse, authController.signup);
+authRouter.post(
+	constants.ROUTES.AUTH_ROUTES._SIGNUP,
+	validateRequestBody(schemas.signupZodSchema),
+	validateReCaptchaResponse,
+	authController.signup
+);
 
 authRouter.post(constants.ROUTES.AUTH_ROUTES._SIGNIN, validateReCaptchaResponse, authController.signin);
 
@@ -26,7 +29,7 @@ authRouter.post(
 authRouter.patch(
 	`${constants.ROUTES.AUTH_ROUTES._RESET_PASSWORD}/:token`,
 	apiRateLimiterStrict,
-	validate(resetPasswordZodSchema),
+	validateRequestBody(schemas.resetPasswordZodSchema),
 	validateReCaptchaResponse,
 	authController.resetPassword
 );

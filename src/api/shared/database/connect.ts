@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 import { _env } from '@environment';
-import { messages } from '@utils';
+import { MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 
 export const connectDatabase = async () => {
@@ -42,7 +42,7 @@ export const connectDatabase = async () => {
 		// 		connectionInstance
 		// );
 	} catch (error: unknown) {
-		let errorMessage: string = messages.SHARED.DATABASE_CONNECTION_ERROR;
+		let errorMessage: string = MESSAGES.SHARED.DATABASE_CONNECTION_ERROR;
 
 		if (error && error instanceof Object && 'message' in error && typeof error.message === 'string') {
 			errorMessage = error.message;

@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 
 import { _env } from '@environment';
 import { User } from '@models';
-import { ApiError, asyncHandler, messages } from '@utils';
+import { ApiError, asyncHandler, MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 
 import { authRouter, mailRouter, userRouter } from './routes';
@@ -29,7 +29,7 @@ const verifyJWT: RequestHandler = async (request: Request, response: Response, n
 		const accessToken = request.cookies.accessToken || request.headers.authorization?.split('Bearer ')[1] || request.body.accessToken;
 
 		if (!accessToken) {
-			next(new ApiError(messages.HTTP_STATUS.CLIENT.UNAUTHORIZED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
+			next(new ApiError(MESSAGES.HTTP_STATUS.CLIENT.UNAUTHORIZED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 			return;
 		}
 
@@ -49,7 +49,7 @@ const verifyJWT: RequestHandler = async (request: Request, response: Response, n
 		}
 
 		if (!user) {
-			next(new ApiError(messages.HTTP_STATUS.CLIENT.UNAUTHORIZED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
+			next(new ApiError(MESSAGES.HTTP_STATUS.CLIENT.UNAUTHORIZED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 			return;
 		}
 
@@ -57,7 +57,7 @@ const verifyJWT: RequestHandler = async (request: Request, response: Response, n
 		next();
 		return;
 	} catch (err) {
-		next(new ApiError(messages.HTTP_STATUS.CLIENT.UNAUTHORIZED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
+		next(new ApiError(MESSAGES.HTTP_STATUS.CLIENT.UNAUTHORIZED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 		return;
 	}
 };

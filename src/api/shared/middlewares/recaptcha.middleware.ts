@@ -2,21 +2,21 @@ import { NextFunction, Request, RequestHandler, Response } from 'express';
 
 import { _env } from '@environment';
 import { IReCaptchaSiteVerifyResponse } from '@interfaces';
-import { ApiError, asyncHandler, messages } from '@utils';
+import { ApiError, asyncHandler, MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 
 export const validateReCaptchaResponse: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	// Additional Check, already using zod validations
-	
+
 	if (!('reCaptcha' in request.body)) {
-		next(new ApiError(messages.AUTH.RE_CAPTCHA_NOT_PROVIDED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
+		next(new ApiError(MESSAGES.AUTH.RE_CAPTCHA_NOT_PROVIDED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
 		return;
 	}
 
 	const { reCaptcha } = request.body;
 
 	if (!reCaptcha) {
-		next(new ApiError(messages.AUTH.RE_CAPTCHA_RESPONSE_EMPTY, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
+		next(new ApiError(MESSAGES.AUTH.RE_CAPTCHA_RESPONSE_EMPTY, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
 		return;
 	}
 
@@ -41,7 +41,7 @@ export const validateReCaptchaResponse: RequestHandler = asyncHandler(async (req
 	// console.log({ data, reCaptchaParams });
 
 	if (!data.success) {
-		next(new ApiError(messages.AUTH.RE_CAPTCHA_FAILED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
+		next(new ApiError(MESSAGES.AUTH.RE_CAPTCHA_FAILED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 		return;
 	}
 

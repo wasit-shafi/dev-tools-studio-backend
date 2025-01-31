@@ -6,7 +6,7 @@ import path from 'path';
 import { _env } from '@config/environment';
 import { emailQueue } from '@messageQueue';
 import { User } from '@models';
-import { ApiError, ApiResponse, asyncHandler, messages, sendSms } from '@utils';
+import { ApiError, ApiResponse, asyncHandler, MESSAGES, sendSms } from '@utils';
 import * as constants from '@utils/constants';
 import * as utils from '@utils/utils';
 
@@ -17,7 +17,7 @@ const signup = asyncHandler(async (request: Request, response: Response, next: N
 	const user = await User.findOne({ email });
 
 	if (user) {
-		next(new ApiError(messages.AUTH.EMAIL_EXISTS_ERROR, constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT));
+		next(new ApiError(MESSAGES.AUTH.EMAIL_EXISTS_ERROR, constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT));
 		return;
 	}
 
@@ -34,7 +34,7 @@ const signup = asyncHandler(async (request: Request, response: Response, next: N
 
 	response
 		.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED)
-		.json(new ApiResponse(messages.AUTH.SIGNUP_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED, { _id: newUser._id }));
+		.json(new ApiResponse(MESSAGES.AUTH.SIGNUP_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED, { _id: newUser._id }));
 });
 
 const signin = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
@@ -43,7 +43,7 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 	// making sure user only send only userName or email not both
 
 	if ('userName' in request.body && 'email' in request.body) {
-		next(new ApiError(messages.AUTH.EMAIL_AND_USERNAME_CONFLICT_FOR_SIGNIN, constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT));
+		next(new ApiError(MESSAGES.AUTH.EMAIL_AND_USERNAME_CONFLICT_FOR_SIGNIN, constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT));
 		return;
 	}
 
@@ -51,7 +51,7 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 
 	if (!user) {
 		// user not found
-		next(new ApiError(messages.AUTH.INVALID_USERNAME_OR_PASSWORD, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
+		next(new ApiError(MESSAGES.AUTH.INVALID_USERNAME_OR_PASSWORD, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 		return;
 	}
 
@@ -81,12 +81,12 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 				})
 			);
 	} else {
-		next(new ApiError(messages.AUTH.INVALID_USERNAME_OR_PASSWORD, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
+		next(new ApiError(MESSAGES.AUTH.INVALID_USERNAME_OR_PASSWORD, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 	}
 });
 
 const signout = asyncHandler(async (request: Request, response: Response) => {
-	response.json({ message: messages.AUTH.SIGNOUT_SUCCESS });
+	response.json({ message: MESSAGES.AUTH.SIGNOUT_SUCCESS });
 });
 
 const forgotPassword = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
@@ -142,7 +142,7 @@ const forgotPassword = asyncHandler(async (request: Request, response: Response,
 		});
 	}
 
-	response.json(new ApiResponse(messages.AUTH.PASSWORD_RESET_MAIL_SENT, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
+	response.json(new ApiResponse(MESSAGES.AUTH.PASSWORD_RESET_MAIL_SENT, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
 });
 
 const resetPassword = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
@@ -160,11 +160,11 @@ const resetPassword = asyncHandler(async (request: Request, response: Response, 
 		user.passwordResetExpires = null;
 		user.passwordChangedAt = new Date();
 		await user.save();
-		response.json(new ApiResponse(messages.AUTH.PASSWORD_RESET_MAIL_SENT, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
+		response.json(new ApiResponse(MESSAGES.AUTH.PASSWORD_RESET_MAIL_SENT, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
 		return;
 	}
 
-	next(new ApiError(messages.AUTH.INVALID_RESET_PASSWORD_ATTEMPT, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
+	next(new ApiError(MESSAGES.AUTH.INVALID_RESET_PASSWORD_ATTEMPT, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
 });
 
 const refreshToken = asyncHandler(async (request: Request, response: Response) => {

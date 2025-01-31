@@ -1,6 +1,6 @@
+import { connectDatabase } from '@database';
 import { _env } from '@environment';
 
-import { connectDatabase } from './api/shared/database';
 import { app } from './app';
 
 connectDatabase()
@@ -12,6 +12,6 @@ connectDatabase()
 	})
 	.catch((error) => {
 		console.error(error);
-		
+
 		process.exit(1); // terminating the process
 	});

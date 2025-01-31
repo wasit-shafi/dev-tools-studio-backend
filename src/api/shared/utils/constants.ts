@@ -8,7 +8,7 @@ export const SALT_ROUNDS_FOR_PASSWORD: number = 10;
 export const OTP_LENGTH: number = 6;
 
 export const FLAG_CDN_BASE_URL = 'https://flagcdn.com';
-export const GOOGLE_MAPS_BASE_URL = 'http://maps.google.com';
+export const GOOGLE_MAPS_BASE_URL = 'https://maps.google.com';
 export const GEOAPIFY_MAPS_BASE_URL = 'https://maps.geoapify.com/v1';
 
 export const IP_INFO_REQUESTS_TIMEOUT: number = 6000; //6 seconds (default is 5 seconds)

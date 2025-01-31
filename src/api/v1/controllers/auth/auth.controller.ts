@@ -40,7 +40,7 @@ const signup = asyncHandler(async (request: Request, response: Response, next: N
 const signin = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const { userName, email, password } = request.body;
 
-	// making sure user only send only userName or email not both
+	// making sure user send only userName or email not both
 
 	if ('userName' in request.body && 'email' in request.body) {
 		next(new ApiError(MESSAGES.AUTH.EMAIL_AND_USERNAME_CONFLICT_FOR_SIGNIN, constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT));

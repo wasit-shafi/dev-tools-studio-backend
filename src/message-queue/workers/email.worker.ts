@@ -16,7 +16,7 @@ const emailWorker = new Worker(
 		// 	// job,
 		// });
 
-		sendMail(job.data.emailOptions);
+		await sendMail(job.data.emailOptions);
 	},
 	{
 		connection: redisConnectionConfig,

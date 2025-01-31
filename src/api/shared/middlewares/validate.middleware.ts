@@ -8,8 +8,9 @@ export const validateRequestBody =
 	(schema: Schema): RequestHandler =>
 	async (request, response, next) => {
 		try {
-			const parsedBody = await schema.parseAsync(request.body);
-			request.body = parsedBody; // to remove all the dangling properties
+			// Using parseAsync() instead of parse(), for more info refer: https://zod.dev/?id=parseasync
+
+			request.body = await schema.parseAsync(request.body); // to remove all the dangling properties
 			next();
 			return;
 		} catch (error: unknown) {
@@ -24,7 +25,7 @@ export const validateRequestParams =
 	(schema: Schema): RequestHandler =>
 	async (request, response, next) => {
 		try {
-			request.params = schema.parse(request.params); // to remove all the dangling properties
+			request.params = await schema.parseAsync(request.params); // to remove all the dangling properties
 			next();
 		} catch (error: unknown) {
 			const message: string = error instanceof ZodError ? error.errors[0].message : MESSAGES.SHARED.SCHEMA_VALIDATION_ERROR;
@@ -36,7 +37,7 @@ export const validateRequestQuery =
 	(schema: Schema): RequestHandler =>
 	async (request, response, next) => {
 		try {
-			request.query = schema.parse(request.query); // to remove all the dangling properties
+			request.query = await schema.parseAsync(request.query); // to remove all the dangling properties
 			next();
 		} catch (error: unknown) {
 			const message: string = error instanceof ZodError ? error.errors[0].message : MESSAGES.SHARED.SCHEMA_VALIDATION_ERROR;

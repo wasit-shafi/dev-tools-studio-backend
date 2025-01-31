@@ -98,24 +98,22 @@ const userSchema = new Schema(
 
 			generateAccessToken() {
 				const user = this;
-				const accessToken = jwt.sign(
+
+				return jwt.sign(
 					{ data: { id: user._id, email: user.email, userName: user.userName, roles: user.roles } },
 					String(_env.get('ACCESS_TOKEN_SECRET')),
 					{
 						expiresIn: String(_env.get('ACCESS_TOKEN_EXPIRY')),
 					}
 				);
-
-				return accessToken;
 			},
 
 			generateRefreshToken() {
 				const user = this;
-				const refreshToken = jwt.sign({ data: { id: user._id } }, String(_env.get('REFRESH_TOKEN_SECRET')), {
+
+				return jwt.sign({ data: { id: user._id } }, String(_env.get('REFRESH_TOKEN_SECRET')), {
 					expiresIn: String(_env.get('REFRESH_TOKEN_EXPIRY')),
 				});
-
-				return refreshToken;
 			},
 
 			generateResetPasswordToken() {
@@ -145,10 +143,7 @@ userSchema.pre('save', async function (next) {
 	const saltRounds: number = Number(_env.get('SALT_ROUNDS'));
 	const salt = bcrypt.genSaltSync(saltRounds);
 
-	const password: string = user.password;
-	const hashedPassword = bcrypt.hashSync(password, salt);
-
-	user.password = hashedPassword;
+	user.password = bcrypt.hashSync(user.password, salt);
 
 	next();
 });

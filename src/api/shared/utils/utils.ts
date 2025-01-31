@@ -35,13 +35,11 @@ export const generateCookieOptions = (
 	isSecure = true,
 	isHttpOnly = true
 ) => {
-	const cookieOptions = {
+	return {
 		expires: expiresIn,
 		secure: isSecure,
 		httpOnly: isHttpOnly,
 	};
-	// console.log('cookieOptions :: ', cookieOptions);
-	return cookieOptions;
 };
 
 /**

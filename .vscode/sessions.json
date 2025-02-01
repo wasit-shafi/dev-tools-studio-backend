@@ -1,33 +1,27 @@
 {
-  "$schema": "https://cdn.statically.io/gh/nguyenngoclongdev/cdn/main/schema/v10/terminal-keeper.json",
-  "theme": "tribe",
-  "active": "default",
-  "activateOnStartup": true,
-  "keepExistingTerminals": false,
-  "sessions": {
-    "default": [
-      [
-        {
-          "name": "Backend",
-          "commands": [
-            "npm run tsnd"
-          ],
-          "autoExecuteCommands": false
-        },
-        {
-          "name": "Redis",
-          "commands": [
-            "docker run -p 6379:6379 -d --name=redis redis && clear && docker ps -a"
-          ],
-          "autoExecuteCommands": false
-        },
-        {
-          "name": "Terminal",
-          "commands": [
-            ""
-          ]
-        }
-      ]
-    ]
-  }
+	"$schema": "https://cdn.statically.io/gh/nguyenngoclongdev/cdn/main/schema/v10/terminal-keeper.json",
+	"theme": "tribe",
+	"active": "default",
+	"activateOnStartup": true,
+	"keepExistingTerminals": false,
+	"sessions": {
+		"default": [
+			[
+				{
+					"name": "Backend",
+					"commands": ["npm run tsnd"],
+					"autoExecuteCommands": false
+				},
+				{
+					"name": "Redis",
+					"commands": ["docker run -p 6379:6379 -d --name=redis redis && clear && docker ps -a"],
+					"autoExecuteCommands": false
+				},
+				{
+					"name": "Terminal",
+					"commands": [""]
+				}
+			]
+		]
+	}
 }

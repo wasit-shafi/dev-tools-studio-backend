@@ -1,4 +1,5 @@
 import { _env } from '@environment';
+import { logger } from '@utils';
 import * as constants from '@utils/constants';
 
 interface IRedisConnectionConfig {
@@ -15,4 +16,4 @@ if (_env.get('NODE_ENV') == constants.NODE_ENV.PRODUCTION) {
 	redisConnectionConfig.password = String(_env.get('REDIS_USER_PASSWORD'));
 }
 
-// console.log('redisConnectionConfig :: ', redisConnectionConfig);
+// logger.info({ redisConnectionConfig });

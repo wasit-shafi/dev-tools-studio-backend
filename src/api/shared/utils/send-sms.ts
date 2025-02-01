@@ -1,5 +1,6 @@
 import { PublishCommand, SetSMSAttributesCommand, SNSClient } from '@aws-sdk/client-sns';
 import { _env } from '@config/environment';
+import { logger } from '@utils';
 import * as constants from '@utils/constants';
 
 /*
@@ -27,7 +28,7 @@ const snsClient = new SNSClient(snsClientConfig);
 export const sendSms = async (params: ISendSms): Promise<void> => {
 	const { phoneNumber, message, smsType = constants.DEFAULT_SMS_TYPE } = params;
 
-	// console.log('sendSms params :: ', { phoneNumber, message, smsType });
+	// logger.info('sendSms params :: ', { phoneNumber, message, smsType });
 
 	try {
 		const input = {
@@ -44,7 +45,7 @@ export const sendSms = async (params: ISendSms): Promise<void> => {
 		// });
 
 		const publishResponse = await snsClient.send(publishCommand);
-		// console.log({ publishCommand, publishResponse, setSmsAttributesCommand });
+		// logger.info({ publishCommand, publishResponse, setSmsAttributesCommand });
 	} catch (error) {
 		console.log('sendSms error :: ', error);
 	}

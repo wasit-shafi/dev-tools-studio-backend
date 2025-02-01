@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction, RequestHandler } from 'express';
 
 import { _env } from '@environment';
 import { emailQueue } from '@messageQueue';
-import { ApiError, MESSAGES } from '@utils';
+import { ApiError, logger, MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 
 const sendMail: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {
@@ -41,7 +41,7 @@ const sendMail: RequestHandler = async (request: Request, response: Response, ne
 			},
 			{ delay }
 		);
-		// console.log('task :: ', task);
+		// logger.info('sendMail :: ', { task });
 
 		response.json({ message: MESSAGES.BULL_MQ.EMAIL.EMAIL_SCHEDULED_SUCCESS });
 	} catch (error: unknown) {

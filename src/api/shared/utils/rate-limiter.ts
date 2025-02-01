@@ -1,7 +1,7 @@
 import { rateLimit } from 'express-rate-limit';
 
 import { _env } from '@environment';
-import { ApiError, MESSAGES } from '@utils';
+import { ApiError, logger, MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 
 import type { Request, Response, NextFunction } from 'express';
@@ -18,7 +18,8 @@ export const globalApiRateLimiter = rateLimit({
 	},
 	handler: (request: Request, response: Response, next: NextFunction, options) => {
 		// TODO(WASIT): create a new transport for logging request details like ip in separate db.
-		// console.log('options :: ', options);
+
+		// logger.info('globalApiRateLimiter :: options :: ', options);
 		next(
 			new ApiError(
 				`${MESSAGES.HTTP_STATUS.CLIENT.TOO_MANY_REQUEST} (You exceeded ${_env.get('API_RATE_LIMITER_THRESHOLD_LIMIT')} Api requests per ${_env.get('API_RATE_LIMITER_WINDOW_IN_MINUTE')} minutes)`,

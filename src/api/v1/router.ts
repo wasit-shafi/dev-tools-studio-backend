@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 
 import { _env } from '@environment';
 import { User } from '@models';
-import { ApiError, asyncHandler, MESSAGES } from '@utils';
+import { ApiError, asyncHandler, logger, MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 
 import { authRouter, mailRouter, userRouter } from './routes';
@@ -18,7 +18,7 @@ router.get('/say-hello', (request, response) => {
 
 const verifyJWT: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {
 	try {
-		// console.log('verifyJWT', {
+		// logger.info('verifyJWT :: ', {
 		// 	accessTokenFromCookies: request.cookies.accessToken,
 		// 	accessTokenFromHeaders: request.headers.authorization?.split('Bearer ')[1],
 		// 	accessTokenFromBody: request.body.accessToken,

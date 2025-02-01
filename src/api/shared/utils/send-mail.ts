@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 
 import { _env } from '@environment';
+import { logger } from '@utils';
 
 interface IMailOptions {
 	from: string;
@@ -23,5 +24,5 @@ const nodemailerTransport = nodemailer.createTransport({
 
 export const sendMail = async (params: IMailOptions) => {
 	const info = await nodemailerTransport.sendMail(params);
-	// console.log('info :: ', info);
+	// logger.info('sendMail ::', { info });
 };

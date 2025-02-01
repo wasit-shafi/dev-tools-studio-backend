@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 
 import { _env } from '@environment';
-import { MESSAGES } from '@utils';
+import { logger, MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 
 export const connectDatabase = async () => {
-	console.log({
+	logger.info({
 		port: _env.get('EXPRESS_PORT'),
 		cors: _env.get('CORS_ORIGIN'),
 		nodeEnv: _env.get('NODE_ENV'),
@@ -14,33 +14,28 @@ export const connectDatabase = async () => {
 
 	try {
 		mongoose.connection.on('connected', () => {
-			console.log('connected');
+			logger.info('DB CONNECTION EVENT: connected');
 		});
 		mongoose.connection.on('open', () => {
-			console.log('open');
+			logger.info('DB CONNECTION EVENT: open');
 		});
 		mongoose.connection.on('disconnected', () => {
-			console.log('disconnected');
+			logger.info('DB CONNECTION EVENT: disconnected');
 		});
 		mongoose.connection.on('reconnected', () => {
-			console.log('reconnected');
+			logger.info('DB CONNECTION EVENT: reconnected');
 		});
 		mongoose.connection.on('disconnecting', () => {
-			console.log('disconnecting');
+			logger.info('DB CONNECTION EVENT: disconnecting');
 		});
 		mongoose.connection.on('close', () => {
-			console.log('close');
+			logger.info('DB CONNECTION EVENT: close');
 		});
 
 		const connectionString = `${_env.get('DATABASE_URI')}/${constants.DATABASE_NAME}?retryWrites=true&w=majority&appName=Cluster0`;
-
-		// console.log('connectionString', connectionString);
-
 		const connectionInstance = await mongoose.connect(connectionString);
-		// console.log(
-		// 	'Successfully connected with database, connectionInstance: ' +
-		// 		connectionInstance
-		// );
+
+		// logger.info({ connectionString, connectionInstance });
 	} catch (error: unknown) {
 		let errorMessage: string = MESSAGES.SHARED.DATABASE_CONNECTION_ERROR;
 

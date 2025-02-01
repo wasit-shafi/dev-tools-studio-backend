@@ -5,7 +5,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 import { v7 as uuidv7 } from 'uuid';
 
 import { _env } from '@environment';
-import { ApiError, asyncHandler, MESSAGES, MONGODB_ERROR_CODES } from '@utils';
+import { ApiError, asyncHandler, logger, MESSAGES, MONGODB_ERROR_CODES } from '@utils';
 import * as constants from '@utils/constants';
 
 const userSchema = new Schema(
@@ -173,7 +173,7 @@ userSchema.post('save', function (error: unknown, document: Document, next: Func
 				errorMessage = MESSAGES.SHARED.SOMETHING_WENT_WRONG;
 				errorCode = constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST;
 
-				console.log('default case of switch: mongodbErrorCode :', mongodbErrorCode);
+				logger.info('default case of switch: mongodbErrorCode :', mongodbErrorCode);
 		}
 		next(new ApiError(errorMessage, errorCode));
 		return;

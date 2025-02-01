@@ -6,7 +6,7 @@ import path from 'path';
 import { _env } from '@config/environment';
 import { emailQueue } from '@messageQueue';
 import { User } from '@models';
-import { ApiError, ApiResponse, asyncHandler, MESSAGES, sendSms } from '@utils';
+import { ApiError, ApiResponse, asyncHandler, logger, MESSAGES, sendSms } from '@utils';
 import * as constants from '@utils/constants';
 import * as utils from '@utils/utils';
 
@@ -119,6 +119,7 @@ const forgotPassword = asyncHandler(async (request: Request, response: Response,
 			longitude,
 		});
 
+		// logger.info('forgotPassword controller::', { ipinfo });
 		const countryFlagUrl = utils.getCountryFlagUrl(constants.FLAG_CDN_ICON_SIZE.W20H15, ipinfo?.countryCode);
 
 		ejs.renderFile(

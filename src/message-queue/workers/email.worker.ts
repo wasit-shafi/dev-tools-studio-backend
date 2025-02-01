@@ -1,7 +1,7 @@
 import { Job, Worker } from 'bullmq';
 
-import { sendMail } from '@api/shared/utils/send-mail';
 import { redisConnectionConfig } from '@messageQueue';
+import { logger, sendMail } from '@utils';
 import * as constants from '@utils/constants';
 
 // TODO(WASIT): handle how to manage spinning more workers on demand
@@ -9,7 +9,7 @@ import * as constants from '@utils/constants';
 const emailWorker = new Worker(
 	constants.MESSAGING_QUEUES.EMAIL,
 	async (job: Job) => {
-		// console.log({
+		// logger.info('emailWorker ::', {
 		// 	worker: job.name,
 		// 	data: job.data,
 		// 	time: new Date().getTime(),

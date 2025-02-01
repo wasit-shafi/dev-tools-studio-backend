@@ -2,7 +2,7 @@ import { NextFunction, Request, RequestHandler, Response } from 'express';
 
 import { _env } from '@environment';
 import { IReCaptchaSiteVerifyResponse } from '@interfaces';
-import { ApiError, asyncHandler, MESSAGES } from '@utils';
+import { ApiError, asyncHandler, logger, MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 
 export const validateReCaptchaResponse: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
@@ -20,7 +20,7 @@ export const validateReCaptchaResponse: RequestHandler = asyncHandler(async (req
 		return;
 	}
 
-	if (_env.get('NODE_ENV') == constants.NODE_ENV.DEVELOPMENT) {
+	if (_env.get('NODE_ENV') === constants.NODE_ENV.DEVELOPMENT) {
 		next();
 		return;
 	}
@@ -38,7 +38,7 @@ export const validateReCaptchaResponse: RequestHandler = asyncHandler(async (req
 
 	const data: IReCaptchaSiteVerifyResponse = await recaptchaSiteVerifyResponse.json();
 
-	// console.log({ data, reCaptchaParams });
+	// logger.info({ data, reCaptchaParams });
 
 	if (!data.success) {
 		next(new ApiError(MESSAGES.AUTH.RE_CAPTCHA_FAILED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));

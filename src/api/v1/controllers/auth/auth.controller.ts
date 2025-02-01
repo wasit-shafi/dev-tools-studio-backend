@@ -40,7 +40,7 @@ const signup = asyncHandler(async (request: Request, response: Response, next: N
 const signin = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const { userName, email, password } = request.body;
 
-	// making sure user send only userName or email not both
+	// making sure user only send only userName or email not both
 
 	if ('userName' in request.body && 'email' in request.body) {
 		next(new ApiError(MESSAGES.AUTH.EMAIL_AND_USERNAME_CONFLICT_FOR_SIGNIN, constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT));
@@ -100,8 +100,6 @@ const forgotPassword = asyncHandler(async (request: Request, response: Response,
 	});
 
 	if (user) {
-		const templateString = fs.readFileSync(path.join(__dirname, '../../../../templates/reset-password.ejs'), 'utf-8');
-
 		const resetPasswordLink = `${_env.get('FE_BASE_URL')}/reset-password?token=${user.generateResetPasswordToken()}`;
 		await user.save();
 
@@ -123,26 +121,39 @@ const forgotPassword = asyncHandler(async (request: Request, response: Response,
 
 		const countryFlagUrl = utils.getCountryFlagUrl(constants.FLAG_CDN_ICON_SIZE.W20H15, ipinfo?.countryCode);
 
-		await emailQueue.add(constants.MESSAGING_QUEUES.EMAIL, {
-			emailOptions: {
-				from: `Dev Tools Studio<noReply@devToolsStudio.com>`,
-				to: email,
-				subject: 'Reset Your Password',
-				html: ejs.render(templateString, {
-					firstName: user.firstName,
-					resetPasswordLink,
-					when,
-					device,
-					near,
-					staticMapUrl,
-					googleMapUrl,
-					countryFlagUrl,
-				}),
+		ejs.renderFile(
+			path.join(__dirname, '../../../../templates/reset-password.ejs'),
+			{
+				firstName: user.firstName,
+				resetPasswordLink,
+				when,
+				device,
+				near,
+				staticMapUrl,
+				googleMapUrl,
+				countryFlagUrl,
 			},
-		});
-	}
+			async (error, templateHtmlString) => {
+				if (error) {
+					next(new ApiError(MESSAGES.SHARED.SOMETHING_WENT_WRONG, constants.HTTP_STATUS_CODES.SERVER_ERROR.INTERNAL_SERVER_ERROR));
+					return;
+				}
 
-	response.json(new ApiResponse(MESSAGES.AUTH.PASSWORD_RESET_MAIL_SENT, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
+				await emailQueue.add(constants.MESSAGING_QUEUES.EMAIL, {
+					emailOptions: {
+						from: `Dev Tools Studio<noReply@devToolsStudio.com>`,
+						to: email,
+						subject: 'Reset Your Password',
+						html: templateHtmlString,
+					},
+				});
+
+				response.json(new ApiResponse(MESSAGES.AUTH.PASSWORD_RESET_MAIL_SENT, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
+			}
+		);
+	} else {
+		response.json(new ApiResponse(MESSAGES.AUTH.PASSWORD_RESET_MAIL_SENT, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
+	}
 });
 
 const resetPassword = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {

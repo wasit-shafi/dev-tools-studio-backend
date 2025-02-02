@@ -14,7 +14,7 @@ import { routerV2 } from '@apiV2/router';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { globalErrorController } from '@controllers';
 import { _env } from '@environment';
-import { ApiError, ApiResponse, asyncHandler, globalApiRateLimiter, MESSAGES } from '@utils';
+import { ApiError, ApiResponse, asyncHandler, globalApiRateLimiter, logger, MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 
 import { serverAdapter } from './bull-board/create-board';

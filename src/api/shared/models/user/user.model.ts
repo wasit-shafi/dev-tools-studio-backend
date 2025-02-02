@@ -31,6 +31,7 @@ const userSchema = new Schema(
 			type: String,
 			required: true,
 			unique: true,
+			index: true,
 			default: function () {
 				return 'firstName' in this && 'lastName' in this
 					? `${this.firstName.toLowerCase()}-${this.lastName.toLowerCase()}-${uuidv7()}`
@@ -42,6 +43,7 @@ const userSchema = new Schema(
 			type: String,
 			required: true,
 			unique: true,
+			index: true,
 		},
 
 		password: {

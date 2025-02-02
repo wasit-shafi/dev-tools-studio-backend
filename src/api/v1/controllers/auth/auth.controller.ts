@@ -99,62 +99,63 @@ const forgotPassword = asyncHandler(async (request: Request, response: Response,
 		email,
 	});
 
-	if (user) {
-		const resetPasswordLink = `${_env.get('FE_BASE_URL')}/reset-password?token=${user.generateResetPasswordToken()}`;
-		await user.save();
-
-		const when = new Date().toUTCString();
-		const device = utils.getDeviceInfoString(request.headers['user-agent'] || '');
-		const near = utils.getIpInfoString(ipinfo);
-
-		const latitude = ipinfo && !ipinfo?.bogon ? ipinfo.loc.split(',')[0] : '';
-		const longitude = ipinfo && !ipinfo?.bogon ? ipinfo.loc.split(',')[1] : '';
-
-		const staticMapUrl = utils.getStaticMapUrl({
-			latitude,
-			longitude,
-		});
-		const googleMapUrl = utils.getGoogleMapUrl({
-			latitude,
-			longitude,
-		});
-
-		// logger.info('forgotPassword controller::', { ipinfo });
-		const countryFlagUrl = utils.getCountryFlagUrl(constants.FLAG_CDN_ICON_SIZE.W20H15, ipinfo?.countryCode);
-
-		ejs.renderFile(
-			path.join(__dirname, '../../../../templates/reset-password.ejs'),
-			{
-				firstName: user.firstName,
-				resetPasswordLink,
-				when,
-				device,
-				near,
-				staticMapUrl,
-				googleMapUrl,
-				countryFlagUrl,
-			},
-			async (error, templateHtmlString) => {
-				if (error) {
-					next(new ApiError(MESSAGES.SHARED.SOMETHING_WENT_WRONG, constants.HTTP_STATUS_CODES.SERVER_ERROR.INTERNAL_SERVER_ERROR));
-					return;
-				}
-
-				await emailQueue.add(constants.MESSAGING_QUEUES.EMAIL, {
-					emailOptions: {
-						from: `Dev Tools Studio<noReply@devToolsStudio.com>`,
-						to: email,
-						subject: 'Reset Your Password',
-						html: templateHtmlString,
-					},
-				});
-
-				response.json(new ApiResponse(MESSAGES.AUTH.PASSWORD_RESET_MAIL_SENT, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
-			}
-		);
-	} else {
+	if (!user) {
 		response.json(new ApiResponse(MESSAGES.AUTH.PASSWORD_RESET_MAIL_SENT, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
+		return;
 	}
+
+	const { firstName } = user;
+	const resetPasswordLink = `${_env.get('FE_BASE_URL')}/reset-password?token=${user.generateResetPasswordToken()}`;
+	await user.save();
+
+	const when = new Date().toUTCString();
+	const device = utils.getDeviceInfoString(request.headers['user-agent'] || '');
+	const near = utils.getIpInfoString(ipinfo);
+
+	const latitude = ipinfo && !ipinfo?.bogon ? ipinfo.loc.split(',')[0] : '';
+	const longitude = ipinfo && !ipinfo?.bogon ? ipinfo.loc.split(',')[1] : '';
+
+	const staticMapUrl = utils.getStaticMapUrl({
+		latitude,
+		longitude,
+	});
+	const googleMapUrl = utils.getGoogleMapUrl({
+		latitude,
+		longitude,
+	});
+
+	const countryFlagUrl = utils.getCountryFlagUrl(constants.FLAG_CDN_ICON_SIZE.W20H15, ipinfo?.countryCode);
+
+	ejs.renderFile(
+		path.join(__dirname, '../../../../templates/reset-password.ejs'),
+		{
+			firstName,
+			resetPasswordLink,
+			when,
+			device,
+			near,
+			staticMapUrl,
+			googleMapUrl,
+			countryFlagUrl,
+		},
+		async (error, templateHtmlString) => {
+			if (error) {
+				next(new ApiError(MESSAGES.SHARED.SOMETHING_WENT_WRONG, constants.HTTP_STATUS_CODES.SERVER_ERROR.INTERNAL_SERVER_ERROR));
+				return;
+			}
+
+			await emailQueue.add(constants.MESSAGING_QUEUES.EMAIL, {
+				emailOptions: {
+					from: `Dev Tools Studio<noReply@devToolsStudio.com>`,
+					to: email,
+					subject: 'Reset Your Password',
+					html: templateHtmlString,
+				},
+			});
+
+			response.json(new ApiResponse(MESSAGES.AUTH.PASSWORD_RESET_MAIL_SENT, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
+		}
+	);
 });
 
 const resetPassword = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {

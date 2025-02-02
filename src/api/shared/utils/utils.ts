@@ -3,6 +3,7 @@ import { UAParser } from 'ua-parser-js';
 
 import { _env } from '@config/environment';
 import { IGoogleMapParams, IStaticMapParams, TFlagCdnIconSizeValues } from '@interfaces';
+import { logger } from '@utils';
 import * as constants from '@utils/constants';
 
 interface IOtpGeneratorOptions {
@@ -79,13 +80,17 @@ export const getDeviceInfoString = (userAgent: string): string => {
 export const getIpInfoString = (ipInfo: unknown): string => {
 	let near = '';
 
-	if (ipInfo && ipInfo instanceof Object && 'bogon' in ipInfo && !ipInfo.bogon) {
-		const city: string = 'city' in ipInfo && typeof ipInfo.city === 'string' ? ipInfo.city : '';
-		const country: string = 'country' in ipInfo && typeof ipInfo.country === 'string' ? ipInfo.country : '';
-		const isEU: boolean = 'isEU' in ipInfo && typeof ipInfo.isEU === 'boolean' ? ipInfo.isEU : false;
-		const region: string = 'region' in ipInfo && typeof ipInfo.region === 'string' ? ipInfo.region : '';
+	if (ipInfo && ipInfo instanceof Object) {
+		if ('bogon' in ipInfo && ipInfo.bogon) {
+			return near;
+		} else {
+			const city: string = 'city' in ipInfo && typeof ipInfo.city === 'string' ? ipInfo.city : '';
+			const country: string = 'country' in ipInfo && typeof ipInfo.country === 'string' ? ipInfo.country : '';
+			const isEU: boolean = 'isEU' in ipInfo && typeof ipInfo.isEU === 'boolean' ? ipInfo.isEU : false;
+			const region: string = 'region' in ipInfo && typeof ipInfo.region === 'string' ? ipInfo.region : '';
 
-		near = `${city}, ${country}${isEU ? '(Europe)' : ''}, ${region}`;
+			near = `${city}, ${country}${isEU ? '(Europe)' : ''}, ${region}`;
+		}
 	}
 
 	near = near.trim();

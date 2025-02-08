@@ -95,6 +95,7 @@ const userSchema = new Schema(
 		methods: {
 			async comparePassword(candidatePassword: string): Promise<boolean> {
 				const user = this;
+
 				return bcrypt.compare(candidatePassword, user.password).catch(() => false);
 			},
 
@@ -127,6 +128,29 @@ const userSchema = new Schema(
 				this.passwordResetExpires = Date.now() + constants.TIME.MS.MINUTE * 5; // valid for 5 mins only;
 
 				return resetPasswordToken;
+			},
+		},
+		// Referred below links for more info about toJSON/toObject mongoose:
+		// https://mongoosejs.com/docs/api/document.html#Document.prototype.toObject()
+		// https://mongoosejs.com/docs/api/document.html#transform
+		// https://stackoverflow.com/a/57613179/10249156
+		// https://github.com/Automattic/mongoose/issues/2072
+
+		toJSON: {
+			versionKey: false,
+
+			transform: function (document, returnObject) {
+				delete returnObject.password;
+				delete returnObject.passwordChangedAt;
+				delete returnObject.passwordResetToken;
+				delete returnObject.passwordResetExpires;
+
+				delete returnObject.refreshTokens;
+
+				delete returnObject.updatedAt;
+				delete returnObject.createdAt;
+
+				return returnObject;
 			},
 		},
 

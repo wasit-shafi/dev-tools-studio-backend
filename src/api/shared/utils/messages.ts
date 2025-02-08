@@ -32,6 +32,7 @@ export const MESSAGES = {
 		SMTP_ERROR: 'Something went wrong, while sending email, please try again after some time',
 		SOMETHING_WENT_WRONG: 'Something went wrong. Please try again.',
 		DUPLICATE_ENTRY_FOUND: 'Duplicate entry found. Please check your input and try again.',
+		SIGNIN_SUCCESSFUL: 'Sign-in successful',
 	},
 	ERROR: {},
 	HTTP_STATUS: {

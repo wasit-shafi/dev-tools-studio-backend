@@ -21,3 +21,8 @@ export interface IGoogleMapParams {
 
 export type TFlagCdnIconSizeKeys = keyof typeof constants.FLAG_CDN_ICON_SIZE;
 export type TFlagCdnIconSizeValues = (typeof constants.FLAG_CDN_ICON_SIZE)[TFlagCdnIconSizeKeys];
+
+export interface IHeadersForAvoidMailGrouping {
+	References: string;
+	'X-Entity-Ref-ID': string;
+}

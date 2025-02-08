@@ -49,15 +49,9 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 
 	const user = await User.findOne({ $or: [{ email: email }, { userName: userName }] });
 
-	if (!user) {
-		// user not found
-		next(new ApiError(MESSAGES.AUTH.INVALID_USERNAME_OR_PASSWORD, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
-		return;
-	}
+	const passwordMatched = user ? await user.comparePassword(password) : false;
 
-	const passwordMatched = await user.comparePassword(password);
-
-	if (passwordMatched) {
+	if (user && passwordMatched) {
 		const accessToken = user.generateAccessToken();
 		const refreshToken = user.generateRefreshToken();
 
@@ -73,16 +67,16 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 			.cookie('accessToken', accessToken, cookieOptions)
 			.cookie('refreshToken', refreshToken, cookieOptions)
 			.json(
-				new ApiResponse('', constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, {
-					id: user._id,
+				new ApiResponse(MESSAGES.SHARED.SIGNIN_SUCCESSFUL, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, {
+					user: user.toJSON(),
 					accessToken,
 					refreshToken,
-					roles: user.roles,
 				})
 			);
-	} else {
-		next(new ApiError(MESSAGES.AUTH.INVALID_USERNAME_OR_PASSWORD, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
+		return;
 	}
+
+	next(new ApiError(MESSAGES.AUTH.INVALID_USERNAME_OR_PASSWORD, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 });
 
 const signout = asyncHandler(async (request: Request, response: Response) => {

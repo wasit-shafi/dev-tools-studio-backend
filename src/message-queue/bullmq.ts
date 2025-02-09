@@ -1,12 +1,8 @@
 import { _env } from '@environment';
+import { IRedisConnectionConfig } from '@interfaces';
 import { logger } from '@utils';
 import * as constants from '@utils/constants';
 
-interface IRedisConnectionConfig {
-	host: string;
-	port: number;
-	password?: string;
-}
 export const redisConnectionConfig: IRedisConnectionConfig = {
 	host: String(_env.get('REDIS_HOST')),
 	port: Number(_env.get('REDIS_PORT')),

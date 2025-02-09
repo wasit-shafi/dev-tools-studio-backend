@@ -6,7 +6,7 @@ import path from 'path';
 import { _env } from '@config/environment';
 import { emailQueue } from '@messageQueue';
 import { User } from '@models';
-import { ApiError, ApiResponse, asyncHandler, logger, MESSAGES, sendSms } from '@utils';
+import { ApiError, ApiResponse, asyncHandler, getHeadersForAvoidMailGrouping, logger, MESSAGES, sendSms } from '@utils';
 import * as constants from '@utils/constants';
 import * as utils from '@utils/utils';
 
@@ -144,6 +144,7 @@ const forgotPassword = asyncHandler(async (request: Request, response: Response,
 					to: email,
 					subject: 'Reset Your Password',
 					html: templateHtmlString,
+					headers: { ...getHeadersForAvoidMailGrouping() },
 				},
 			});
 

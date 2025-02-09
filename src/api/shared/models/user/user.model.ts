@@ -135,6 +135,7 @@ const userSchema = new Schema(
 		// https://mongoosejs.com/docs/api/document.html#transform
 		// https://stackoverflow.com/a/57613179/10249156
 		// https://github.com/Automattic/mongoose/issues/2072
+		// https://medium.com/@vikramgyawali57/hiding-credentials-in-response-with-mongoose-and-nodejs-a5d591b373e6
 
 		toJSON: {
 			versionKey: false,

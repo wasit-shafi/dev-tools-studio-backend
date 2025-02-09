@@ -3,16 +3,15 @@ import { UAParser } from 'ua-parser-js';
 import { v7 as uuidv7 } from 'uuid';
 
 import { _env } from '@config/environment';
-import { IGoogleMapParams, IHeadersForAvoidMailGrouping, IStaticMapParams, TFlagCdnIconSizeValues } from '@interfaces';
+import {
+	IGoogleMapParams,
+	IHeadersForAvoidMailGrouping,
+	IOtpGeneratorOptions,
+	IStaticMapParams,
+	TFlagCdnIconSizeValues,
+} from '@interfaces';
 import { logger } from '@utils';
 import * as constants from '@utils/constants';
-
-interface IOtpGeneratorOptions {
-	digits?: boolean;
-	lowerCaseAlphabets?: boolean;
-	upperCaseAlphabets?: boolean;
-	specialChars?: boolean;
-}
 
 /**
  *

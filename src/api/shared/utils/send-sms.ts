@@ -1,19 +1,8 @@
 import { PublishCommand, SetSMSAttributesCommand, SNSClient } from '@aws-sdk/client-sns';
 import { _env } from '@config/environment';
+import { ISendSms } from '@interfaces';
 import { logger } from '@utils';
 import * as constants from '@utils/constants';
-
-/*
-  Transactional - highest reliability
-  Promotional - lowest cost 
-*/
-type TSmsType = 'Promotional' | 'Transactional';
-
-interface ISendSms {
-	phoneNumber: string;
-	message: string;
-	smsType?: TSmsType;
-}
 
 const snsClientConfig = {
 	region: String(_env.get('AWS_SNS_REGION')),

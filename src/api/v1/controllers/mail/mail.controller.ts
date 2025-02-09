@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction, RequestHandler } from 'express';
 
 import { _env } from '@environment';
 import { emailQueue } from '@messageQueue';
-import { ApiError, logger, MESSAGES } from '@utils';
+import { ApiError, getHeadersForAvoidMailGrouping, logger, MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 
 const sendMail: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {
@@ -31,6 +31,7 @@ const sendMail: RequestHandler = async (request: Request, response: Response, ne
 			to,
 			subject,
 			html,
+			headers: { ...getHeadersForAvoidMailGrouping() },
 		};
 
 		const task = await emailQueue.add(

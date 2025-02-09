@@ -1,15 +1,8 @@
 import nodemailer from 'nodemailer';
 
 import { _env } from '@environment';
+import { IMailOptions } from '@interfaces';
 import { logger } from '@utils';
-
-interface IMailOptions {
-	from: string;
-	to: string;
-	subject: string;
-	html?: string;
-	text?: string;
-}
 
 const nodemailerTransport = nodemailer.createTransport({
 	host: 'smtp.gmail.com',

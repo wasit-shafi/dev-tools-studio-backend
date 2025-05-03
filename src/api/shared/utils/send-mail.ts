@@ -3,22 +3,22 @@ import nodemailer from 'nodemailer';
 import { _env } from '@environment';
 import { IMailOptions } from '@interfaces';
 import { logger } from '@utils';
+import * as constants from '@utils/constants';
 
-const nodemailerTransport = nodemailer.createTransport({
-	host: 'smtp.gmail.com',
-	port: 465,
-	// Use `true` for port 465, `false` for all other ports
-	secure: true,
+const emailServiceTransport = nodemailer.createTransport({
+	host: String(_env.get('EMAIL_SERVICE_SMTP_HOST_SERVER')),
+	port: Number(_env.get('EMAIL_SERVICE_SMTP_PORT')),
+	secure: Number(_env.get('EMAIL_SERVICE_SMTP_PORT')) == constants.SMTP_PORTS.FOUR_SIX_FIVE, // true for port 465, false for other ports
 	auth: {
-		user: String(_env.get('NODE_MAILER_TRANSPORT_AUTH_USER')),
-		pass: String(_env.get('NODE_MAILER_TRANSPORT_AUTH_PASS')),
+		user: String(_env.get('EMAIL_SERVICE_SMTP_USER')),
+		pass: String(_env.get('EMAIL_SERVICE_SMTP_PASSWORD')),
 	},
 });
 
 export const sendMail = async (params: IMailOptions) => {
 	try {
-		const info = await nodemailerTransport.sendMail(params);
+		const info = await emailServiceTransport.sendMail(params);
 	} catch (error) {
-		logger.error(error);
+		console.log('Error While sending email :: ', error);
 	}
 };

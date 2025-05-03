@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { authController } from '@apiV1Controllers/auth/auth.controller';
-import { validateReCaptchaResponse, validateRequestBody } from '@middlewares';
+import { validateReCaptchaResponse, validateRequestBody, verifyJWT } from '@middlewares';
 import * as schemas from '@schemas';
 import { apiRateLimiterStrict } from '@utils';
 import * as constants from '@utils/constants';
@@ -20,7 +20,7 @@ authRouter.post(
 authRouter.post(constants.ROUTES.AUTH_ROUTES._SIGNIN, validateReCaptchaResponse, authController.signin);
 // signout
 
-authRouter.post(constants.ROUTES.AUTH_ROUTES._SIGNOUT, authController.signout);
+authRouter.post(constants.ROUTES.AUTH_ROUTES._SIGNOUT, verifyJWT, authController.signout);
 // forgot password
 
 authRouter.post(

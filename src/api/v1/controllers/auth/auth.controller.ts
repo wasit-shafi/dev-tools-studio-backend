@@ -140,7 +140,7 @@ const forgotPassword = asyncHandler(async (request: Request, response: Response,
 
 			await emailQueue.add(constants.MESSAGING_QUEUES.EMAIL, {
 				emailOptions: {
-					from: `Dev Tools Studio<noReply@devToolsStudio.com>`,
+					from: `${_env.get('EMAIL_SERVICE_SENDER_NAME')}<${_env.get('EMAIL_SERVICE_SENDER_EMAIL_ID')}>`,
 					to: email,
 					subject: 'Reset Your Password',
 					html: templateHtmlString,

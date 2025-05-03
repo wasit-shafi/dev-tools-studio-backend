@@ -5,6 +5,7 @@ import { emailQueue } from '@messageQueue';
 import { ApiError, getHeadersForAvoidMailGrouping, logger, MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 
+// TODO(Wasit): update the sendMail controller
 const sendMail: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {
 	try {
 		const { to, subject, salutation, body, closing, signature, dateTimeLocal, confirmationMail } = request.body;
@@ -27,7 +28,7 @@ const sendMail: RequestHandler = async (request: Request, response: Response, ne
 									</p>`;
 
 		const emailOptions = {
-			from: `Wasit Shafi 👻<${_env.get('NODE_MAILER_TRANSPORT_AUTH_USER')}>`, // sender address
+			from: `${_env.get('EMAIL_SERVICE_SENDER_NAME')}<${_env.get('EMAIL_SERVICE_SENDER_EMAIL_ID')}>`,
 			to,
 			subject,
 			html,

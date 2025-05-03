@@ -163,6 +163,13 @@ export const SMS_MESSAGE_TYPE = {
 	TRANSACTIONAL: 'Transactional',
 } as const satisfies Record<string, string>;
 
+export const SMTP_PORTS = {
+	FIVE_EIGHT_SEVEN: 587,
+	FOUR_SIX_FIVE: 465,
+	TWO_FIVE: 25,
+	TWO_FIVE_TWO_FIVE: 2525,
+} as const satisfies Record<string, number>;
+
 // NOTE(WASIT): In AWS SNS 'Promotional' is the default sms type
 
 export const DEFAULT_SMS_TYPE = SMS_MESSAGE_TYPE.TRANSACTIONAL;

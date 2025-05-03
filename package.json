@@ -10,8 +10,8 @@
 		"start": "copyfiles --error -f src/config/swagger/*.* dist/config/swagger && node -r tsconfig-paths/register dist/index.js",
 		"up": "docker-compose up --build -V --watch",
 		"up:prod": "docker-compose -f docker-compose.prod.yml up --build -V",
-		"down": "docker-compose down --remove-orphans -v",
-		"down:prod": "docker-compose -f docker-compose.prod.yml down --remove-orphans -v",
+		"down": "docker-compose down --remove-orphans",
+		"down:prod": "docker-compose -f docker-compose.prod.yml down --remove-orphans",
 		"format-codebase": "npx prettier --write ."
 	},
 	"author": "",

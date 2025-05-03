@@ -7,6 +7,7 @@ import { apiRateLimiterStrict } from '@utils';
 import * as constants from '@utils/constants';
 
 export const authRouter = Router();
+// signup
 
 authRouter.post(
 	constants.ROUTES.AUTH_ROUTES._SIGNUP,
@@ -14,10 +15,13 @@ authRouter.post(
 	validateReCaptchaResponse,
 	authController.signup
 );
+// signin
 
 authRouter.post(constants.ROUTES.AUTH_ROUTES._SIGNIN, validateReCaptchaResponse, authController.signin);
+// signout
 
 authRouter.post(constants.ROUTES.AUTH_ROUTES._SIGNOUT, authController.signout);
+// forgot password
 
 authRouter.post(
 	constants.ROUTES.AUTH_ROUTES._FORGOT_PASSWORD,
@@ -25,6 +29,7 @@ authRouter.post(
 	validateReCaptchaResponse,
 	authController.forgotPassword
 );
+// reset password
 
 authRouter.patch(
 	`${constants.ROUTES.AUTH_ROUTES._RESET_PASSWORD}/:token`,

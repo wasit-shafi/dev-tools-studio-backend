@@ -16,6 +16,9 @@ const nodemailerTransport = nodemailer.createTransport({
 });
 
 export const sendMail = async (params: IMailOptions) => {
-	const info = await nodemailerTransport.sendMail(params);
-	// logger.info('sendMail ::', { info });
+	try {
+		const info = await nodemailerTransport.sendMail(params);
+	} catch (error) {
+		logger.error(error);
+	}
 };

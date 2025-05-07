@@ -5,7 +5,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 import { v7 as uuidv7 } from 'uuid';
 
 import { _env } from '@environment';
-import { ApiError, asyncHandler, logger, MESSAGES, MONGODB_ERROR_CODES } from '@utils';
+import { ApiError, logger, MESSAGES, MONGODB_ERROR_CODES } from '@utils';
 import * as constants from '@utils/constants';
 
 const userSchema = new Schema(
@@ -45,7 +45,10 @@ const userSchema = new Schema(
 			unique: true,
 			index: true,
 		},
-
+		isEmailVerified: {
+			type: Boolean,
+			default: false,
+		},
 		password: {
 			type: String,
 			required: true,
@@ -60,10 +63,18 @@ const userSchema = new Schema(
 			type: String,
 			required: true,
 		},
+		isMobileNumberVerified: {
+			type: Boolean,
+			default: false,
+		},
 
 		country: {
 			type: String,
 			required: true,
+		},
+		accessTokens: {
+			type: [String],
+			default: [],
 		},
 
 		refreshTokens: {
@@ -99,27 +110,35 @@ const userSchema = new Schema(
 				return bcrypt.compare(candidatePassword, user.password).catch(() => false);
 			},
 
-			generateAccessToken() {
+			async generateAccessToken(): Promise<string> {
 				const user = this;
-
-				return jwt.sign(
-					{ data: { id: user._id, email: user.email, userName: user.userName, roles: user.roles } },
+				const accessToken: string = jwt.sign(
+					{ data: { _id: user._id, email: user.email, userName: user.userName, roles: user.roles } },
 					String(_env.get('ACCESS_TOKEN_SECRET')),
 					{
-						expiresIn: String(_env.get('ACCESS_TOKEN_EXPIRY')),
+						expiresIn: '1d',
+						// expiresIn: String(_env.get('ACCESS_TOKEN_EXPIRY')),
 					}
 				);
+				user.accessTokens.push(accessToken);
+				await user.save();
+
+				return accessToken;
 			},
 
-			generateRefreshToken() {
+			async generateRefreshToken(): Promise<string> {
 				const user = this;
-
-				return jwt.sign({ data: { id: user._id } }, String(_env.get('REFRESH_TOKEN_SECRET')), {
-					expiresIn: String(_env.get('REFRESH_TOKEN_EXPIRY')),
+				const refreshToken: string = jwt.sign({ data: { _id: user._id } }, String(_env.get('REFRESH_TOKEN_SECRET')), {
+					expiresIn: '2d',
+					// expiresIn: String(_env.get('REFRESH_TOKEN_EXPIRY')),
 				});
+
+				user.refreshTokens.push(refreshToken);
+				await user.save();
+				return refreshToken;
 			},
 
-			generateResetPasswordToken() {
+			generateResetPasswordToken(): string {
 				const resetPasswordToken = crypto.randomBytes(64).toString('hex');
 
 				// saving the hashed resetPasswordToken in the database, so that even if the token which is saved in db gets exposed/leaked, no now is able to use it directly to reset password of the user
@@ -146,10 +165,10 @@ const userSchema = new Schema(
 				delete returnObject.passwordResetToken;
 				delete returnObject.passwordResetExpires;
 
+				delete returnObject.accessTokens;
 				delete returnObject.refreshTokens;
 
 				delete returnObject.updatedAt;
-				delete returnObject.createdAt;
 
 				return returnObject;
 			},

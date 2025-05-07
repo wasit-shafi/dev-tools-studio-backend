@@ -15,6 +15,7 @@ export const MESSAGES = {
 		RE_CAPTCHA_RESPONSE_EMPTY: "ReCaptcha response can't be empty. Please check the checkbox again",
 		SIGNIN_FAILED: 'Invalid credentials',
 		SIGNIN_SUCCESS: 'You have successfully signed in',
+		SIGNOUT_FAILED: 'Unable to sign out user, please try again',
 		SIGNOUT_SUCCESS: 'You have been signed out successfully',
 		SIGNUP_SUCCESS: 'Congratulations!! Account Created Successfully',
 		TOKEN_REFRESH: 'Token refreshed successfully',

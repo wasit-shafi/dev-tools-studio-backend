@@ -7,5 +7,7 @@ declare namespace Express {
 		//  TODO(WASIT): review types for user & ipinfo
 		user: any;
 		ipinfo: any;
+		accessToken: string;
+		refreshToken?: string; // refresh token will not be available
 	}
 }

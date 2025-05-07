@@ -52,8 +52,8 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 	const passwordMatched = user ? await user.comparePassword(password) : false;
 
 	if (user && passwordMatched) {
-		const accessToken = user.generateAccessToken();
-		const refreshToken = user.generateRefreshToken();
+		const accessToken = await user.generateAccessToken();
+		const refreshToken = await user.generateRefreshToken();
 
 		const cookieOptions = {
 			secure: true,
@@ -68,9 +68,7 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 			.cookie('refreshToken', refreshToken, cookieOptions)
 			.json(
 				new ApiResponse(MESSAGES.SHARED.SIGNIN_SUCCESSFUL, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, {
-					user: user.toJSON(),
-					accessToken,
-					refreshToken,
+					user: { ...user.toJSON(), accessToken, refreshToken },
 				})
 			);
 		return;
@@ -79,8 +77,23 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 	next(new ApiError(MESSAGES.AUTH.INVALID_USERNAME_OR_PASSWORD, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 });
 
-const signout = asyncHandler(async (request: Request, response: Response) => {
-	response.json({ message: MESSAGES.AUTH.SIGNOUT_SUCCESS });
+const signout = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+	const user = await User.findOne({ _id: request.user._id, accessTokens: { $in: request.accessToken } });
+
+	if (!user) {
+		next(new ApiError(MESSAGES.AUTH.SIGNOUT_FAILED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
+		return;
+	}
+
+	user.accessTokens = user.accessTokens.filter((token) => token !== request.accessToken);
+	user.refreshTokens = [];
+	await user.save();
+
+	response
+		.clearCookie('accessToken')
+		.clearCookie('refreshToken')
+		.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.OK)
+		.json(new ApiResponse(MESSAGES.AUTH.SIGNOUT_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
 });
 
 const forgotPassword = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {

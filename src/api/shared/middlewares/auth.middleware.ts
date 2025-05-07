@@ -34,9 +34,12 @@ export const verifyJWT: RequestHandler = async (request: Request, response: Resp
 			'data' in decoded &&
 			decoded.data !== null &&
 			decoded.data instanceof Object &&
-			'id' in decoded.data
+			'_id' in decoded.data
 		) {
-			user = await User.findById(decoded.data.id);
+			user = await User.findOne({
+				_id: decoded.data._id,
+				accessTokens: { $in: accessToken },
+			}).select('-password');
 		}
 
 		if (!user) {
@@ -45,6 +48,7 @@ export const verifyJWT: RequestHandler = async (request: Request, response: Resp
 		}
 
 		request.user = user;
+		request.accessToken = accessToken;
 		next();
 		return;
 	} catch (err) {

@@ -33,9 +33,7 @@ const userSchema = new Schema(
 			unique: true,
 			index: true,
 			default: function () {
-				return 'firstName' in this && 'lastName' in this
-					? `${this.firstName.toLowerCase()}-${this.lastName.toLowerCase()}-${uuidv7()}`
-					: '';
+				return 'firstName' in this && 'lastName' in this ? `${this.firstName.toLowerCase()}-${this.lastName.toLowerCase()}-${uuidv7()}` : '';
 			},
 		},
 
@@ -112,14 +110,10 @@ const userSchema = new Schema(
 
 			async generateAccessToken(): Promise<string> {
 				const user = this;
-				const accessToken: string = jwt.sign(
-					{ data: { _id: user._id, email: user.email, userName: user.userName, roles: user.roles } },
-					String(_env.get('ACCESS_TOKEN_SECRET')),
-					{
-						expiresIn: '1d',
-						// expiresIn: String(_env.get('ACCESS_TOKEN_EXPIRY')),
-					}
-				);
+				const accessToken: string = jwt.sign({ data: { _id: user._id, email: user.email, userName: user.userName, roles: user.roles } }, String(_env.get('ACCESS_TOKEN_SECRET')), {
+					expiresIn: '1d',
+					// expiresIn: String(_env.get('ACCESS_TOKEN_EXPIRY')),
+				});
 				user.accessTokens.push(accessToken);
 				await user.save();
 

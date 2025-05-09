@@ -62,6 +62,8 @@ export const ROUTES = {
 		_SIGNOUT: '/signout',
 		_FORGOT_PASSWORD: '/forgot-password',
 		_RESET_PASSWORD: '/reset-password',
+		_ME: '/me',
+		_REFRESH: '/refresh',
 	},
 } as const satisfies Record<string, string | Record<string, string>>;
 

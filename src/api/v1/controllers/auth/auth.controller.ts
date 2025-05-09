@@ -77,6 +77,44 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 	next(new ApiError(MESSAGES.AUTH.INVALID_USERNAME_OR_PASSWORD, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 });
 
+const getMe = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+	// NOTE(Wasit): refetching the user although we have it in request.user, just to  make use of user.toJson() in-order to sync with the other APIs specially login API
+
+	const user = await User.findById(request.user._id);
+
+	if (!user) {
+		next(new ApiError(MESSAGES.AUTH.SIGNOUT_FAILED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
+		return;
+	}
+
+	response
+		.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.OK)
+		.json(new ApiResponse(MESSAGES.AUTH.USER_FETCH_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { user: user.toJSON() }));
+});
+
+const refresh = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+	// NOTE(Wasit): refetching the user although we have it in request.user, just to  make use of user.toJson() in-order to sync with the other APIs specially login API
+
+	const user = await User.findById(request.user._id);
+
+	if (!user) {
+		next(new ApiError(MESSAGES.AUTH.INVALID_RESET_PASSWORD_ATTEMPT, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
+		return;
+	}
+
+	const accessToken = await user.generateAccessToken();
+	const refreshToken = await user.generateRefreshToken();
+
+	user.refreshTokens = user.refreshTokens.filter((refreshToken) => refreshToken !== request.refreshToken);
+	user.save();
+
+	response.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.OK).json(
+		new ApiResponse(MESSAGES.AUTH.REFRESH_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, {
+			user: { ...user.toJSON(), accessToken, refreshToken },
+		})
+	);
+});
+
 const signout = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const user = await User.findOne({ _id: request.user._id, accessTokens: { $in: request.accessToken } });
 
@@ -85,7 +123,7 @@ const signout = asyncHandler(async (request: Request, response: Response, next: 
 		return;
 	}
 
-	user.accessTokens = user.accessTokens.filter((token) => token !== request.accessToken);
+	user.accessTokens = user.accessTokens.filter((accessToken) => accessToken !== request.accessToken);
 	user.refreshTokens = [];
 	await user.save();
 
@@ -107,7 +145,7 @@ const forgotPassword = asyncHandler(async (request: Request, response: Response,
 	});
 
 	if (!user) {
-		response.json(new ApiResponse(MESSAGES.AUTH.PASSWORD_RESET_MAIL_SENT, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
+		response.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.OK).json(new ApiResponse(MESSAGES.AUTH.PASSWORD_RESET_MAIL_SENT, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
 		return;
 	}
 
@@ -188,11 +226,4 @@ const resetPassword = asyncHandler(async (request: Request, response: Response, 
 	next(new ApiError(MESSAGES.AUTH.INVALID_RESET_PASSWORD_ATTEMPT, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
 });
 
-const refreshToken = asyncHandler(async (request: Request, response: Response) => {
-	response.json({
-		accessToken: 'new_access_token',
-		refreshToken: 'new_refresh_token',
-	});
-});
-
-export const authController = { signup, signin, signout, forgotPassword, resetPassword };
+export const authController = { signup, signin, signout, forgotPassword, resetPassword, getMe, refresh };

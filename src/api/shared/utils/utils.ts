@@ -4,11 +4,7 @@ import { v7 as uuidv7 } from 'uuid';
 
 import { _env } from '@config/environment';
 import {
-	IGoogleMapParams,
-	IHeadersForAvoidMailGrouping,
-	IOtpGeneratorOptions,
-	IStaticMapParams,
-	TFlagCdnIconSizeValues,
+    IGoogleMapParams, IHeadersForAvoidMailGrouping, IOtpGeneratorOptions, IStaticMapParams, TFlagCdnIconSizeValues
 } from '@interfaces';
 import { logger } from '@utils';
 import * as constants from '@utils/constants';
@@ -31,11 +27,7 @@ export const generateOtp = (otpLength = constants.DEFAULT_OTP_LENGTH, otpOptions
  * @returns
  */
 
-export const generateCookieOptions = (
-	expiresIn: Date = new Date(Date.now() + constants.DEFAULT_COOKIE_EXPIRY),
-	isSecure = true,
-	isHttpOnly = true
-) => {
+export const generateCookieOptions = (expiresIn: Date = new Date(Date.now() + constants.DEFAULT_COOKIE_EXPIRY), isSecure = true, isHttpOnly = true) => {
 	return {
 		expires: expiresIn,
 		secure: isSecure,

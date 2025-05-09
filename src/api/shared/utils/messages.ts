@@ -6,8 +6,9 @@ export const MESSAGES = {
 		INVALID_RESET_PASSWORD_ATTEMPT: 'This password reset attempt is no longer valid, please request a new link and try again.',
 		INVALID_USERNAME_OR_PASSWORD: 'Invalid username or password',
 		MFA_REQUIRED: 'Multi-factor authentication required',
-		PASSWORD_RESET_MAIL_SENT:
-			'If an account with this email exists, a password reset link has been sent. Please check your inbox and follow the instructions.',
+		PASSWORD_RESET_MAIL_SENT: 'If an account with this email exists, a password reset link has been sent. Please check your inbox and follow the instructions.',
+		REFRESH_FAILURE: 'Refresh token expired or invalid, please login again',
+		REFRESH_SUCCESS: 'Successfully updated the tokens',
 		RESET_PASSWORD_FAILED: 'Password reset failed',
 		RESET_PASSWORD_SUCCESS: 'Password reset successful, please login with your new password',
 		RE_CAPTCHA_FAILED: 'reCAPTCHA verification failed',
@@ -19,6 +20,7 @@ export const MESSAGES = {
 		SIGNOUT_SUCCESS: 'You have been signed out successfully',
 		SIGNUP_SUCCESS: 'Congratulations!! Account Created Successfully',
 		TOKEN_REFRESH: 'Token refreshed successfully',
+		USER_FETCH_SUCCESS: 'User detail fetched successfully',
 	},
 	BULL_MQ: {
 		EMAIL: {

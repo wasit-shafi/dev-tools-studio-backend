@@ -7,9 +7,9 @@ import * as constants from '@utils/constants';
 
 import type { RequestHandler, Request, Response, NextFunction } from 'express';
 
-export const verifyJWT: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {
+export const verifyAccessToken: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {
 	try {
-		// logger.info('verifyJWT :: ', {
+		// logger.info('verifyAccessToken :: ', {
 		// 	accessTokenFromCookies: request.cookies.accessToken,
 		// 	accessTokenFromHeaders: request.headers.authorization?.split('Bearer ')[1],
 		// 	accessTokenFromBody: request.body.accessToken,
@@ -26,16 +26,9 @@ export const verifyJWT: RequestHandler = async (request: Request, response: Resp
 
 		let user = null;
 		const accessTokenSecret = String(_env.get('ACCESS_TOKEN_SECRET'));
-		const decoded: unknown = await jwt.verify(accessToken, accessTokenSecret);
+		const decoded: unknown = jwt.verify(accessToken, accessTokenSecret);
 
-		if (
-			decoded !== null &&
-			decoded instanceof Object &&
-			'data' in decoded &&
-			decoded.data !== null &&
-			decoded.data instanceof Object &&
-			'_id' in decoded.data
-		) {
+		if (decoded !== null && decoded instanceof Object && 'data' in decoded && decoded.data !== null && decoded.data instanceof Object && '_id' in decoded.data) {
 			user = await User.findOne({
 				_id: decoded.data._id,
 				accessTokens: { $in: accessToken },
@@ -53,6 +46,40 @@ export const verifyJWT: RequestHandler = async (request: Request, response: Resp
 		return;
 	} catch (err) {
 		next(new ApiError(MESSAGES.HTTP_STATUS.CLIENT.UNAUTHORIZED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
+		return;
+	}
+};
+
+export const verifyRefreshToken: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {
+	try {
+		const refreshToken = request.cookies?.refreshToken || request.body?.refreshToken;
+
+		if (!refreshToken) {
+			next(new ApiError(MESSAGES.HTTP_STATUS.CLIENT.UNAUTHORIZED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
+			return;
+		}
+
+		let user = null;
+		const refreshTokenSecret = String(_env.get('REFRESH_TOKEN_SECRET'));
+		const decoded: unknown = jwt.verify(refreshToken, refreshTokenSecret);
+
+		if (decoded !== null && decoded instanceof Object && 'data' in decoded && decoded.data !== null && decoded.data instanceof Object && '_id' in decoded.data) {
+			user = await User.findOne({
+				_id: decoded.data._id,
+				refreshTokens: { $in: refreshToken },
+			}).select('-password');
+		}
+		if (!user) {
+			next(new ApiError(MESSAGES.HTTP_STATUS.CLIENT.UNAUTHORIZED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
+			return;
+		}
+
+		request.user = user;
+		request.refreshToken = refreshToken;
+		next();
+		return;
+	} catch (err) {
+		next(new ApiError(MESSAGES.AUTH.REFRESH_FAILURE, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
 		return;
 	}
 };

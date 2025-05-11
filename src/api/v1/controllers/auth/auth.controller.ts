@@ -83,7 +83,7 @@ const getMe = asyncHandler(async (request: Request, response: Response, next: Ne
 	const user = await User.findById(request.user._id);
 
 	if (!user) {
-		next(new ApiError(MESSAGES.AUTH.SIGNOUT_FAILED, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
+		next(new ApiError(MESSAGES.AUTH.USER_FETCH_FAILURE, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
 		return;
 	}
 

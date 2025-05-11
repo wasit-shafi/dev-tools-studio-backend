@@ -21,6 +21,7 @@ export const MESSAGES = {
 		SIGNUP_SUCCESS: 'Congratulations!! Account Created Successfully',
 		TOKEN_REFRESH: 'Token refreshed successfully',
 		USER_FETCH_SUCCESS: 'User detail fetched successfully',
+		USER_FETCH_FAILURE: 'Something went wrong while fetching user detail',
 	},
 	BULL_MQ: {
 		EMAIL: {
@@ -47,5 +48,17 @@ export const MESSAGES = {
 		},
 		SERVER: {},
 	},
-	USER: {},
+	USER: {
+		ADD_CREDENTIAL_SUCCESS: 'New credential added successfully',
+		ADD_CREDENTIAL_FAILURE: 'Something went wrong while adding new credential ',
+
+		GET_CREDENTIAL_SUCCESS: 'Credential fetched successfully',
+		GET_CREDENTIAL_FAILURE: 'Something went wrong while fetching the user credential',
+
+		GET_CREDENTIAL_LIST_SUCCESS: 'Credentials fetched successfully',
+		GET_CREDENTIAL_LIST_FAILURE: 'Something went wrong while fetching the user credential',
+
+		ADD_EMAIL_TEMPLATE_SUCCESS: 'New email template added successfully',
+		ADD_EMAIL_TEMPLATE_FAILURE: 'Something went wrong while fetching the email template',
+	},
 } as const;

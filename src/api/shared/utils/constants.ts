@@ -55,6 +55,8 @@ export const ROUTES = {
 	_USER: '/user',
 	_MAIL: '/mail',
 	_AUTH: '/auth',
+	_EMAIL_TEMPLATE: '/email-template',
+	_CREDENTIAL: '/credential',
 
 	AUTH_ROUTES: {
 		_SIGNUP: '/signup',
@@ -64,6 +66,11 @@ export const ROUTES = {
 		_RESET_PASSWORD: '/reset-password',
 		_ME: '/me',
 		_REFRESH: '/refresh',
+	},
+	USER_ROUTES: {
+		CREDENTIAL: '/credential',
+		CREDENTIAL_LIST: '/credential-list',
+		EMAIL_TEMPLATE: '/email-template',
 	},
 } as const satisfies Record<string, string | Record<string, string>>;
 
@@ -89,6 +96,7 @@ export const MODEL_NAMES = {
 	ROLE: 'Role',
 	DEV_TOOL: 'DevTool',
 	EMAIL_TEMPLATE: 'EmailTemplate',
+	CREDENTIAL: 'Credential',
 } as const satisfies Record<string, string>;
 
 export const HTTP_STATUS_CODES_RANGES = {
@@ -175,6 +183,17 @@ export const SMTP_PORTS = {
 // NOTE(WASIT): In AWS SNS 'Promotional' is the default sms type
 
 export const DEFAULT_SMS_TYPE = SMS_MESSAGE_TYPE.TRANSACTIONAL;
+
+export const CREDENTIAL_TYPE = {
+	SMTP: {
+		LABEL: 'SMTP',
+		VALUE: 1,
+	},
+	OAUTH: {
+		LABEL: 'OAuth',
+		VALUE: 2,
+	},
+} as const;
 
 export const IP_MOCK_LIST: string[] = [
 	'22.23.172.79',

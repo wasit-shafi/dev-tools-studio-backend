@@ -3,34 +3,27 @@ import mongoose from 'mongoose';
 import * as constants from '@utils/constants';
 
 const emailTemplateSchema = new mongoose.Schema({
+	userId: {
+		type: mongoose.Schema.Types.ObjectId,
+		required: true,
+		ref: constants.MODEL_NAMES.USER,
+	},
 	subject: {
 		type: String,
-		required: true,
+		required: [true, 'Subject is required'],
 	},
 	salutation: {
 		type: String,
-		required: true,
 	},
 	body: {
 		type: String,
-		required: true,
+		required: [true, 'Body is required'],
 	},
 	closing: {
 		type: String,
-		required: true,
 	},
 	signature: {
 		type: String,
-		required: true,
-	},
-	usedCount: {
-		type: Number,
-		required: true,
-		default: 0,
-	},
-	lastUsedTimestamp: {
-		type: Date,
-		required: true,
 	},
 });
 

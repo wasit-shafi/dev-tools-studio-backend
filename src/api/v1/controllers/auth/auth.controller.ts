@@ -52,6 +52,8 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 	const passwordMatched = user ? await user.comparePassword(password) : false;
 
 	if (user && passwordMatched) {
+		// TODO(Wasit): consider making it on function generateAuthTokens/generateAccessAndRefreshTokens etc
+
 		const accessToken = await user.generateAccessToken();
 		const refreshToken = await user.generateRefreshToken();
 
@@ -124,6 +126,8 @@ const signout = asyncHandler(async (request: Request, response: Response, next: 
 	}
 
 	user.accessTokens = user.accessTokens.filter((accessToken) => accessToken !== request.accessToken);
+	// TODO(Wasit): Temporarily removing all the refresh tokens on signout
+
 	user.refreshTokens = [];
 	await user.save();
 

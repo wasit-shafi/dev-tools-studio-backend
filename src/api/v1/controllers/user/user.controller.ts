@@ -22,7 +22,7 @@ const addNewCredential: RequestHandler = async (request: Request, response: Resp
 };
 
 const getCredential: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {
-	const credential = await Credential.findOne({ userId: request.user._id, _id: request.body._id }).select('-__v ');
+	const credential = await Credential.findOne({ userId: request.user._id, _id: request.params._id }).select('-userId -__v');
 
 	if (!credential) {
 		next(new ApiError(MESSAGES.USER.GET_CREDENTIAL_FAILURE, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
@@ -33,7 +33,7 @@ const getCredential: RequestHandler = async (request: Request, response: Respons
 };
 
 const getCredentialList: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {
-	const credentialList = await Credential.find({ userId: request.user._id }).select('-_id -userId -__v');
+	const credentialList = await Credential.find({ userId: request.user._id }).select('-userId -__v');
 
 	response
 		.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.OK)

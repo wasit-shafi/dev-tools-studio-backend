@@ -9,7 +9,7 @@ const credentialSchema = new mongoose.Schema({
 		ref: constants.MODEL_NAMES.USER,
 	},
 	credentialType: {
-		type: String,
+		type: Number,
 		required: [true, 'Credential Type is required'],
 	},
 	emailId: {

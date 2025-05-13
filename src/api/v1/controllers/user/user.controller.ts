@@ -41,7 +41,7 @@ const deleteCredential: RequestHandler = async (request: Request, response: Resp
 			return;
 		}
 
-		response.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.OK).json(new ApiResponse(MESSAGES.USER.DELETE_CREDENTIAL_SUCCESS + '123', constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
+		response.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.OK).json(new ApiResponse(MESSAGES.USER.DELETE_CREDENTIAL_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
 	} catch (error: any) {
 		next(new ApiError(MESSAGES.USER.DELETE_CREDENTIAL_FAILURE, constants.HTTP_STATUS_CODES.SERVER_ERROR.INTERNAL_SERVER_ERROR));
 	}

@@ -53,10 +53,16 @@ export const MESSAGES = {
 		ADD_CREDENTIAL_FAILURE: 'Something went wrong while adding new credential ',
 
 		GET_CREDENTIAL_SUCCESS: 'Credential fetched successfully',
-		GET_CREDENTIAL_FAILURE: 'Something went wrong while fetching the user credential',
+		GET_CREDENTIAL_FAILURE: 'Something went wrong while fetching credentials',
+
+		DELETE_CREDENTIAL_SUCCESS: 'Credential deleted successfully',
+		DELETE_CREDENTIAL_FAILURE: 'Something went wrong while deleting credential',
+
+		PATCH_CREDENTIAL_SUCCESS: 'Credential updated successfully',
+		PATCH_CREDENTIAL_FAILURE: 'Something went wrong while updating credential',
 
 		GET_CREDENTIAL_LIST_SUCCESS: 'Credentials fetched successfully',
-		GET_CREDENTIAL_LIST_FAILURE: 'Something went wrong while fetching the user credential',
+		GET_CREDENTIAL_LIST_FAILURE: 'Something went wrong while fetching credential',
 
 		ADD_EMAIL_TEMPLATE_SUCCESS: 'New email template added successfully',
 		ADD_EMAIL_TEMPLATE_FAILURE: 'Something went wrong while fetching the email template',

@@ -32,6 +32,38 @@ const getCredential: RequestHandler = async (request: Request, response: Respons
 	response.json(new ApiResponse(MESSAGES.USER.GET_CREDENTIAL_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { credential }));
 };
 
+const deleteCredential: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {
+	try {
+		const credential = await Credential.findOneAndDelete({ userId: request.user._id, _id: request.params._id });
+
+		if (!credential) {
+			next(new ApiError(MESSAGES.USER.DELETE_CREDENTIAL_FAILURE, constants.HTTP_STATUS_CODES.CLIENT_ERROR.NOT_FOUND));
+			return;
+		}
+
+		response.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.OK).json(new ApiResponse(MESSAGES.USER.DELETE_CREDENTIAL_SUCCESS + '123', constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
+	} catch (error: any) {
+		next(new ApiError(MESSAGES.USER.DELETE_CREDENTIAL_FAILURE, constants.HTTP_STATUS_CODES.SERVER_ERROR.INTERNAL_SERVER_ERROR));
+	}
+};
+
+const patchCredential: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {
+	try {
+		const updatedCredential = await Credential.findOneAndUpdate({ userId: request.user._id, _id: request.params._id }, { ...request.body }, { new: true })
+			.select('-userId -__v')
+			.lean();
+
+		if (!updatedCredential) {
+			next(new ApiError(MESSAGES.USER.PATCH_CREDENTIAL_FAILURE, constants.HTTP_STATUS_CODES.CLIENT_ERROR.NOT_FOUND));
+			return;
+		}
+
+		response.json(new ApiResponse(MESSAGES.USER.PATCH_CREDENTIAL_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { ...updatedCredential }));
+	} catch (error) {
+		next(new ApiError(MESSAGES.USER.PATCH_CREDENTIAL_FAILURE, constants.HTTP_STATUS_CODES.SERVER_ERROR.INTERNAL_SERVER_ERROR));
+	}
+};
+
 const getCredentialList: RequestHandler = async (request: Request, response: Response, next: NextFunction) => {
 	const credentialList = await Credential.find({ userId: request.user._id }).select('-userId -__v');
 
@@ -47,6 +79,8 @@ const addNewEmailTemplate: RequestHandler = async (request: Request, response: R
 export const userController = {
 	addNewCredential,
 	addNewEmailTemplate,
+	deleteCredential,
 	getCredential,
 	getCredentialList,
+	patchCredential,
 };

@@ -50,13 +50,8 @@ export const NODE_ENV = {
 export const RE_CAPTCHA_SITE_VERIFY_BASE_URL: string = 'https://www.google.com/recaptcha/api/siteverify';
 
 export const ROUTES = {
-	// LOGIN: '/login',
-	// LOGOUT: '/logout',
 	_USER: '/user',
-	_MAIL: '/mail',
 	_AUTH: '/auth',
-	_EMAIL_TEMPLATE: '/email-template',
-	_CREDENTIAL: '/credential',
 
 	AUTH_ROUTES: {
 		_SIGNUP: '/signup',
@@ -70,6 +65,7 @@ export const ROUTES = {
 	USER_ROUTES: {
 		CREDENTIAL: '/credential',
 		CREDENTIAL_LIST: '/credential-list',
+		EMAIL: '/email',
 		EMAIL_TEMPLATE: '/email-template',
 	},
 } as const satisfies Record<string, string | Record<string, string>>;
@@ -178,6 +174,18 @@ export const SMTP_PORTS = {
 	FOUR_SIX_FIVE: 465,
 	TWO_FIVE: 25,
 	TWO_FIVE_TWO_FIVE: 2525,
+} as const satisfies Record<string, number>;
+
+export const QUEUE_CONFIGS = {
+	EMAIL_QUEUE: {
+		TOTAL_RETRY_ATTEMPTS: 3,
+		BACKOFF_RETRY_DELAY_IN_SECONDS: 30,
+	},
+};
+
+export const EMAIL_TYPES = {
+	APPLICATION: 1,
+	USER: 2,
 } as const satisfies Record<string, number>;
 
 // NOTE(WASIT): In AWS SNS 'Promotional' is the default sms type

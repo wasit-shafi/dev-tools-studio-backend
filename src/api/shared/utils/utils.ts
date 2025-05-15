@@ -3,9 +3,7 @@ import { UAParser } from 'ua-parser-js';
 import { v7 as uuidv7 } from 'uuid';
 
 import { _env } from '@config/environment';
-import {
-    IGoogleMapParams, IHeadersForAvoidMailGrouping, IOtpGeneratorOptions, IStaticMapParams, TFlagCdnIconSizeValues
-} from '@interfaces';
+import { IGoogleMapParams, IHeadersForAvoidEmailGrouping, IOtpGeneratorOptions, IStaticMapParams, TFlagCdnIconSizeValues } from '@interfaces';
 import { logger } from '@utils';
 import * as constants from '@utils/constants';
 
@@ -123,7 +121,7 @@ export const getCountryFlagUrl = (flagSize: TFlagCdnIconSizeValues, countryCode:
 	return flagUrl;
 };
 
-export const getHeadersForAvoidMailGrouping = (): IHeadersForAvoidMailGrouping => {
+export const getHeadersForAvoidEmailGrouping = (): IHeadersForAvoidEmailGrouping => {
 	const uniqueId = uuidv7();
 
 	const headers = {

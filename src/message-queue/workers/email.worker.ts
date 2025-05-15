@@ -1,7 +1,7 @@
 import { Job, Worker } from 'bullmq';
 
 import { redisConnectionConfig } from '@messageQueue';
-import { logger, sendMail } from '@utils';
+import { logger, sendApplicationEmail, sendUserEmail } from '@utils';
 import * as constants from '@utils/constants';
 
 // TODO(WASIT): handle how to manage spinning more workers on demand
@@ -9,14 +9,18 @@ import * as constants from '@utils/constants';
 const emailWorker = new Worker(
 	constants.MESSAGING_QUEUES.EMAIL,
 	async (job: Job) => {
+		const { emailType = 0 } = job.data;
+
 		// logger.info('emailWorker ::', {
 		// 	worker: job.name,
 		// 	data: job.data,
-		// 	time: new Date().getTime(),
-		// 	// job,
 		// });
 
-		await sendMail(job.data.emailOptions);
+		if (emailType === constants.EMAIL_TYPES.APPLICATION) {
+			sendApplicationEmail(job.data);
+		} else if (emailType === constants.EMAIL_TYPES.USER) {
+			sendUserEmail(job.data);
+		}
 	},
 	{
 		connection: redisConnectionConfig,

@@ -4,7 +4,7 @@ import { _env } from '@environment';
 import { verifyAccessToken } from '@middlewares';
 import * as constants from '@utils/constants';
 
-import { authRouter, mailRouter, userRouter } from './routes';
+import { authRouter, userRouter } from './routes';
 
 const router = Router();
 
@@ -13,8 +13,6 @@ router.get('/say-hello', (request, response) => {
 });
 
 router.use(constants.ROUTES._USER, verifyAccessToken, userRouter);
-
-router.use(constants.ROUTES._MAIL, verifyAccessToken, mailRouter);
 
 router.use(constants.ROUTES._AUTH, authRouter);
 

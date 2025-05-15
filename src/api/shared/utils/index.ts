@@ -6,6 +6,6 @@ export * from './logger';
 export * from './messages';
 export * from './mongodb';
 export * from './rate-limiter';
-export * from './send-mail';
-export * from './send-sms';
+export * from './email';
+export * from './sms';
 export * from './utils';

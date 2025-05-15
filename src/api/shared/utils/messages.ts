@@ -66,5 +66,11 @@ export const MESSAGES = {
 
 		ADD_EMAIL_TEMPLATE_SUCCESS: 'New email template added successfully',
 		ADD_EMAIL_TEMPLATE_FAILURE: 'Something went wrong while fetching the email template',
+
+		EMAIL_SCHEDULED_SUCCESS: 'Email Scheduled successfully',
+		EMAIL_SCHEDULED_FAILURE: 'Something went wrong while schedule email',
+
+		EMAIL_SENT_SUCCESS: 'Email Sent successfully',
+		EMAIL_SENT_FAILURE: 'Something went wrong while sending email',
 	},
 } as const;

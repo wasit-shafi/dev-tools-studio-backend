@@ -12,9 +12,14 @@ const credentialSchema = new mongoose.Schema({
 		type: Number,
 		required: [true, 'Credential Type is required'],
 	},
+	displayName: {
+		type: String,
+		required: [true, 'Display Name is required'],
+	},
 	emailId: {
 		type: String,
 		required: [true, 'emailId is required'],
+		unique: [true, 'emailId should be unique'],
 	},
 	host: {
 		type: String,
@@ -27,6 +32,7 @@ const credentialSchema = new mongoose.Schema({
 	user: {
 		type: String,
 		required: [true, 'user is required'],
+		unique: [true, 'user should be unique'],
 	},
 	pass: {
 		type: String,

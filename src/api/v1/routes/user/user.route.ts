@@ -13,6 +13,9 @@ userRouter.delete(`${constants.ROUTES.USER_ROUTES.CREDENTIAL}/:_id`, userControl
 // Credential List
 
 userRouter.get(constants.ROUTES.USER_ROUTES.CREDENTIAL_LIST, userController.getCredentialList);
+//  Email
+
+userRouter.post(constants.ROUTES.USER_ROUTES.EMAIL, userController.postEmail);
 // Email Template
 
 userRouter.post(constants.ROUTES.USER_ROUTES.EMAIL_TEMPLATE, userController.addNewEmailTemplate);

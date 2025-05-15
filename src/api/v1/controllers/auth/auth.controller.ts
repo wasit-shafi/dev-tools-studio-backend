@@ -4,14 +4,16 @@ import fs from 'fs';
 import path from 'path';
 
 import { _env } from '@config/environment';
+import { IEmailOptions } from '@interfaces';
 import { emailQueue } from '@messageQueue';
 import { User } from '@models';
-import { ApiError, ApiResponse, asyncHandler, getHeadersForAvoidMailGrouping, logger, MESSAGES, sendSms } from '@utils';
+import { ApiError, ApiResponse, asyncHandler, getHeadersForAvoidEmailGrouping, logger, MESSAGES, sendSms } from '@utils';
 import * as constants from '@utils/constants';
 import * as utils from '@utils/utils';
 
-import type { NextFunction, Request, Response } from 'express';
-const signup = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+import type { NextFunction, Request, RequestHandler, Response } from 'express';
+
+const signup: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const { firstName, lastName, email, password, countryCode, mobileNumber, country } = request.body;
 
 	const user = await User.findOne({ email });
@@ -37,7 +39,7 @@ const signup = asyncHandler(async (request: Request, response: Response, next: N
 		.json(new ApiResponse(MESSAGES.AUTH.SIGNUP_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED, { _id: newUser._id }));
 });
 
-const signin = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+const signin: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const { userName, email, password } = request.body;
 
 	// making sure user only send only userName or email not both
@@ -79,7 +81,7 @@ const signin = asyncHandler(async (request: Request, response: Response, next: N
 	next(new ApiError(MESSAGES.AUTH.INVALID_USERNAME_OR_PASSWORD, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
 });
 
-const getMe = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+const getMe: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	// NOTE(Wasit): refetching the user although we have it in request.user, just to  make use of user.toJson() in-order to sync with the other APIs specially login API
 
 	const user = await User.findById(request.user._id);
@@ -94,7 +96,7 @@ const getMe = asyncHandler(async (request: Request, response: Response, next: Ne
 		.json(new ApiResponse(MESSAGES.AUTH.USER_FETCH_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { user: user.toJSON() }));
 });
 
-const refresh = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+const refresh: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	// NOTE(Wasit): refetching the user although we have it in request.user, just to  make use of user.toJson() in-order to sync with the other APIs specially login API
 
 	const user = await User.findById(request.user._id);
@@ -117,7 +119,7 @@ const refresh = asyncHandler(async (request: Request, response: Response, next: 
 	);
 });
 
-const signout = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+const signout: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const user = await User.findOne({ _id: request.user._id, accessTokens: { $in: request.accessToken } });
 
 	if (!user) {
@@ -138,7 +140,7 @@ const signout = asyncHandler(async (request: Request, response: Response, next: 
 		.json(new ApiResponse(MESSAGES.AUTH.SIGNOUT_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
 });
 
-const forgotPassword = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+const forgotPassword: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const {
 		ipinfo,
 		body: { email },
@@ -193,14 +195,17 @@ const forgotPassword = asyncHandler(async (request: Request, response: Response,
 				return;
 			}
 
+			const emailOptions: IEmailOptions = {
+				from: `${_env.get('EMAIL_SERVICE_SENDER_NAME')}<${_env.get('EMAIL_SERVICE_SENDER_EMAIL_ID')}>`,
+				to: email,
+				subject: 'Reset Your Password',
+				html: templateHtmlString,
+				headers: { ...getHeadersForAvoidEmailGrouping() },
+			};
+
 			await emailQueue.add(constants.MESSAGING_QUEUES.EMAIL, {
-				emailOptions: {
-					from: `${_env.get('EMAIL_SERVICE_SENDER_NAME')}<${_env.get('EMAIL_SERVICE_SENDER_EMAIL_ID')}>`,
-					to: email,
-					subject: 'Reset Your Password',
-					html: templateHtmlString,
-					headers: { ...getHeadersForAvoidMailGrouping() },
-				},
+				emailOptions,
+				emailType: constants.EMAIL_TYPES.APPLICATION,
 			});
 
 			response.json(new ApiResponse(MESSAGES.AUTH.PASSWORD_RESET_MAIL_SENT, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
@@ -208,7 +213,7 @@ const forgotPassword = asyncHandler(async (request: Request, response: Response,
 	);
 });
 
-const resetPassword = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+const resetPassword: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const { password } = request.body;
 	const { token = '' } = request.params;
 

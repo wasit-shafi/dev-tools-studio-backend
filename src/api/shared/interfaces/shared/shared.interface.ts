@@ -22,19 +22,29 @@ export interface IGoogleMapParams {
 export type TFlagCdnIconSizeKeys = keyof typeof constants.FLAG_CDN_ICON_SIZE;
 export type TFlagCdnIconSizeValues = (typeof constants.FLAG_CDN_ICON_SIZE)[TFlagCdnIconSizeKeys];
 
-export interface IHeadersForAvoidMailGrouping {
+export interface IHeadersForAvoidEmailGrouping {
 	References: string;
 	'X-Entity-Ref-ID': string;
 }
 
-export interface IMailOptions {
+export interface IEmailOptions {
 	from: string;
 	to: string;
 	subject: string;
-	html?: string;
-	text?: string;
+	html: string;
+	headers?: Record<string, string>;
 }
 
+export interface ISendUserEmail {
+	credential: { host: string; port: number; user: string; pass: string };
+	emailOptions: IEmailOptions;
+	receiveConfirmationEmail: boolean;
+	emailType: number;
+}
+
+export interface ISendApplicationEmail {
+	emailOptions: IEmailOptions;
+}
 /*
 	Transactional - highest reliability
 	Promotional - lowest cost 

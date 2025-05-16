@@ -197,8 +197,8 @@ export const CREDENTIAL_TYPE = {
 		LABEL: 'SMTP',
 		VALUE: 1,
 	},
-	OAUTH: {
-		LABEL: 'OAuth',
+	OAUTH2: {
+		LABEL: 'OAuth2',
 		VALUE: 2,
 	},
 } as const;

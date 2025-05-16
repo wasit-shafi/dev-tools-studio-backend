@@ -38,7 +38,9 @@ export const MESSAGES = {
 		DUPLICATE_ENTRY_FOUND: 'Duplicate entry found. Please check your input and try again.',
 		SIGNIN_SUCCESSFUL: 'Sign-in successful',
 	},
-	ERROR: {},
+	ERROR: {
+		JWT_TOKEN_VERIFICATION_FAILURE: 'JWT token verification failed, please try again',
+	},
 	HTTP_STATUS: {
 		INFORMATION: {},
 		REDIRECTION: {},

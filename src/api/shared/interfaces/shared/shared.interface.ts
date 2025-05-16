@@ -35,8 +35,14 @@ export interface IEmailOptions {
 	headers?: Record<string, string>;
 }
 
+export interface ISmtpCredential {
+	host: string;
+	port: number;
+	user: string;
+	pass: string;
+}
 export interface ISendUserEmail {
-	credential: { host: string; port: number; user: string; pass: string };
+	credential: ISmtpCredential;
 	emailOptions: IEmailOptions;
 	receiveConfirmationEmail: boolean;
 	emailType: number;

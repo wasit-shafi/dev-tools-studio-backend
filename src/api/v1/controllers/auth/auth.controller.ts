@@ -7,7 +7,9 @@ import { _env } from '@config/environment';
 import { IEmailOptions } from '@interfaces';
 import { emailQueue } from '@messageQueue';
 import { User } from '@models';
-import { ApiError, ApiResponse, asyncHandler, getHeadersForAvoidEmailGrouping, logger, MESSAGES, sendSms } from '@utils';
+import {
+    ApiError, ApiResponse, asyncHandler, getHeadersForAvoidEmailGrouping, logger, MESSAGES, sendSms
+} from '@utils';
 import * as constants from '@utils/constants';
 import * as utils from '@utils/utils';
 
@@ -156,8 +158,7 @@ const forgotPassword: RequestHandler = asyncHandler(async (request: Request, res
 	}
 
 	const { firstName } = user;
-	const resetPasswordLink = `${_env.get('FE_BASE_URL')}/reset-password?token=${user.generateResetPasswordToken()}`;
-	await user.save();
+	const resetPasswordLink = `${_env.get('FE_BASE_URL')}/reset-password?token=${await user.generateResetPasswordToken()}`;
 
 	const when = new Date().toUTCString();
 	const device = utils.getDeviceInfoString(request.headers['user-agent'] || '');

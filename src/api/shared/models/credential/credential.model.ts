@@ -20,6 +20,7 @@ const credentialSchema = new mongoose.Schema({
 		type: String,
 		required: [true, 'emailId is required'],
 		unique: [true, 'emailId should be unique'],
+		index: true,
 	},
 	host: {
 		type: String,
@@ -33,6 +34,7 @@ const credentialSchema = new mongoose.Schema({
 		type: String,
 		required: [true, 'user is required'],
 		unique: [true, 'user should be unique'],
+		index: true,
 	},
 	pass: {
 		type: String,

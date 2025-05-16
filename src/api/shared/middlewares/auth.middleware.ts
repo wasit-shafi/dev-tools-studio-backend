@@ -24,9 +24,17 @@ export const verifyAccessToken: RequestHandler = asyncHandler(async (request: Re
 	}
 
 	let user = null;
+	let decoded: unknown;
 	const accessTokenSecret = String(_env.get('ACCESS_TOKEN_SECRET'));
 
-	const decoded: unknown = jwt.verify(accessToken, accessTokenSecret);
+	try {
+		decoded = jwt.verify(accessToken, accessTokenSecret);
+	} catch (error: unknown) {
+		const errorMessage: string =
+			error && error instanceof Object && 'message' in error && typeof error.message === 'string' ? error.message : MESSAGES.ERROR.JWT_TOKEN_VERIFICATION_FAILURE;
+		next(new ApiError(errorMessage, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
+		return;
+	}
 
 	if (decoded !== null && decoded instanceof Object && 'data' in decoded && decoded.data !== null && decoded.data instanceof Object && '_id' in decoded.data) {
 		user = await User.findOne({
@@ -54,8 +62,17 @@ export const verifyRefreshToken: RequestHandler = asyncHandler(async (request: R
 	}
 
 	let user = null;
+	let decoded: unknown;
 	const refreshTokenSecret = String(_env.get('REFRESH_TOKEN_SECRET'));
-	const decoded: unknown = jwt.verify(refreshToken, refreshTokenSecret);
+
+	try {
+		decoded = jwt.verify(refreshToken, refreshTokenSecret);
+	} catch (error: unknown) {
+		const errorMessage: string =
+			error && error instanceof Object && 'message' in error && typeof error.message === 'string' ? error.message : MESSAGES.ERROR.JWT_TOKEN_VERIFICATION_FAILURE;
+		next(new ApiError(errorMessage, constants.HTTP_STATUS_CODES.CLIENT_ERROR.UNAUTHORIZED));
+		return;
+	}
 
 	if (decoded !== null && decoded instanceof Object && 'data' in decoded && decoded.data !== null && decoded.data instanceof Object && '_id' in decoded.data) {
 		user = await User.findOne({

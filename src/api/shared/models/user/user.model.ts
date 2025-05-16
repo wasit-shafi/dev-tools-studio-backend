@@ -132,14 +132,16 @@ const userSchema = new Schema(
 				return refreshToken;
 			},
 
-			generateResetPasswordToken(): string {
+			async generateResetPasswordToken(): Promise<string> {
+				const user = this;
 				const resetPasswordToken = crypto.randomBytes(64).toString('hex');
 
 				// saving the hashed resetPasswordToken in the database, so that even if the token which is saved in db gets exposed/leaked, no now is able to use it directly to reset password of the user
 
-				this.passwordResetToken = crypto.createHash('sha256').update(resetPasswordToken).digest('hex');
-				this.passwordResetExpires = Date.now() + constants.TIME.MS.MINUTE * 5; // valid for 5 mins only;
+				user.passwordResetToken = crypto.createHash('sha256').update(resetPasswordToken).digest('hex');
+				user.passwordResetExpires = Date.now() + constants.TIME.MS.MINUTE * 5; // valid for 5 mins only;
 
+				await user.save();
 				return resetPasswordToken;
 			},
 		},

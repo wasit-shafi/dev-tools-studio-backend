@@ -92,10 +92,11 @@ const getMe: RequestHandler = asyncHandler(async (request: Request, response: Re
 		next(new ApiError(MESSAGES.AUTH.USER_FETCH_FAILURE, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
 		return;
 	}
+	// NOTE(Wasit): returning the current accessToken as well as the accessToken user already have is valid
 
 	response
 		.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.OK)
-		.json(new ApiResponse(MESSAGES.AUTH.USER_FETCH_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { user: user.toJSON() }));
+		.json(new ApiResponse(MESSAGES.AUTH.USER_FETCH_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { user: { ...user.toJSON(), accessToken: request.accessToken } }));
 });
 
 const refresh: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {

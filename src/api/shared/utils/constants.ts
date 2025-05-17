@@ -67,6 +67,7 @@ export const ROUTES = {
 		CREDENTIAL_LIST: '/credential-list',
 		EMAIL: '/email',
 		EMAIL_TEMPLATE: '/email-template',
+		EMAIL_TEMPLATE_LIST: '/email-template-list',
 	},
 } as const satisfies Record<string, string | Record<string, string>>;
 

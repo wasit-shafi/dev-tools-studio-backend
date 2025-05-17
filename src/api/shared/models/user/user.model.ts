@@ -14,19 +14,16 @@ const userSchema = new Schema(
 			type: String,
 			required: [true, 'First Name is required'],
 		},
-
 		lastName: {
 			type: String,
 			required: true,
 		},
-
 		displayName: {
 			type: String,
 			default: function () {
 				return 'firstName' in this && 'lastName' in this ? `${this.firstName.toLowerCase()} ${this.lastName.toLowerCase()}` : '';
 			},
 		},
-
 		userName: {
 			type: String,
 			required: true,
@@ -36,7 +33,6 @@ const userSchema = new Schema(
 				return 'firstName' in this && 'lastName' in this ? `${this.firstName.toLowerCase()}-${this.lastName.toLowerCase()}-${uuidv7()}` : '';
 			},
 		},
-
 		email: {
 			type: String,
 			required: true,
@@ -51,12 +47,10 @@ const userSchema = new Schema(
 			type: String,
 			required: true,
 		},
-
 		countryCode: {
 			type: String,
 			required: true,
 		},
-
 		mobileNumber: {
 			type: String,
 			required: true,
@@ -65,7 +59,6 @@ const userSchema = new Schema(
 			type: Boolean,
 			default: false,
 		},
-
 		country: {
 			type: String,
 			required: true,
@@ -74,26 +67,21 @@ const userSchema = new Schema(
 			type: [String],
 			default: [],
 		},
-
 		refreshTokens: {
 			type: [String],
 			required: true,
 			default: [],
 		},
-
 		roles: {
 			type: [Number],
 			required: true,
 		},
-
 		passwordChangedAt: {
 			type: Date,
 		},
-
 		passwordResetExpires: {
 			type: Number, // timestamp
 		},
-
 		passwordResetToken: {
 			type: String,
 		},

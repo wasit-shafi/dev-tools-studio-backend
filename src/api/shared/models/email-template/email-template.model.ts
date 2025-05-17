@@ -8,12 +8,17 @@ const emailTemplateSchema = new mongoose.Schema({
 		required: true,
 		ref: constants.MODEL_NAMES.USER,
 	},
+	name: {
+		type: String,
+		required: [true, 'Email Template name is required'],
+	},
 	subject: {
 		type: String,
 		required: [true, 'Subject is required'],
 	},
 	salutation: {
 		type: String,
+		required: [true, 'Salutation is required'],
 	},
 	body: {
 		type: String,
@@ -21,9 +26,21 @@ const emailTemplateSchema = new mongoose.Schema({
 	},
 	closing: {
 		type: String,
+		required: [true, 'Closing is required'],
 	},
 	signature: {
 		type: String,
+		required: [true, 'Signature is required'],
+	},
+	tags: {
+		type: [String],
+		default: [],
+		validate: {
+			validator: function (tags: string[]) {
+				return tags.every((tag) => !tag.includes(' ') && tag.startsWith('#') && !tag.endsWith('#'));
+			},
+			message: 'Tags are invalid, please try again',
+		},
 	},
 });
 

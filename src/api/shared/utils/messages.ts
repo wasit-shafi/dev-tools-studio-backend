@@ -64,15 +64,27 @@ export const MESSAGES = {
 		PATCH_CREDENTIAL_FAILURE: 'Something went wrong while updating credential',
 
 		GET_CREDENTIAL_LIST_SUCCESS: 'Credentials fetched successfully',
-		GET_CREDENTIAL_LIST_FAILURE: 'Something went wrong while fetching credential',
-
-		ADD_EMAIL_TEMPLATE_SUCCESS: 'New email template added successfully',
-		ADD_EMAIL_TEMPLATE_FAILURE: 'Something went wrong while fetching the email template',
+		GET_CREDENTIAL_LIST_FAILURE: 'Something went wrong while fetching credentials',
 
 		EMAIL_SCHEDULED_SUCCESS: 'Email Scheduled successfully',
 		EMAIL_SCHEDULED_FAILURE: 'Something went wrong while schedule email',
 
 		EMAIL_SENT_SUCCESS: 'Email Sent successfully',
 		EMAIL_SENT_FAILURE: 'Something went wrong while sending email',
+
+		ADD_EMAIL_TEMPLATE_SUCCESS: 'New email template added successfully',
+		ADD_EMAIL_TEMPLATE_FAILURE: 'Something went wrong while fetching the email template',
+
+		PATCH_EMAIL_TEMPLATE_SUCCESS: 'Email template updated successfully',
+		PATCH_EMAIL_TEMPLATE_FAILURE: 'Something went wrong while updating email template',
+
+		DELETE_EMAIL_TEMPLATE_SUCCESS: 'Email template deleted successfully',
+		DELETE_EMAIL_TEMPLATE_FAILURE: 'Something went wrong while deleting email template',
+
+		GET_EMAIL_TEMPLATE_SUCCESS: 'Email template fetched successfully',
+		GET_EMAIL_TEMPLATE_FAILURE: 'Something went wrong while fetching email template',
+
+		GET_EMAIL_TEMPLATE_LIST_SUCCESS: 'Email templates fetched successfully',
+		GET_EMAIL_TEMPLATE_LIST_FAILURE: 'Something went wrong while fetching email templates',
 	},
 } as const;

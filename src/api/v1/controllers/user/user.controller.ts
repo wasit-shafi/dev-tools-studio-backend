@@ -3,9 +3,11 @@ import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import { _env } from '@environment';
 import { IEmailOptions, ISendUserEmail } from '@interfaces';
 import { emailQueue } from '@messageQueue';
-import { Credential } from '@models';
+import { Credential, EmailTemplate } from '@models';
 import { ApiError, ApiResponse, asyncHandler, getHeadersForAvoidEmailGrouping, MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
+
+// Credential
 
 const addNewCredential: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const { credentialType, displayName, emailId, host, port, user, pass } = request.body;
@@ -56,8 +58,9 @@ const patchCredential: RequestHandler = asyncHandler(async (request: Request, re
 		return;
 	}
 
-	response.json(new ApiResponse(MESSAGES.USER.PATCH_CREDENTIAL_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { ...updatedCredential }));
+	response.json(new ApiResponse(MESSAGES.USER.PATCH_CREDENTIAL_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { _id: updatedCredential._id }));
 });
+// Credential List
 
 const getCredentialList: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const credentialList = await Credential.find({ userId: request.user._id }).select('-userId -__v');
@@ -66,10 +69,62 @@ const getCredentialList: RequestHandler = asyncHandler(async (request: Request, 
 		.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.OK)
 		.json(new ApiResponse(MESSAGES.USER.GET_CREDENTIAL_LIST_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { credentialList }));
 });
+// Email Template
 
 const addNewEmailTemplate: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
-	response.json(new ApiResponse(MESSAGES.USER.ADD_EMAIL_TEMPLATE_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED, { _id: '123abc' }));
+	const { name, subject, salutation, body, closing, signature, tags } = request.body;
+
+	const newEmailTemplate = await EmailTemplate.create({ userId: request.user._id, name, subject, salutation, body, closing, signature, tags });
+
+	response
+		.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED)
+		.json(new ApiResponse(MESSAGES.USER.ADD_EMAIL_TEMPLATE_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED, { _id: newEmailTemplate._id }));
 });
+
+const getEmailTemplate: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+	const emailTemplate = await EmailTemplate.findOne({ userId: request.user._id, _id: request.params._id }).select('-userId -__v');
+
+	if (!emailTemplate) {
+		next(new ApiError(MESSAGES.USER.GET_EMAIL_TEMPLATE_FAILURE, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
+		return;
+	}
+
+	response.json(new ApiResponse(MESSAGES.USER.GET_EMAIL_TEMPLATE_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { emailTemplate }));
+});
+
+const patchEmailTemplate: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+	const updatedEmailTemplate = await EmailTemplate.findOneAndUpdate({ userId: request.user._id, _id: request.params._id }, { ...request.body }, { new: true })
+		.select('-userId -__v')
+		.lean();
+
+	if (!updatedEmailTemplate) {
+		next(new ApiError(MESSAGES.USER.PATCH_EMAIL_TEMPLATE_FAILURE, constants.HTTP_STATUS_CODES.CLIENT_ERROR.NOT_FOUND));
+		return;
+	}
+
+	response.json(new ApiResponse(MESSAGES.USER.PATCH_EMAIL_TEMPLATE_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { _id: updatedEmailTemplate._id }));
+});
+
+const deleteEmailTemplate: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+	const emailTemplate = await EmailTemplate.findOneAndDelete({ userId: request.user._id, _id: request.params._id });
+
+	if (!emailTemplate) {
+		next(new ApiError(MESSAGES.USER.DELETE_EMAIL_TEMPLATE_FAILURE, constants.HTTP_STATUS_CODES.CLIENT_ERROR.NOT_FOUND));
+		return;
+	}
+
+	response.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.OK).json(new ApiResponse(MESSAGES.USER.DELETE_EMAIL_TEMPLATE_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
+});
+// Email Template List
+
+const getEmailTemplateList: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+	const emailTemplateList = await EmailTemplate.find({ userId: request.user._id }).select('-userId -__v');
+
+	response
+		.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.OK)
+		.json(new ApiResponse(MESSAGES.USER.GET_EMAIL_TEMPLATE_LIST_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { emailTemplateList }));
+});
+// Post Email
 
 const postEmail: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const { from, to, subject, salutation, body, closing, signature, dateTimeLocal, receiveConfirmationEmail } = request.body;
@@ -126,8 +181,12 @@ export const userController = {
 	addNewCredential,
 	addNewEmailTemplate,
 	deleteCredential,
+	deleteEmailTemplate,
 	getCredential,
 	getCredentialList,
+	getEmailTemplate,
+	getEmailTemplateList,
 	patchCredential,
+	patchEmailTemplate,
 	postEmail,
 };

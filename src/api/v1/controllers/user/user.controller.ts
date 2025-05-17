@@ -72,9 +72,9 @@ const getCredentialList: RequestHandler = asyncHandler(async (request: Request, 
 // Email Template
 
 const addNewEmailTemplate: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
-	const { name, subject, salutation, body, closing, signature, tags } = request.body;
+	const { templateName, subject, salutation, body, closing, signature, tags } = request.body;
 
-	const newEmailTemplate = await EmailTemplate.create({ userId: request.user._id, name, subject, salutation, body, closing, signature, tags });
+	const newEmailTemplate = await EmailTemplate.create({ userId: request.user._id, templateName, subject, salutation, body, closing, signature, tags });
 
 	response
 		.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED)

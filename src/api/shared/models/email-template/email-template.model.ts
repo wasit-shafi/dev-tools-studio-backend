@@ -8,9 +8,9 @@ const emailTemplateSchema = new mongoose.Schema({
 		required: true,
 		ref: constants.MODEL_NAMES.USER,
 	},
-	name: {
+	templateName: {
 		type: String,
-		required: [true, 'Email Template name is required'],
+		required: [true, 'Template name is required'],
 	},
 	subject: {
 		type: String,

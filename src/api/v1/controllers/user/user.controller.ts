@@ -127,10 +127,13 @@ const getEmailTemplateList: RequestHandler = asyncHandler(async (request: Reques
 // Post Email
 
 const postEmail: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
-	const { from, to, subject, salutation, body, closing, signature, dateTimeLocal, receiveConfirmationEmail } = request.body;
+	let delay: number = 0;
+	const { from, to, subject, salutation, body, closing, signature, dateTimeLocal, receiveConfirmationEmail, sendNow } = request.body;
 
-	const targetDateAndTime = new Date(dateTimeLocal);
-	const delay = Number(targetDateAndTime) - Number(new Date());
+	if (!sendNow) {
+		const targetDateAndTime = new Date(dateTimeLocal);
+		delay = Number(targetDateAndTime) - Number(new Date());
+	}
 
 	if (delay < 0) {
 		next(new ApiError(MESSAGES.SHARED.INVALID_DATE_AND_TIME, constants.HTTP_STATUS_CODES.CLIENT_ERROR.NOT_ACCEPTABLE));
@@ -154,7 +157,7 @@ const postEmail: RequestHandler = asyncHandler(async (request: Request, response
 									<b>BODY:</b><pre>${body}</pre><br/>\
 									<b>CLOSING:</b> ${closing}<br/>\
 									<b>SIGNATURE:</b> ${signature}<br/>\
-									<b>DATE:</b>	${targetDateAndTime.toString()}<br/>\
+									<b>Send Now:</b>	${sendNow}<br/>\
 									<b>DATE TIME LOCAL:</b>	${dateTimeLocal}\
 								</p>`;
 

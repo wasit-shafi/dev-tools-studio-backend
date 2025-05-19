@@ -1,6 +1,5 @@
 import crypto from 'crypto';
 import ejs from 'ejs';
-import fs from 'fs';
 import path from 'path';
 
 import { _env } from '@config/environment';
@@ -44,7 +43,7 @@ const signup: RequestHandler = asyncHandler(async (request: Request, response: R
 const signin: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const { userName, email, password } = request.body;
 
-	// making sure user only send only userName or email not both
+	// making sure user only send userName or email not both
 
 	if ('userName' in request.body && 'email' in request.body) {
 		next(new ApiError(MESSAGES.AUTH.EMAIL_AND_USERNAME_CONFLICT_FOR_SIGNIN, constants.HTTP_STATUS_CODES.CLIENT_ERROR.CONFLICT));
@@ -179,7 +178,7 @@ const forgotPassword: RequestHandler = asyncHandler(async (request: Request, res
 
 	const countryFlagUrl = utils.getCountryFlagUrl(constants.FLAG_CDN_ICON_SIZE.W20H15, ipinfo?.countryCode);
 
-	ejs.renderFile(
+	await ejs.renderFile(
 		path.join(__dirname, '../../../../templates/reset-password.ejs'),
 		{
 			firstName,

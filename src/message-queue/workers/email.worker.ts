@@ -17,9 +17,9 @@ const emailWorker = new Worker(
 		// });
 
 		if (emailType === constants.EMAIL_TYPES.APPLICATION) {
-			sendApplicationEmail(job.data);
+			await sendApplicationEmail(job.data);
 		} else if (emailType === constants.EMAIL_TYPES.USER) {
-			sendUserEmail(job.data);
+			await sendUserEmail(job.data);
 		}
 	},
 	{

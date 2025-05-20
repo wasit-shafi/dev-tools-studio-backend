@@ -26,7 +26,7 @@ export const sendApplicationEmail = async (params: ISendApplicationEmail) => {
 export const sendUserEmail = async (params: ISendUserEmail) => {
 	try {
 		const {
-			credential: { host, port, user, pass },
+			credential: { host, port, emailId, pass },
 			emailOptions,
 		} = params;
 
@@ -35,7 +35,7 @@ export const sendUserEmail = async (params: ISendUserEmail) => {
 			port,
 			secure: port == constants.SMTP_PORTS.FOUR_SIX_FIVE, // true for port 465, false for other ports
 			auth: {
-				user,
+				user: emailId,
 				pass,
 			},
 		});

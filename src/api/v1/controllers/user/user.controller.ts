@@ -10,7 +10,7 @@ import * as constants from '@utils/constants';
 // Credential
 
 const addNewCredential: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
-	const { credentialType, displayName, emailId, host, port, user, pass } = request.body;
+	const { credentialType, displayName, emailId, host, port, pass } = request.body;
 
 	const newCredential = await Credential.create({
 		userId: request.user._id,
@@ -19,7 +19,6 @@ const addNewCredential: RequestHandler = asyncHandler(async (request: Request, r
 		emailId,
 		host,
 		port,
-		user,
 		pass,
 	});
 

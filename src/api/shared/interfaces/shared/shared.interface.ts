@@ -38,7 +38,7 @@ export interface IEmailOptions {
 export interface ISmtpCredential {
 	host: string;
 	port: number;
-	user: string;
+	emailId: string;
 	pass: string;
 }
 export interface ISendUserEmail {

@@ -30,12 +30,6 @@ const credentialSchema = new mongoose.Schema({
 		type: Number,
 		required: [true, 'port is required'],
 	},
-	user: {
-		type: String,
-		required: [true, 'user is required'],
-		unique: [true, 'user should be unique'],
-		index: true,
-	},
 	pass: {
 		type: String,
 		required: [true, 'pass is required'],

@@ -75,3 +75,22 @@ export interface IRedisConnectionConfig {
 	port: number;
 	password?: string;
 }
+
+export interface IUserFilePath {
+	_id: string;
+	type: (typeof constants.S3_FILE_TYPES)[keyof typeof constants.S3_FILE_TYPES];
+}
+
+export interface IUploadToS3 {
+	key: string;
+	filePath: string;
+}
+
+export interface IGeneratePresignedUrl {
+	key: string;
+	operation: (typeof constants.CLIENT_S3_OPERATIONS)[keyof typeof constants.CLIENT_S3_OPERATIONS];
+}
+
+export interface IDeleteFromS3 {
+	key: string;
+}

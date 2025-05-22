@@ -1,12 +1,13 @@
-import type { Request, Response, NextFunction, RequestHandler } from 'express';
+import fs from 'fs';
 
 import { _env } from '@environment';
 import { IEmailOptions, ISendUserEmail } from '@interfaces';
 import { emailQueue } from '@messageQueue';
-import { Credential, EmailTemplate } from '@models';
-import { ApiError, ApiResponse, asyncHandler, getHeadersForAvoidEmailGrouping, MESSAGES } from '@utils';
+import { Attachment, Credential, EmailTemplate, User } from '@models';
+import { ApiError, ApiResponse, asyncHandler, deleteFromS3, generateFilePathForUser, getHeadersForAvoidEmailGrouping, MESSAGES, uploadToS3 } from '@utils';
 import * as constants from '@utils/constants';
 
+import type { Request, Response, NextFunction, RequestHandler } from 'express';
 // Credential
 
 const addNewCredential: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
@@ -179,9 +180,74 @@ const postEmail: RequestHandler = asyncHandler(async (request: Request, response
 	response.json(new ApiResponse(MESSAGES.BULL_MQ.EMAIL.EMAIL_SCHEDULED_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
 });
 
+const profilePicture: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+	const {
+		file,
+		user: { _id },
+	} = request;
+
+	if (!file) {
+		next(new ApiError(MESSAGES.USER.PROFILE_PICTURE_FAILURE, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
+		return;
+	}
+
+	await uploadToS3({
+		key: `${generateFilePathForUser({
+			_id,
+			type: constants.S3_FILE_TYPES.USER_PROFILE_PICTURE,
+		})}${file.filename}`,
+		filePath: file.path,
+	});
+	fs.unlinkSync(file.path);
+
+	await User.findByIdAndUpdate(_id, {
+		profilePicture: file.filename,
+	});
+	// Cleanup : delete temp file from server & delete previous uploaded profile picture if exists
+
+	const oldProfilePicture = request.user.profilePicture;
+
+	if (oldProfilePicture) {
+		await deleteFromS3({
+			key: `${generateFilePathForUser({
+				_id,
+				type: constants.S3_FILE_TYPES.USER_PROFILE_PICTURE,
+			})}${oldProfilePicture}`,
+		});
+	}
+
+	response.json(new ApiResponse(MESSAGES.USER.PROFILE_PICTURE_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
+});
+
+const attachment: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+	const {
+		file,
+		user: { _id },
+	} = request;
+
+	if (!file) {
+		next(new ApiError(MESSAGES.USER.ATTACHMENT_FAILURE, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
+		return;
+	}
+
+	await uploadToS3({
+		key: `${generateFilePathForUser({
+			_id,
+			type: constants.S3_FILE_TYPES.USER_ATTACHMENT,
+		})}${file.filename}`,
+		filePath: file.path,
+	});
+	fs.unlinkSync(file.path);
+
+	await Attachment.create({ userId: _id, fileName: file.filename, attachmentName: request.body.attachmentName });
+
+	response.json(new ApiResponse(MESSAGES.USER.ATTACHMENT_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
+});
+
 export const userController = {
 	addNewCredential,
 	addNewEmailTemplate,
+	attachment,
 	deleteCredential,
 	deleteEmailTemplate,
 	getCredential,
@@ -191,4 +257,5 @@ export const userController = {
 	patchCredential,
 	patchEmailTemplate,
 	postEmail,
+	profilePicture,
 };

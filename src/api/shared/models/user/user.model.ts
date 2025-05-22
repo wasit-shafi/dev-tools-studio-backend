@@ -5,7 +5,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 import { v7 as uuidv7 } from 'uuid';
 
 import { _env } from '@environment';
-import { ApiError, logger, MESSAGES, MONGODB_ERROR_CODES } from '@utils';
+import { ApiError, generateFilePathForUser, generatePresignedUrl, logger, MESSAGES, MONGODB_ERROR_CODES } from '@utils';
 import * as constants from '@utils/constants';
 
 const userSchema = new Schema(
@@ -42,6 +42,10 @@ const userSchema = new Schema(
 		isEmailVerified: {
 			type: Boolean,
 			default: false,
+		},
+		profilePicture: {
+			type: String,
+			default: '',
 		},
 		password: {
 			type: String,
@@ -143,7 +147,7 @@ const userSchema = new Schema(
 		toJSON: {
 			versionKey: false,
 
-			transform: function (document, returnObject) {
+			transform: async function (document, returnObject) {
 				delete returnObject.password;
 				delete returnObject.passwordChangedAt;
 				delete returnObject.passwordResetToken;
@@ -153,6 +157,16 @@ const userSchema = new Schema(
 				delete returnObject.refreshTokens;
 
 				delete returnObject.updatedAt;
+
+				if (document?.profilePicture) {
+					const presignedUrl = await generatePresignedUrl({
+						key: `${generateFilePathForUser({ _id: document._id.toString(), type: constants.S3_FILE_TYPES.USER_PROFILE_PICTURE })}${document.profilePicture}`,
+						operation: constants.CLIENT_S3_OPERATIONS.GET_OBJECT,
+					});
+
+					returnObject.profilePictureUrl = presignedUrl;
+				}
+				delete returnObject.profilePicture;
 
 				return returnObject;
 			},

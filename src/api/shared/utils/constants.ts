@@ -63,8 +63,10 @@ export const ROUTES = {
 		_REFRESH: '/refresh',
 	},
 	USER_ROUTES: {
+		ATTACHMENT: '/attachment',
 		CREDENTIAL: '/credential',
 		CREDENTIAL_LIST: '/credential-list',
+		PROFILE_PICTURE: '/profile-picture',
 		EMAIL: '/email',
 		EMAIL_TEMPLATE: '/email-template',
 		EMAIL_TEMPLATE_LIST: '/email-template-list',
@@ -89,11 +91,12 @@ export const DEFAULT_OTP_LENGTH: number = 8;
 // NOTE(WASIT): Mongoose automatically changes singular model name to plural form, as well as transforms it to lowercase. e.g. User => users
 
 export const MODEL_NAMES = {
-	USER: 'User',
-	ROLE: 'Role',
+	ATTACHMENT: 'Attachment',
+	CREDENTIAL: 'Credential',
 	DEV_TOOL: 'DevTool',
 	EMAIL_TEMPLATE: 'EmailTemplate',
-	CREDENTIAL: 'Credential',
+	ROLE: 'Role',
+	USER: 'User',
 } as const satisfies Record<string, string>;
 
 export const HTTP_STATUS_CODES_RANGES = {
@@ -203,6 +206,22 @@ export const CREDENTIAL_TYPE = {
 		VALUE: 2,
 	},
 } as const;
+
+export const S3_FILE_TYPES = {
+	USER_PROFILE_PICTURE: 1,
+	USER_ATTACHMENT: 2,
+} as const satisfies Record<string, number>;
+
+export const CLIENT_S3_OPERATIONS = {
+	GET_OBJECT: 1,
+	PUT_OBJECT: 2,
+	DELETE_OBJECT: 3,
+	LIST_OBJECT: 4,
+} as const satisfies Record<string, number>;
+
+export const FILE_PATHS = {
+	TEMP_UPLOADS: 'src/public/temp/uploads',
+} as const satisfies Record<string, string>;
 
 export const IP_MOCK_LIST: string[] = [
 	'22.23.172.79',

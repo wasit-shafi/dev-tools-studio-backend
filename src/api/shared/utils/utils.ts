@@ -3,10 +3,8 @@ import { UAParser } from 'ua-parser-js';
 import { v7 as uuidv7 } from 'uuid';
 
 import { _env } from '@config/environment';
-import {
-    IGoogleMapParams, IHeadersForAvoidEmailGrouping, IOtpGeneratorOptions, IStaticMapParams, TFlagCdnIconSizeValues
-} from '@interfaces';
-import { logger } from '@utils';
+import { IGoogleMapParams, IHeadersForAvoidEmailGrouping, IOtpGeneratorOptions, IStaticMapParams, IUserFilePath, TFlagCdnIconSizeValues } from '@interfaces';
+import { logger, MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 
 /**
@@ -130,4 +128,24 @@ export const getHeadersForAvoidEmailGrouping = (): IHeadersForAvoidEmailGrouping
 		References: `<${uniqueId}@${constants.DOMAIN}>`,
 		'X-Entity-Ref-ID': uniqueId,
 	};
+};
+
+export const generateFilePathForUser = (params: IUserFilePath): string => {
+	let path = '';
+	const { _id, type } = params;
+
+	if (!_id || !type) {
+		throw new Error(MESSAGES.SHARED.SOMETHING_WENT_WRONG);
+	}
+
+	switch (type) {
+		case constants.S3_FILE_TYPES.USER_PROFILE_PICTURE:
+			path = `users/${_id}/profile/picture/`;
+			break;
+		case constants.S3_FILE_TYPES.USER_ATTACHMENT:
+			path = `users/${_id}/attachment/`;
+			break;
+	}
+
+	return path;
 };

@@ -11,7 +11,6 @@ import YAML from 'yaml';
 
 import { routerV1 } from '@apiV1/router';
 import { routerV2 } from '@apiV2/router';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { globalErrorController } from '@controllers';
 import { _env } from '@environment';
 import { ApiError, ApiResponse, asyncHandler, globalApiRateLimiter, logger, MESSAGES } from '@utils';
@@ -69,27 +68,6 @@ const swaggerOptions = {
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions));
 
-const s3Client = new S3Client({
-	region: String(_env.get('AWS_S3_BUCKET_REGION')),
-	credentials: {
-		accessKeyId: String(_env.get('AWS_ACCESS_KEY_ID')),
-		secretAccessKey: String(_env.get('AWS_SECRET_ACCESS_KEY')),
-	},
-});
-
-app.post(
-	'/upload',
-	asyncHandler(async (request: Request, response: Response) => {
-		const s3ClientResponse = await s3Client.send(
-			new PutObjectCommand({
-				Bucket: String(_env.get('AWS_S3_BUCKET_NAME')),
-				Key: 'sample.txt',
-				Body: 'sample text content',
-			})
-		);
-		response.send({ ...s3ClientResponse });
-	})
-);
 // bull board dashboard ui for bullmq queues
 
 app.use('/ui', serverAdapter.getRouter());

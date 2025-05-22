@@ -86,5 +86,11 @@ export const MESSAGES = {
 
 		GET_EMAIL_TEMPLATE_LIST_SUCCESS: 'Email templates fetched successfully',
 		GET_EMAIL_TEMPLATE_LIST_FAILURE: 'Something went wrong while fetching email templates',
+
+		PROFILE_PICTURE_SUCCESS: 'Profile picture saved successfully',
+		PROFILE_PICTURE_FAILURE: 'Something went wrong while saving profile picture',
+
+		ATTACHMENT_SUCCESS: 'Attachment saved successfully',
+		ATTACHMENT_FAILURE: 'Something went wrong while saving attachment',
 	},
 } as const;

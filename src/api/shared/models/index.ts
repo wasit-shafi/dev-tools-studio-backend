@@ -1,3 +1,4 @@
+export * from './attachment/attachment.model';
 export * from './credential/credential.model';
 export * from './dev-tool/dev-tool.model';
 export * from './email-template/email-template.model';

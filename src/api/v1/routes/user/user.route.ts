@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import { userController } from '@apiV1Controllers';
+import { upload } from '@middlewares';
 import * as constants from '@utils/constants';
 
 export const userRouter = Router();
@@ -27,3 +28,9 @@ userRouter.get(constants.ROUTES.USER_ROUTES.EMAIL_TEMPLATE_LIST, userController.
 // Email
 
 userRouter.post(constants.ROUTES.USER_ROUTES.EMAIL, userController.postEmail);
+// Profile Picture
+
+userRouter.post(constants.ROUTES.USER_ROUTES.PROFILE_PICTURE, upload.single('profilePicture'), userController.profilePicture);
+// Attachment
+
+userRouter.post(constants.ROUTES.USER_ROUTES.ATTACHMENT, upload.single('attachment'), userController.attachment);

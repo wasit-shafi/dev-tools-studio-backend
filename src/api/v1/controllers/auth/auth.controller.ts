@@ -6,9 +6,7 @@ import { _env } from '@config/environment';
 import { IEmailOptions } from '@interfaces';
 import { emailQueue } from '@messageQueue';
 import { User } from '@models';
-import {
-    ApiError, ApiResponse, asyncHandler, getHeadersForAvoidEmailGrouping, logger, MESSAGES, sendSms
-} from '@utils';
+import { ApiError, ApiResponse, asyncHandler, getHeadersForAvoidEmailGrouping, MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 import * as utils from '@utils/utils';
 
@@ -73,7 +71,7 @@ const signin: RequestHandler = asyncHandler(async (request: Request, response: R
 			.cookie('refreshToken', refreshToken, cookieOptions)
 			.json(
 				new ApiResponse(MESSAGES.SHARED.SIGNIN_SUCCESSFUL, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, {
-					user: { ...user.toJSON(), accessToken, refreshToken },
+					user: { ...(await user.toJSON()), accessToken, refreshToken },
 				})
 			);
 		return;
@@ -95,7 +93,7 @@ const getMe: RequestHandler = asyncHandler(async (request: Request, response: Re
 
 	response
 		.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.OK)
-		.json(new ApiResponse(MESSAGES.AUTH.USER_FETCH_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { user: { ...user.toJSON(), accessToken: request.accessToken } }));
+		.json(new ApiResponse(MESSAGES.AUTH.USER_FETCH_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { user: { ...(await user.toJSON()), accessToken: request.accessToken } }));
 });
 
 const refresh: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
@@ -116,7 +114,7 @@ const refresh: RequestHandler = asyncHandler(async (request: Request, response: 
 
 	response.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.OK).json(
 		new ApiResponse(MESSAGES.AUTH.REFRESH_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, {
-			user: { ...user.toJSON(), accessToken, refreshToken },
+			user: { ...(await user.toJSON()), accessToken, refreshToken },
 		})
 	);
 });

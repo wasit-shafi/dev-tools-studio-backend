@@ -4,7 +4,7 @@ import { _env } from '@environment';
 import { IEmailOptions, ISendUserEmail } from '@interfaces';
 import { emailQueue } from '@messageQueue';
 import { Attachment, Credential, EmailTemplate, User } from '@models';
-import { ApiError, ApiResponse, asyncHandler, deleteFromS3, generateFilePathForUser, getHeadersForAvoidEmailGrouping, MESSAGES, uploadToS3 } from '@utils';
+import { ApiError, ApiResponse, asyncHandler, deleteFromS3, generateFilePathForUser, generatePresignedUrl, getHeadersForAvoidEmailGrouping, MESSAGES, uploadToS3 } from '@utils';
 import * as constants from '@utils/constants';
 
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
@@ -216,7 +216,12 @@ const profilePicture: RequestHandler = asyncHandler(async (request: Request, res
 		});
 	}
 
-	response.json(new ApiResponse(MESSAGES.USER.PROFILE_PICTURE_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
+	const presignedUrl = await generatePresignedUrl({
+		key: `${generateFilePathForUser({ _id, type: constants.S3_FILE_TYPES.USER_PROFILE_PICTURE })}${file.filename}`,
+		operation: constants.CLIENT_S3_OPERATIONS.GET_OBJECT,
+	});
+
+	response.json(new ApiResponse(MESSAGES.USER.PROFILE_PICTURE_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { profilePicture: presignedUrl }));
 });
 
 const attachment: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {

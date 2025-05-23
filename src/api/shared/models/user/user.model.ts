@@ -164,9 +164,8 @@ const userSchema = new Schema(
 						operation: constants.CLIENT_S3_OPERATIONS.GET_OBJECT,
 					});
 
-					returnObject.profilePictureUrl = presignedUrl;
+					returnObject.profilePicture = presignedUrl;
 				}
-				delete returnObject.profilePicture;
 
 				return returnObject;
 			},

@@ -92,5 +92,11 @@ export const MESSAGES = {
 
 		ATTACHMENT_SUCCESS: 'Attachment saved successfully',
 		ATTACHMENT_FAILURE: 'Something went wrong while saving attachment',
+
+		DELETE_ATTACHMENT_SUCCESS: 'Attachment deleted successfully',
+		DELETE_ATTACHMENT_FAILURE: 'Something went wrong while deleting attachment',
+
+		GET_ATTACHMENT_LIST_SUCCESS: 'Attachments fetched successfully',
+		GET_ATTACHMENT_LIST_FAILURE: 'Something went wrong while fetching attachments',
 	},
 } as const;

@@ -33,4 +33,9 @@ userRouter.post(constants.ROUTES.USER_ROUTES.EMAIL, userController.postEmail);
 userRouter.post(constants.ROUTES.USER_ROUTES.PROFILE_PICTURE, upload.single('profilePicture'), userController.profilePicture);
 // Attachment
 
-userRouter.post(constants.ROUTES.USER_ROUTES.ATTACHMENT, upload.single('attachment'), userController.attachment);
+userRouter.post(constants.ROUTES.USER_ROUTES.ATTACHMENT, upload.single('attachment'), userController.postAttachment);
+
+userRouter.route(`${constants.ROUTES.USER_ROUTES.ATTACHMENT}/:_id`).delete(userController.deleteAttachment);
+// Attachment List
+
+userRouter.get(constants.ROUTES.USER_ROUTES.ATTACHMENT_LIST, userController.getAttachmentList);

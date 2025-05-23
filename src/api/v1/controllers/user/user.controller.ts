@@ -224,7 +224,7 @@ const profilePicture: RequestHandler = asyncHandler(async (request: Request, res
 	response.json(new ApiResponse(MESSAGES.USER.PROFILE_PICTURE_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { profilePicture: presignedUrl }));
 });
 
-const attachment: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+const postAttachment: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const {
 		file,
 		user: { _id },
@@ -249,18 +249,47 @@ const attachment: RequestHandler = asyncHandler(async (request: Request, respons
 	response.json(new ApiResponse(MESSAGES.USER.ATTACHMENT_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
 });
 
+const deleteAttachment: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+	const {
+		user: { _id },
+	} = request;
+	const attachment = await Attachment.findOneAndDelete({ userId: _id, _id: request.params._id });
+
+	if (!attachment) {
+		next(new ApiError(MESSAGES.USER.DELETE_ATTACHMENT_FAILURE, constants.HTTP_STATUS_CODES.CLIENT_ERROR.NOT_FOUND));
+		return;
+	}
+
+	await deleteFromS3({
+		key: `${generateFilePathForUser({
+			_id,
+			type: constants.S3_FILE_TYPES.USER_ATTACHMENT,
+		})}${attachment.fileName}`,
+	});
+
+	response.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.OK).json(new ApiResponse(MESSAGES.USER.DELETE_ATTACHMENT_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
+});
+
+const getAttachmentList: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+	const attachmentList = await Attachment.find({ userId: request.user._id }).select('-userId -__v');
+
+	response.json(new ApiResponse(MESSAGES.USER.GET_ATTACHMENT_LIST_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { attachmentList }));
+});
+
 export const userController = {
 	addNewCredential,
 	addNewEmailTemplate,
-	attachment,
+	deleteAttachment,
 	deleteCredential,
 	deleteEmailTemplate,
+	getAttachmentList,
 	getCredential,
 	getCredentialList,
 	getEmailTemplate,
 	getEmailTemplateList,
 	patchCredential,
 	patchEmailTemplate,
+	postAttachment,
 	postEmail,
 	profilePicture,
 };

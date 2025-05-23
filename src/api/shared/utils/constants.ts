@@ -64,6 +64,7 @@ export const ROUTES = {
 	},
 	USER_ROUTES: {
 		ATTACHMENT: '/attachment',
+		ATTACHMENT_LIST: '/attachment-list',
 		CREDENTIAL: '/credential',
 		CREDENTIAL_LIST: '/credential-list',
 		PROFILE_PICTURE: '/profile-picture',

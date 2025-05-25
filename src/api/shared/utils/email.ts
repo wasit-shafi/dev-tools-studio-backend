@@ -1,8 +1,9 @@
 import nodemailer from 'nodemailer';
 
+import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { _env } from '@environment';
 import { ISendApplicationEmail, ISendUserEmail } from '@interfaces';
-import { logger } from '@utils';
+import { BUCKET_NAME, generateFilePathForUser, s3Client } from '@utils';
 import * as constants from '@utils/constants';
 
 const emailServiceTransporter = nodemailer.createTransport({
@@ -28,7 +29,32 @@ export const sendUserEmail = async (params: ISendUserEmail) => {
 		const {
 			credential: { host, port, emailId, pass },
 			emailOptions,
+			attachmentDetails = [],
+			_id = '',
 		} = params;
+
+		const attachmentsKeys = attachmentDetails.map((attachment) => ({
+			fileName: attachment.fileName,
+			key: `${generateFilePathForUser({ _id, type: constants.S3_FILE_TYPES.USER_ATTACHMENT })}${attachment.fileName}`,
+		}));
+
+		const attachmentPromises = attachmentsKeys.map(async (attachment) => {
+			const s3Response = await s3Client.send(
+				new GetObjectCommand({
+					Bucket: BUCKET_NAME,
+					Key: attachment.key,
+				})
+			);
+
+			return {
+				filename: attachment.fileName,
+				content: s3Response.Body as any,
+				contentType: s3Response.ContentType,
+			};
+		});
+
+		const attachments = await Promise.all(attachmentPromises);
+		const emailOptionsWithAttachments = { ...emailOptions, attachments };
 
 		const transporter = nodemailer.createTransport({
 			host,
@@ -39,8 +65,7 @@ export const sendUserEmail = async (params: ISendUserEmail) => {
 				pass,
 			},
 		});
-
-		await transporter.sendMail(emailOptions);
+		await transporter.sendMail(emailOptionsWithAttachments);
 	} catch (error) {
 		console.log('Error While sending email :: ', error);
 	}

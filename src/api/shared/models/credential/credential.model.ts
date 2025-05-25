@@ -18,8 +18,8 @@ const credentialSchema = new mongoose.Schema({
 	},
 	emailId: {
 		type: String,
-		required: [true, 'emailId is required'],
-		unique: [true, 'emailId should be unique'],
+		required: [true, 'EmailId/User is required'],
+		unique: [true, 'EmailId/User should be unique'],
 		index: true,
 	},
 	host: {

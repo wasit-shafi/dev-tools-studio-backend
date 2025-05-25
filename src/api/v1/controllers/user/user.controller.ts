@@ -128,7 +128,7 @@ const getEmailTemplateList: RequestHandler = asyncHandler(async (request: Reques
 
 const postEmail: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	let delay: number = 0;
-	const { from, to, subject, salutation, body, closing, signature, dateTimeLocal, receiveConfirmationEmail, sendNow } = request.body;
+	const { from, to, subject, salutation, body, closing, signature, dateTimeLocal, receiveConfirmationEmail, sendNow, attachmentIds = [] } = request.body;
 
 	if (!sendNow) {
 		const targetDateAndTime = new Date(dateTimeLocal);
@@ -147,19 +147,30 @@ const postEmail: RequestHandler = asyncHandler(async (request: Request, response
 		.select('-_id -userId -__v')
 		.lean();
 
-	if (!credential) {
+	const attachmentDetails = await Attachment.find(
+		{
+			_id: {
+				$in: attachmentIds,
+			},
+		},
+		{
+			_id: 0,
+			userId: 1,
+			fileName: 1,
+		}
+	).lean();
+	// TODO(Wasit): review how get the string userId instead of ObjectId()
+
+	const transformedAttachmentDetails = attachmentDetails.map((attachment) => ({ ...attachment, userId: attachment.userId.toString() }));
+
+	if (!credential || attachmentDetails.length !== attachmentIds.length) {
 		next(new ApiError(MESSAGES.USER.EMAIL_SCHEDULED_FAILURE, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
 		return;
 	}
 
-	const html = `<p>\
-									<b>SALUTATION:</b> ${salutation}<br/>\
-									<b>BODY:</b><pre>${body}</pre><br/>\
-									<b>CLOSING:</b> ${closing}<br/>\
-									<b>SIGNATURE:</b> ${signature}<br/>\
-									<b>Send Now:</b>	${sendNow}<br/>\
-									<b>DATE TIME LOCAL:</b>	${dateTimeLocal}\
-								</p>`;
+	// NOTE(Wasit): Keep the html format in sync with frontend (email preview)
+
+	const html = `<p style="white-space:pre-wrap">${salutation}<br/>${body}<br/>${closing}<br/><br/>${signature}</p>`;
 
 	const emailOptions: IEmailOptions = {
 		from: `"${credential.displayName}" <${from}>`,
@@ -174,6 +185,8 @@ const postEmail: RequestHandler = asyncHandler(async (request: Request, response
 		emailOptions,
 		receiveConfirmationEmail,
 		emailType: constants.EMAIL_TYPES.USER,
+		_id: request.user._id,
+		attachmentDetails: transformedAttachmentDetails,
 	};
 	await emailQueue.add(constants.MESSAGING_QUEUES.EMAIL, data, { delay });
 

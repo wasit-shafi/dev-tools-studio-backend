@@ -6,10 +6,10 @@ import { _env } from '@environment';
 import { IDeleteFromS3, IGeneratePresignedUrl, IUploadToS3 } from '@interfaces';
 import * as constants from '@utils/constants';
 
-const BUCKET_NAME: string = String(_env.get('AWS_S3_BUCKET_NAME'));
+export const BUCKET_NAME: string = String(_env.get('AWS_S3_BUCKET_NAME'));
 const AWS_PRESIGNED_URL_EXPIRY: number = Number(_env.get('AWS_PRESIGNED_URL_EXPIRY'));
 
-const s3Client = new S3Client({
+export const s3Client = new S3Client({
 	region: String(_env.get('AWS_S3_BUCKET_REGION')),
 	credentials: {
 		accessKeyId: String(_env.get('AWS_ACCESS_KEY_ID')),
@@ -69,6 +69,7 @@ export const generatePresignedUrl = async (params: IGeneratePresignedUrl): Promi
 				const command = new GetObjectCommand({
 					Bucket: BUCKET_NAME,
 					Key: key,
+					ResponseContentType: 'auto',
 				});
 
 				presignedUrl = await getSignedUrl(s3Client, command, { expiresIn: AWS_PRESIGNED_URL_EXPIRY });

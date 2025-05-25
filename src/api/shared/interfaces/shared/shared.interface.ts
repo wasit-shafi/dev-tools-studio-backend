@@ -46,6 +46,11 @@ export interface ISendUserEmail {
 	emailOptions: IEmailOptions;
 	receiveConfirmationEmail: boolean;
 	emailType: number;
+	_id?: string;
+	attachmentDetails?: {
+		userId: string;
+		fileName: string;
+	}[];
 }
 
 export interface ISendApplicationEmail {

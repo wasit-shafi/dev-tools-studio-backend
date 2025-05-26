@@ -4,7 +4,7 @@
 	"main": "index.js",
 	"scripts": {
 		"build": "npx tsc",
-		"build:d4r": "docker build -t dev-tools-studio-backend:v1.0.0 .",
+		"build:d4r": "docker build -t wasitshafi700/dev-tools-studio-backend:latest .",
 		"tsnd": "ts-node-dev --files -r tsconfig-paths/register --env-file=src/config/environment/dev.env src/index.ts",
 		"dev": "ts-node-dev --files -r tsconfig-paths/register src/index.ts",
 		"start": "copyfiles --error -f src/config/swagger/*.* dist/config/swagger && copyfiles --error -f src/templates/*.* dist/templates && node -r tsconfig-paths/register dist/index.js",

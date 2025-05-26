@@ -26,7 +26,7 @@ services:
 
   # service 4: express backend
   express_service:
-    image: 'dev-tools-studio-backend:v1.0.0'
+    image: 'wasitshafi700/dev-tools-studio-backend:latest'
     container_name: dts_dev_express_container
     build:
       context: '.'

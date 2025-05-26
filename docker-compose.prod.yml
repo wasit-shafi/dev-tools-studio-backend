@@ -1,6 +1,6 @@
 services:
   express_service:
-    image: 'dev-tools-studio-backend:v1.0.0'
+    image: 'dev-tools-studio-backend:latest'
     container_name: dts_prod_express_container
     build:
       context: '.'

@@ -17,7 +17,7 @@ jobs:
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
       - name: Build the Docker image
-        run: docker build . --file Dockerfile.prod
+        run: docker build . -t wasitshafi700/dev-tools-studio:latest --file Dockerfile.prod
 
       - name: Push to Dockerhub
         run: docker push wasitshafi700/dev-tools-studio:latest

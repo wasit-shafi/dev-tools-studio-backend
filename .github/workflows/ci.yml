@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: CI_PIPELINE
 
 on:
   push:
@@ -10,14 +10,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Login Dockerhub
+      - name: Logging into DockerHub
         env:
           DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
-      - name: Build the Docker image
+      - name: Building New Docker Image
         run: docker build . -t wasitshafi700/dev-tools-studio:latest --file Dockerfile.prod
 
-      - name: Push to Dockerhub
+      - name: Push Image on DockerHub
         run: docker push wasitshafi700/dev-tools-studio:latest

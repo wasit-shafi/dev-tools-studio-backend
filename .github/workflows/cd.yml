@@ -1,0 +1,18 @@
+name: CD_PIPELINE
+
+on:
+  workflow_run:
+    workflows: ['CI_PIPELINE']
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: Pull Latest Docker Image
+        run: sudo docker pull wasitshafi700/dev-tools-studio:latest
+
+      - name: Remove Existing Docker Container # (-f: Remove even if container is running)
+        run: sudo docker rm -f wasitshafi700/dev-tools-studio || true

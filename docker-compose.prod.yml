@@ -1,6 +1,6 @@
 services:
   express_service:
-    image: 'wasitshafi700/dev-tools-studio-backend:latest'
+    image: 'wasitshafi700/dev-tools-studio:latest'
     container_name: dts_prod_express_container
     build:
       context: '.'

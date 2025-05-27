@@ -1,6 +1,6 @@
 FROM node:lts
 
-WORKDIR /dev-tools-studio-backend
+WORKDIR /dev-tools-studio
 
 COPY . .
 

@@ -26,7 +26,7 @@ services:
 
   # service 4: express backend
   express_service:
-    image: 'wasitshafi700/dev-tools-studio-backend:latest'
+    image: 'wasitshafi700/dev-tools-studio:latest'
     container_name: dts_dev_express_container
     build:
       context: '.'
@@ -45,7 +45,7 @@ services:
       watch:
         - action: sync+restart
           path: ./
-          target: /dev-tools-studio-backend
+          target: /dev-tools-studio
           ignore:
             - node_modules/
         - action: rebuild

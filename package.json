@@ -3,11 +3,11 @@
 	"version": "1.0.0",
 	"main": "index.js",
 	"scripts": {
-		"build": "npx tsc",
+		"build": "npx tsc && copyfiles --error -f src/config/swagger/*.* dist/config/swagger && copyfiles --error -f src/templates/*.* dist/templates",
 		"build:d4r": "docker build -t wasitshafi700/dev-tools-studio:latest .",
 		"tsnd": "ts-node-dev --files -r tsconfig-paths/register --env-file=src/config/environment/dev.env src/index.ts",
 		"dev": "ts-node-dev --files -r tsconfig-paths/register src/index.ts",
-		"start": "copyfiles --error -f src/config/swagger/*.* dist/config/swagger && copyfiles --error -f src/templates/*.* dist/templates && node -r tsconfig-paths/register dist/index.js",
+		"start": "node -r tsconfig-paths/register dist/index.js",
 		"up": "docker-compose up --build -V --watch",
 		"up:prod": "docker-compose -f docker-compose.prod.yml up --build -V",
 		"down": "docker-compose down --remove-orphans",

@@ -19,9 +19,12 @@ jobs:
 
       - name: Remove unused images
         run: sudo docker image prune -f
+
+      - name: Log current working director - temp change
+        run: pwd
       # TODO(Wasit): how to spin container via docker compose
       # - name: Run docker container
       #   run: docker-compose -f docker-compose.prod.yml up --build -V
 
-      - name: Run docker container
-        run: docker run -d -p 3000:3000 --name dev-tools-studio wasitshafi700/dev-tools-studio:latest
+      # - name: Run docker container
+      #   run: docker run -p 3000:3000 --name dev-tools-studio wasitshafi700/dev-tools-studio:latest

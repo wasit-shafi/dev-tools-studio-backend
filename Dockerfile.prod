@@ -8,6 +8,14 @@ RUN npm install
 COPY . ./
 
 RUN npm run build
+# Clean up unnecessary files
+
+RUN rm -rf src && \
+    rm -rf Dockerfile && \
+    rm -rf Dockerfile.prod && \
+    rm -rf docker-compose.prod.yml && \
+    rm -rf docker-compose.yml && \
+    rm -rf package-lock.json
 
 EXPOSE 3000
 

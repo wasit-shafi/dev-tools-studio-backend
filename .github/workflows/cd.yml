@@ -15,7 +15,13 @@ jobs:
         run: sudo docker pull wasitshafi700/dev-tools-studio:latest
 
       - name: Remove/Delete existing docker container
-        run: sudo docker rm -f wasitshafi700/dev-tools-studio # -f: Remove even if container is running
+        run: sudo docker rm -f wasitshafi700/dev-tools-studio
+
+      - name: Remove unused images
+        run: sudo docker image prune -f
+      # TODO(Wasit): how to spin container via docker compose
+      # - name: Run docker container
+      #   run: docker-compose -f docker-compose.prod.yml up --build -V
 
       - name: Run docker container
-        run: docker-compose -f docker-compose.prod.yml up --build -V
+        run: docker run -d -p 3000:3000 --name dev-tools-studio wasitshafi700/dev-tools-studio:latest

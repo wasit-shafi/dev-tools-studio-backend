@@ -2,14 +2,16 @@ name: CI_PIPELINE
 
 on:
   push:
-    branches: ['dev']
+    branches:
+      - dev
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
       - name: Logging into DockerHub
         env:
           DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}

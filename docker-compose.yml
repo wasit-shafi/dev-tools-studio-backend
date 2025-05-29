@@ -1,6 +1,6 @@
 services:
   mongo:
-    container_name: dts_dev_mongo_container
+    container_name: mongo
     image: mongo:latest
     ports:
       # NOTE(WASIT): 27018 is exposed to client (Most of the time I have multiple connections opened simultaneously)
@@ -16,13 +16,13 @@ services:
 
   redis_insight:
     image: redis/redisinsight:latest
-    container_name: dts_dev_redis_insight_container
+    container_name: redis_insight
     ports:
       - 5540:5540
 
   backend:
-    image: 'wasitshafi700/dev-tools-studio:latest'
-    container_name: dts_dev_express_container
+    image: 'wasitshafi700/dev-tools-studio-backend:latest'
+    container_name: backend
     build:
       context: '.'
       dockerfile: Dockerfile

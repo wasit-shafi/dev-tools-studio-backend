@@ -1,7 +1,7 @@
 services:
   backend:
-    image: 'wasitshafi700/dev-tools-studio:latest'
-    container_name: dts_prod_express_container
+    image: 'wasitshafi700/dev-tools-studio-backend:latest'
+    container_name: backend
     build:
       context: '.'
       dockerfile: Dockerfile.prod

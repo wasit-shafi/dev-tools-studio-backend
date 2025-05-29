@@ -13,10 +13,10 @@ jobs:
 
     steps:
       - name: Pull latest image from DockerHub
-        run: sudo docker pull wasitshafi700/dev-tools-studio:latest
+        run: sudo docker pull wasitshafi700/dev-tools-studio-backend:latest
 
       - name: Remove existing docker container
-        run: sudo docker rm -f wasitshafi700/dev-tools-studio
+        run: sudo docker rm -f wasitshafi700/dev-tools-studio-backend
 
       # # TODO(Wasit): start container via docker compose (temporary blocked due to prod env file)
       # - name: Run docker container

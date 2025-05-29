@@ -12,14 +12,14 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      - name: Login into DockerHub
+      - name: Login to DockerHub
         env:
           DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
       - name: Build New Docker Image
-        run: docker build . -t wasitshafi700/dev-tools-studio:latest --file Dockerfile.prod
+        run: docker build . -t wasitshafi700/dev-tools-studio-backend:latest --file Dockerfile.prod
 
       - name: Push Latest Image on DockerHub
-        run: docker push wasitshafi700/dev-tools-studio:latest
+        run: docker push wasitshafi700/dev-tools-studio-backend:latest

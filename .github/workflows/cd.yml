@@ -8,15 +8,18 @@ on:
       - completed
 
 jobs:
-  build:
+  deploy:
     runs-on: self-hosted
 
     steps:
       - name: Pull latest image from DockerHub
         run: sudo docker pull wasitshafi700/dev-tools-studio-backend:latest
 
+      - name: Remove unused images
+        run: sudo docker image prune -f
+
       - name: Remove existing docker container
-        run: sudo docker rm -f wasitshafi700/dev-tools-studio-backend
+        run: sudo docker rm -f dts-backend
 
       # # TODO(Wasit): start container via docker compose (temporary blocked due to prod env file)
       # - name: Run docker container

@@ -102,9 +102,10 @@ const userSchema = new Schema(
 
 			async generateAccessToken(): Promise<string> {
 				const user = this;
+				// @ts-ignore
+				// TODO(Wasit): Review it why generic string is causing error, while previous there was no error.
 				const accessToken: string = jwt.sign({ data: { _id: user._id, email: user.email, userName: user.userName, roles: user.roles } }, String(_env.get('ACCESS_TOKEN_SECRET')), {
-					expiresIn: '1d',
-					// expiresIn: String(_env.get('ACCESS_TOKEN_EXPIRY')),
+					expiresIn: String(_env.get('ACCESS_TOKEN_EXPIRY')),
 				});
 				user.accessTokens.push(accessToken);
 				await user.save();
@@ -114,9 +115,10 @@ const userSchema = new Schema(
 
 			async generateRefreshToken(): Promise<string> {
 				const user = this;
+				// @ts-ignore
+				// TODO(Wasit): Review it why generic string is causing error, while previous there was no error.
 				const refreshToken: string = jwt.sign({ data: { _id: user._id } }, String(_env.get('REFRESH_TOKEN_SECRET')), {
-					expiresIn: '2d',
-					// expiresIn: String(_env.get('REFRESH_TOKEN_EXPIRY')),
+					expiresIn: String(_env.get('REFRESH_TOKEN_EXPIRY')),
 				});
 
 				user.refreshTokens.push(refreshToken);

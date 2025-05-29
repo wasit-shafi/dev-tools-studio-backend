@@ -1,9 +1,12 @@
+import ejs from 'ejs';
+import path from 'node:path';
 import nodemailer from 'nodemailer';
 
 import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { _env } from '@environment';
 import { ISendApplicationEmail, ISendUserEmail } from '@interfaces';
-import { BUCKET_NAME, generateFilePathForUser, s3Client } from '@utils';
+import { emailQueue } from '@messageQueue';
+import { BUCKET_NAME, generateFilePathForUser, getHeadersForAvoidEmailGrouping, s3Client } from '@utils';
 import * as constants from '@utils/constants';
 
 const emailServiceTransporter = nodemailer.createTransport({
@@ -25,14 +28,15 @@ export const sendApplicationEmail = async (params: ISendApplicationEmail) => {
 };
 
 export const sendUserEmail = async (params: ISendUserEmail) => {
-	try {
-		const {
-			credential: { host, port, emailId, pass },
-			emailOptions,
-			attachmentDetails = [],
-			_id = '',
-		} = params;
+	const {
+		credential: { host, port, emailId, pass },
+		emailOptions,
+		attachmentDetails = [],
+		_id = '',
+		receiveConfirmationEmail,
+	} = params;
 
+	try {
 		const attachmentsKeys = attachmentDetails.map((attachment) => ({
 			fileName: attachment.fileName,
 			key: `${generateFilePathForUser({ _id, type: constants.S3_FILE_TYPES.USER_ATTACHMENT })}${attachment.fileName}`,
@@ -65,8 +69,49 @@ export const sendUserEmail = async (params: ISendUserEmail) => {
 				pass,
 			},
 		});
-		await transporter.sendMail(emailOptionsWithAttachments);
+		const info = await transporter.sendMail(emailOptionsWithAttachments);
+
+		if (receiveConfirmationEmail) {
+			await ejs.renderFile(
+				path.join(__dirname, '../../../templates/user-email-acknowledgement.ejs'),
+				{
+					sentSuccessfully: true,
+					to: emailOptions.to,
+				},
+				async (error, templateHtmlString) => {
+					await emailQueue.add(constants.MESSAGING_QUEUES.EMAIL, {
+						emailOptions: {
+							from: `${_env.get('EMAIL_SERVICE_SENDER_NAME')}<${_env.get('EMAIL_SERVICE_SENDER_EMAIL_ID')}>`,
+							to: emailOptions.from,
+							subject: 'Email Acknowledgement',
+							html: templateHtmlString,
+							headers: { ...getHeadersForAvoidEmailGrouping() },
+						},
+						emailType: constants.EMAIL_TYPES.APPLICATION,
+					});
+				}
+			);
+		}
 	} catch (error) {
+		await ejs.renderFile(
+			path.join(__dirname, '../../../templates/user-email-acknowledgement.ejs'),
+			{
+				sentSuccessfully: false,
+				to: emailOptions.to,
+			},
+			async (error, templateHtmlString) => {
+				await emailQueue.add(constants.MESSAGING_QUEUES.EMAIL, {
+					emailOptions: {
+						from: `${_env.get('EMAIL_SERVICE_SENDER_NAME')}<${_env.get('EMAIL_SERVICE_SENDER_EMAIL_ID')}>`,
+						to: emailOptions.from,
+						subject: 'Email Acknowledgement',
+						html: templateHtmlString,
+						headers: { ...getHeadersForAvoidEmailGrouping() },
+					},
+					emailType: constants.EMAIL_TYPES.APPLICATION,
+				});
+			}
+		);
 		console.log('Error While sending email :: ', error);
 	}
 };

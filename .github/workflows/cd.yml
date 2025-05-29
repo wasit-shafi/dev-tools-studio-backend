@@ -2,7 +2,8 @@ name: CD_PIPELINE
 
 on:
   workflow_run:
-    workflows: ['CI_PIPELINE']
+    workflows:
+      - CI_PIPELINE
     types:
       - completed
 
@@ -14,17 +15,9 @@ jobs:
       - name: Pull latest image from DockerHub
         run: sudo docker pull wasitshafi700/dev-tools-studio:latest
 
-      - name: Remove/Delete existing docker container
+      - name: Remove existing docker container
         run: sudo docker rm -f wasitshafi700/dev-tools-studio
 
-      - name: Remove unused images
-        run: sudo docker image prune -f
-
-      - name: Log current working director - temp change
-        run: pwd
-      # TODO(Wasit): how to spin container via docker compose
+      # # TODO(Wasit): start container via docker compose (temporary blocked due to prod env file)
       # - name: Run docker container
       #   run: docker-compose -f docker-compose.prod.yml up --build -V
-
-      # - name: Run docker container
-      #   run: docker run -p 3000:3000 --name dev-tools-studio wasitshafi700/dev-tools-studio:latest

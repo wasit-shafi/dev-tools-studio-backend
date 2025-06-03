@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import ejs from 'ejs';
 import path from 'path';
 
-import { _env } from '@config/environment';
+import { _env } from '@environment';
 import { IEmailOptions } from '@interfaces';
 import { emailQueue } from '@messageQueue';
 import { User } from '@models';

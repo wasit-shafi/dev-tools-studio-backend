@@ -1,3 +1,5 @@
+import * as constants from '@utils/constants';
+
 export const MESSAGES = {
 	ADMIN: {},
 	AUTH: {
@@ -37,6 +39,9 @@ export const MESSAGES = {
 		SOMETHING_WENT_WRONG: 'Something went wrong. Please try again.',
 		DUPLICATE_ENTRY_FOUND: 'Duplicate entry found. Please check your input and try again.',
 		SIGNIN_SUCCESSFUL: 'Sign-in successful',
+		FILE_UPLOAD_ERROR: 'Something went wrong while uploading the file attachment',
+		LIMIT_FILE_SIZE_ERROR: `File size too large. Please upload files under allowed limits (File size greater than ${constants.GLOBAL_MAX_FILE_SIZE_LIMIT_IN_MB}MB not allowed)`,
+		SOMETHING_WRONG_WITH_FILE_FAILURE: 'Something went wrong while uploading files',
 	},
 	ERROR: {
 		JWT_TOKEN_VERIFICATION_FAILURE: 'JWT token verification failed, please try again',
@@ -89,9 +94,11 @@ export const MESSAGES = {
 
 		PROFILE_PICTURE_SUCCESS: 'Profile picture saved successfully',
 		PROFILE_PICTURE_FAILURE: 'Something went wrong while saving profile picture',
+		NO_PROFILE_PICTURE_FAILURE: `Something went wrong, please make sure to upload only valid profile image under threshold limit (File size greater than ${constants.GLOBAL_MAX_FILE_SIZE_LIMIT_IN_MB}MB not allowed)`,
 
 		ATTACHMENT_SUCCESS: 'Attachment saved successfully',
 		ATTACHMENT_FAILURE: 'Something went wrong while saving attachment',
+		NO_ATTACHMENT_FAILURE: `Something went wrong, please make sure to upload only valid attachment under threshold limit (File size greater than ${constants.GLOBAL_MAX_FILE_SIZE_LIMIT_IN_MB}MB not allowed)`,
 
 		DELETE_ATTACHMENT_SUCCESS: 'Attachment deleted successfully',
 		DELETE_ATTACHMENT_FAILURE: 'Something went wrong while deleting attachment',

@@ -143,6 +143,7 @@ export const HTTP_STATUS_CODES = {
 		NOT_FOUND: 404,
 		NOT_ACCEPTABLE: 406,
 		CONFLICT: 409,
+		PAYLOAD_TOO_LARGE: 413,
 		TOO_MANY_REQUESTS: 429,
 	},
 	// Server Error - 5XX
@@ -224,6 +225,21 @@ export const FILE_PATHS = {
 	TEMP_UPLOADS: 'src/public/temp/uploads',
 } as const satisfies Record<string, string>;
 
+export const ALLOWED_MIME_TYPES = {
+	IMAGES: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
+	VIDEOS: ['video/mp4'],
+	TEXT: ['text/plain'],
+	AUDIO: ['audio/mpeg'],
+	DOCUMENTS: ['application/pdf', 'application/msword'],
+} as const;
+
+export const GLOBAL_MAX_FILE_SIZE_LIMIT_IN_MB = 3;
+
+export const FILE_SIZE = {
+	BYTES: {
+		ONE_MB: 1024 * 1024, // 1 MB = 1024 * 1024 BYTES
+	},
+} as const;
 export const IP_MOCK_LIST: string[] = [
 	'22.23.172.79',
 	'129.236.198.178',

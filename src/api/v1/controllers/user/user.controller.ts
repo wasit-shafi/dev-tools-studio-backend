@@ -4,7 +4,10 @@ import { _env } from '@environment';
 import { IEmailOptions, ISendUserEmail } from '@interfaces';
 import { emailQueue } from '@messageQueue';
 import { Attachment, Credential, EmailTemplate, User } from '@models';
-import { ApiError, ApiResponse, asyncHandler, deleteFromS3, generateFilePathForUser, generatePresignedUrl, getHeadersForAvoidEmailGrouping, MESSAGES, uploadToS3 } from '@utils';
+import {
+    ApiError, ApiResponse, asyncHandler, deleteFromS3, generateFilePathForUser, generatePresignedUrl,
+    getHeadersForAvoidEmailGrouping, MESSAGES, uploadToS3
+} from '@utils';
 import * as constants from '@utils/constants';
 
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
@@ -128,8 +131,7 @@ const getEmailTemplateList: RequestHandler = asyncHandler(async (request: Reques
 
 const postEmail: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	let delay: number = 0;
-	const { from, to, subject, salutation, body, closing, signature, dateTimeLocal, receiveConfirmationEmail, sendNow, attachmentIds = [] } = request.body;
-
+	const { from, sendNow, dateTimeLocal, to, subject, salutation, body, closing, signature, attachmentIds = [], receiveConfirmationEmail } = request.body;
 	if (!sendNow) {
 		const targetDateAndTime = new Date(dateTimeLocal);
 		delay = Number(targetDateAndTime) - Number(new Date());
@@ -200,7 +202,7 @@ const profilePicture: RequestHandler = asyncHandler(async (request: Request, res
 	} = request;
 
 	if (!file) {
-		next(new ApiError(MESSAGES.USER.PROFILE_PICTURE_FAILURE, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
+		next(new ApiError(MESSAGES.USER.NO_PROFILE_PICTURE_FAILURE, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
 		return;
 	}
 
@@ -244,7 +246,7 @@ const postAttachment: RequestHandler = asyncHandler(async (request: Request, res
 	} = request;
 
 	if (!file) {
-		next(new ApiError(MESSAGES.USER.ATTACHMENT_FAILURE, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
+		next(new ApiError(MESSAGES.USER.NO_ATTACHMENT_FAILURE, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
 		return;
 	}
 

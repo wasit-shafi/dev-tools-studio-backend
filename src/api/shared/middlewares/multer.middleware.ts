@@ -1,8 +1,10 @@
+import { Request } from 'express';
 import fs from 'fs';
 import multer from 'multer';
 import path from 'path';
 import { v7 as uuidv7 } from 'uuid';
 
+import { MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 
 const storage = multer.diskStorage({
@@ -26,4 +28,37 @@ const storage = multer.diskStorage({
 	},
 });
 
-export const upload = multer({ storage });
+export const upload = multer({
+	storage,
+	limits: {
+		fileSize: constants.FILE_SIZE.BYTES.ONE_MB * constants.GLOBAL_MAX_FILE_SIZE_LIMIT_IN_MB,
+	},
+	fileFilter: (request: Request, file: any, callback) => {
+		const { path = '' } = request;
+
+		switch (path) {
+			case constants.ROUTES.USER_ROUTES.PROFILE_PICTURE: {
+				const allowedMimeTypes = [...constants.ALLOWED_MIME_TYPES.IMAGES];
+				const isFileAccepted: boolean = allowedMimeTypes.includes(file.mimetype);
+				callback(null, isFileAccepted);
+				return;
+			}
+
+			case constants.ROUTES.USER_ROUTES.ATTACHMENT: {
+				const allowedMimeTypes = [
+					...constants.ALLOWED_MIME_TYPES.IMAGES,
+					...constants.ALLOWED_MIME_TYPES.VIDEOS,
+					...constants.ALLOWED_MIME_TYPES.TEXT,
+					...constants.ALLOWED_MIME_TYPES.AUDIO,
+					...constants.ALLOWED_MIME_TYPES.DOCUMENTS,
+				];
+				const isFileAccepted: boolean = allowedMimeTypes.includes(file.mimetype);
+				callback(null, isFileAccepted);
+				return;
+			}
+		}
+		// fallback error message
+
+		callback(new Error(MESSAGES.SHARED.SOMETHING_WRONG_WITH_FILE_FAILURE));
+	},
+});

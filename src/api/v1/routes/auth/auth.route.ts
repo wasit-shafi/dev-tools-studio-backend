@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { authController } from '@apiV1Controllers/auth/auth.controller';
+import { authController } from '@apiV1Controllers';
 import { validateReCaptchaResponse, validateRequestBody, verifyAccessToken, verifyRefreshToken } from '@middlewares';
 import * as schemas from '@schemas';
 import { apiRateLimiterStrict } from '@utils';

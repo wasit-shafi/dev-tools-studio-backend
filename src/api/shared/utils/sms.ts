@@ -1,5 +1,5 @@
 import { PublishCommand, SetSMSAttributesCommand, SNSClient } from '@aws-sdk/client-sns';
-import { _env } from '@config/environment';
+import { _env } from '@environment';
 import { ISendSms } from '@interfaces';
 import { logger } from '@utils';
 import * as constants from '@utils/constants';

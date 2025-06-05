@@ -92,7 +92,7 @@ jobs:
           -e REFRESH_TOKEN_EXPIRY=$REFRESH_TOKEN_EXPIRY
           -e REFRESH_TOKEN_SECRET=$REFRESH_TOKEN_SECRET
           -e SALT_ROUNDS=$SALT_ROUNDS
-          --name dts-backend wasitshafi700/dev-tools-studio-backend
+          --name dts-backend wasitshafi700/dev-tools-studio-backend;
 
       - name: Remove all unused/dangling images
         run: sudo docker image prune -f

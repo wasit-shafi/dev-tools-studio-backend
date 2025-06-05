@@ -25,40 +25,40 @@ jobs:
       - name: Run docker container
         run: |
           docker run -d -p 3000:3000 \
-            -e ACCESS_TOKEN_EXPIRY="${{secrets.ACCESS_TOKEN_EXPIRY}}" \
-            -e ACCESS_TOKEN_SECRET="${{secrets.ACCESS_TOKEN_SECRET}}" \
-            -e API_RATE_LIMITER_IP_WHITELIST="${{secrets.API_RATE_LIMITER_IP_WHITELIST}}" \
-            -e API_RATE_LIMITER_THRESHOLD_LIMIT="${{secrets.API_RATE_LIMITER_THRESHOLD_LIMIT}}" \
-            -e API_RATE_LIMITER_THRESHOLD_LIMIT_STRICT="${{secrets.API_RATE_LIMITER_THRESHOLD_LIMIT_STRICT}}" \
-            -e API_RATE_LIMITER_WINDOW_IN_MINUTE="${{secrets.API_RATE_LIMITER_WINDOW_IN_MINUTE}}" \
-            -e API_RATE_LIMITER_WINDOW_IN_MINUTE_STRICT="${{secrets.API_RATE_LIMITER_WINDOW_IN_MINUTE_STRICT}}" \
-            -e AWS_ACCESS_KEY_ID="${{secrets.AWS_ACCESS_KEY_ID}}" \
-            -e AWS_PRESIGNED_URL_EXPIRY="${{secrets.AWS_PRESIGNED_URL_EXPIRY}}" \
-            -e AWS_S3_BUCKET_NAME="${{secrets.AWS_S3_BUCKET_NAME}}" \
-            -e AWS_S3_BUCKET_REGION="${{secrets.AWS_S3_BUCKET_REGION}}" \
-            -e AWS_SECRET_ACCESS_KEY="${{secrets.AWS_SECRET_ACCESS_KEY}}" \
-            -e AWS_SNS_REGION="${{secrets.AWS_SNS_REGION}}" \
-            -e CORS_ORIGIN="${{secrets.CORS_ORIGIN}}" \
-            -e DATABASE_URI="${{secrets.DATABASE_URI}}" \
-            -e EMAIL_SERVICE_SENDER_EMAIL_ID="${{secrets.EMAIL_SERVICE_SENDER_EMAIL_ID}}" \
-            -e EMAIL_SERVICE_SENDER_NAME="${{secrets.EMAIL_SERVICE_SENDER_NAME}}" \
-            -e EMAIL_SERVICE_SMTP_HOST_SERVER="${{secrets.EMAIL_SERVICE_SMTP_HOST_SERVER}}" \
-            -e EMAIL_SERVICE_SMTP_PASSWORD="${{secrets.EMAIL_SERVICE_SMTP_PASSWORD}}" \
-            -e EMAIL_SERVICE_SMTP_PORT="${{secrets.EMAIL_SERVICE_SMTP_PORT}}" \
-            -e EMAIL_SERVICE_SMTP_USER="${{secrets.EMAIL_SERVICE_SMTP_USER}}" \
-            -e EXPRESS_PORT="${{secrets.EXPRESS_PORT}}" \
-            -e FE_BASE_URL="${{secrets.FE_BASE_URL}}" \
-            -e GEOAPIFY_API_KEY="${{secrets.GEOAPIFY_API_KEY}}" \
-            -e IP_INFO_ACCESS_TOKEN="${{secrets.IP_INFO_ACCESS_TOKEN}}" \
-            -e NODE_ENV="${{secrets.NODE_ENV}}" \
-            -e RECAPTCHA_SECRET_KEY="${{secrets.RECAPTCHA_SECRET_KEY}}" \
-            -e REDIS_HOST="${{secrets.REDIS_HOST}}" \
-            -e REDIS_PORT="${{secrets.REDIS_PORT}}" \
-            -e REDIS_USER_PASSWORD="${{secrets.REDIS_USER_PASSWORD}}" \
-            -e REFRESH_TOKEN_EXPIRY="${{secrets.REFRESH_TOKEN_EXPIRY}}" \
-            -e REFRESH_TOKEN_SECRET="${{secrets.REFRESH_TOKEN_SECRET}}" \
-            -e SALT_ROUNDS="${{secrets.SALT_ROUNDS}}" \
-            --name dts-backend wasitshafi700/dev-tools-studio-backend;
+          -e ACCESS_TOKEN_EXPIRY="${{secrets.ACCESS_TOKEN_EXPIRY}}" \
+          -e ACCESS_TOKEN_SECRET="${{secrets.ACCESS_TOKEN_SECRET}}" \
+          -e API_RATE_LIMITER_IP_WHITELIST="${{secrets.API_RATE_LIMITER_IP_WHITELIST}}" \
+          -e API_RATE_LIMITER_THRESHOLD_LIMIT="${{secrets.API_RATE_LIMITER_THRESHOLD_LIMIT}}" \
+          -e API_RATE_LIMITER_THRESHOLD_LIMIT_STRICT="${{secrets.API_RATE_LIMITER_THRESHOLD_LIMIT_STRICT}}" \
+          -e API_RATE_LIMITER_WINDOW_IN_MINUTE="${{secrets.API_RATE_LIMITER_WINDOW_IN_MINUTE}}" \
+          -e API_RATE_LIMITER_WINDOW_IN_MINUTE_STRICT="${{secrets.API_RATE_LIMITER_WINDOW_IN_MINUTE_STRICT}}" \
+          -e AWS_ACCESS_KEY_ID="${{secrets.AWS_ACCESS_KEY_ID}}" \
+          -e AWS_PRESIGNED_URL_EXPIRY="${{secrets.AWS_PRESIGNED_URL_EXPIRY}}" \
+          -e AWS_S3_BUCKET_NAME="${{secrets.AWS_S3_BUCKET_NAME}}" \
+          -e AWS_S3_BUCKET_REGION="${{secrets.AWS_S3_BUCKET_REGION}}" \
+          -e AWS_SECRET_ACCESS_KEY="${{secrets.AWS_SECRET_ACCESS_KEY}}" \
+          -e AWS_SNS_REGION="${{secrets.AWS_SNS_REGION}}" \
+          -e CORS_ORIGIN="${{secrets.CORS_ORIGIN}}" \
+          -e DATABASE_URI="${{secrets.DATABASE_URI}}" \
+          -e EMAIL_SERVICE_SENDER_EMAIL_ID="${{secrets.EMAIL_SERVICE_SENDER_EMAIL_ID}}" \
+          -e EMAIL_SERVICE_SENDER_NAME="${{secrets.EMAIL_SERVICE_SENDER_NAME}}" \
+          -e EMAIL_SERVICE_SMTP_HOST_SERVER="${{secrets.EMAIL_SERVICE_SMTP_HOST_SERVER}}" \
+          -e EMAIL_SERVICE_SMTP_PASSWORD="${{secrets.EMAIL_SERVICE_SMTP_PASSWORD}}" \
+          -e EMAIL_SERVICE_SMTP_PORT="${{secrets.EMAIL_SERVICE_SMTP_PORT}}" \
+          -e EMAIL_SERVICE_SMTP_USER="${{secrets.EMAIL_SERVICE_SMTP_USER}}" \
+          -e EXPRESS_PORT="${{secrets.EXPRESS_PORT}}" \
+          -e FE_BASE_URL="${{secrets.FE_BASE_URL}}" \
+          -e GEOAPIFY_API_KEY="${{secrets.GEOAPIFY_API_KEY}}" \
+          -e IP_INFO_ACCESS_TOKEN="${{secrets.IP_INFO_ACCESS_TOKEN}}" \
+          -e NODE_ENV="${{secrets.NODE_ENV}}" \
+          -e RECAPTCHA_SECRET_KEY="${{secrets.RECAPTCHA_SECRET_KEY}}" \
+          -e REDIS_HOST="${{secrets.REDIS_HOST}}" \
+          -e REDIS_PORT="${{secrets.REDIS_PORT}}" \
+          -e REDIS_USER_PASSWORD="${{secrets.REDIS_USER_PASSWORD}}" \
+          -e REFRESH_TOKEN_EXPIRY="${{secrets.REFRESH_TOKEN_EXPIRY}}" \
+          -e REFRESH_TOKEN_SECRET="${{secrets.REFRESH_TOKEN_SECRET}}" \
+          -e SALT_ROUNDS="${{secrets.SALT_ROUNDS}}" \
+          --name dts-backend wasitshafi700/dev-tools-studio-backend;
 
       - name: Remove all unused/dangling images
         run: sudo docker image prune -f

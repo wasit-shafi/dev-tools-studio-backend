@@ -44,7 +44,8 @@ app.use(
 		ipSelector: _env.get('NODE_ENV') === constants.NODE_ENV.PRODUCTION ? defaultIPSelector : constants.mockIpSelector,
 	})
 );
-// app.set('view engine', 'ejs');
+
+app.set('view engine', 'ejs');
 
 app.use(morgan(':method :url :status :date[iso]'));
 
@@ -55,30 +56,31 @@ app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// NOTE(WASIT): in production build openapi.yaml will not be there due to tsc so have to explicitly copy that, for more info refer below links
-// https://stackoverflow.com/questions/74322223/typescript-build-output-misses-some-files
-// https://www.darraghoriordan.com/2021/01/03/copying-missing-files-typescript-build-deploy
-const swaggerDocument = YAML.parse(fs.readFileSync(path.join(__dirname, 'config/swagger/openapi.yaml'), 'utf8'));
+if (_env.get('NODE_ENV') === constants.NODE_ENV.DEVELOPMENT) {
+	// bull board dashboard ui for bullmq queues
 
-// TODO(WASIT): review swaggerOptions later for more configuration
+	app.use('/ui', serverAdapter.getRouter());
 
-const swaggerOptions = {
-	explorer: true,
-};
+	// NOTE(WASIT): in production build openapi.yaml will not be there due to tsc so have to explicitly copy that, for more info refer below links
+	// https://stackoverflow.com/questions/74322223/typescript-build-output-misses-some-files
+	// https://www.darraghoriordan.com/2021/01/03/copying-missing-files-typescript-build-deploy
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions));
+	const swaggerDocument = YAML.parse(fs.readFileSync(path.join(__dirname, 'config/swagger/openapi.yaml'), 'utf8'));
+	// TODO(WASIT): review swaggerOptions later for more configuration
 
-// bull board dashboard ui for bullmq queues
+	const swaggerOptions = {
+		explorer: true,
+	};
 
-app.use('/ui', serverAdapter.getRouter());
+	app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions));
+}
 
 app.use('/api/v1', routerV1);
 app.use('/api/v2', routerV2);
 
 app.get('/', (request: Request, response: Response) => {
 	response.json(
-		new ApiResponse('', constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, {
-			healthCheck: MESSAGES.SHARED.SERVER_HEALTH_CHECK,
+		new ApiResponse(MESSAGES.SHARED.SERVER_HEALTH_CHECK, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, {
 			yourIp: request.ip,
 			requestProtocol: request.protocol,
 		})

@@ -94,9 +94,7 @@ export const DEFAULT_OTP_LENGTH: number = 8;
 export const MODEL_NAMES = {
 	ATTACHMENT: 'Attachment',
 	CREDENTIAL: 'Credential',
-	DEV_TOOL: 'DevTool',
 	EMAIL_TEMPLATE: 'EmailTemplate',
-	ROLE: 'Role',
 	USER: 'User',
 } as const satisfies Record<string, string>;
 

@@ -34,7 +34,7 @@ export const MESSAGES = {
 		DATABASE_CONNECTION_ERROR: 'Failed to connect with database',
 		INVALID_DATE_AND_TIME: 'Invalid date/time',
 		SCHEMA_VALIDATION_ERROR: 'Something went wrong while parsing/validating request',
-		SERVER_HEALTH_CHECK: 'Server on working fine',
+		SERVER_HEALTH_CHECK: 'Server working fine!',
 		SMTP_ERROR: 'Something went wrong, while sending email, please try again after some time',
 		SOMETHING_WENT_WRONG: 'Something went wrong. Please try again.',
 		DUPLICATE_ENTRY_FOUND: 'Duplicate entry found. Please check your input and try again.',

@@ -6,7 +6,6 @@ export * from './email';
 export * from './logger';
 export * from './messages';
 export * from './mongodb';
-export * from './rate-limiter';
 export * from './s3';
 export * from './sms';
 export * from './utils';

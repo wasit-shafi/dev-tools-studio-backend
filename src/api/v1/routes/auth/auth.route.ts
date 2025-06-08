@@ -1,9 +1,10 @@
 import { Router } from 'express';
 
 import { authController } from '@apiV1Controllers';
-import { validateReCaptchaResponse, validateRequestBody, verifyAccessToken, verifyRefreshToken } from '@middlewares';
+import {
+    apiRateLimiterStrict, validateReCaptchaResponse, validateRequestBody, verifyAccessToken, verifyRefreshToken
+} from '@middlewares';
 import * as schemas from '@schemas';
-import { apiRateLimiterStrict } from '@utils';
 import * as constants from '@utils/constants';
 
 export const authRouter = Router();

@@ -18,8 +18,12 @@ jobs:
           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
+      # NOTE: added '--platform linux/amd64,linux/arm64' due to error on AWS ec2 (Ubuntu) after changing the base image from node:lts to node:22-alpine
+      # https://forums.docker.com/t/docker-getting-started-tutorial-docker-no-matching-manifest-for-linux-amd64-in-the-manifest-list-entries/147304
+      # https://stackoverflow.com/questions/75901618/no-matching-manifest-for-linux-amd64-in-the-manifest-list-entries-when-trying
+
       - name: Build New Docker Image
-        run: docker build . -t wasitshafi700/dev-tools-studio-backend:latest --file Dockerfile.prod
+        run: docker build . -t wasitshafi700/dev-tools-studio-backend:latest --platform linux/amd64,linux/arm64 --file Dockerfile.prod
 
       - name: Push Latest Image on Docker Hub
         run: docker push wasitshafi700/dev-tools-studio-backend:latest

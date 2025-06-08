@@ -13,7 +13,8 @@ import { routerV1 } from '@apiV1/router';
 import { routerV2 } from '@apiV2/router';
 import { globalErrorController } from '@controllers';
 import { _env } from '@environment';
-import { ApiError, ApiResponse, asyncHandler, globalApiRateLimiter, logger, MESSAGES } from '@utils';
+import { globalApiRateLimiter } from '@middlewares';
+import { ApiError, ApiResponse, asyncHandler, logger, MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 
 import { serverAdapter } from './bull-board/create-board';

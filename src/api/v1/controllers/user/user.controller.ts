@@ -4,10 +4,7 @@ import { _env } from '@environment';
 import { IEmailOptions, ISendUserEmail } from '@interfaces';
 import { emailQueue } from '@messageQueue';
 import { Attachment, Credential, EmailTemplate, User } from '@models';
-import {
-    ApiError, ApiResponse, asyncHandler, deleteFromS3, generateFilePathForUser, generatePresignedUrl,
-    getHeadersForAvoidEmailGrouping, MESSAGES, uploadToS3
-} from '@utils';
+import { ApiError, ApiResponse, asyncHandler, deleteFromS3, generateFilePathForUser, generatePresignedUrl, getHeadersForAvoidEmailGrouping, MESSAGES, uploadToS3 } from '@utils';
 import * as constants from '@utils/constants';
 
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
@@ -195,7 +192,7 @@ const postEmail: RequestHandler = asyncHandler(async (request: Request, response
 	response.json(new ApiResponse(MESSAGES.BULL_MQ.EMAIL.EMAIL_SCHEDULED_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
 });
 
-const profilePicture: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+const postProfilePicture: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const {
 		file,
 		user: { _id },
@@ -236,7 +233,30 @@ const profilePicture: RequestHandler = asyncHandler(async (request: Request, res
 		operation: constants.CLIENT_S3_OPERATIONS.GET_OBJECT,
 	});
 
-	response.json(new ApiResponse(MESSAGES.USER.PROFILE_PICTURE_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { profilePicture: presignedUrl }));
+	response.json(new ApiResponse(MESSAGES.USER.ADD_PROFILE_PICTURE_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, { profilePicture: presignedUrl }));
+});
+
+const deleteProfilePicture: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+	const {
+		user: { _id, profilePicture },
+	} = request;
+
+	if (!profilePicture) {
+		next(new ApiError(MESSAGES.USER.NO_PROFILE_PHOTO_EXISTS, constants.HTTP_STATUS_CODES.CLIENT_ERROR.BAD_REQUEST));
+		return;
+	}
+
+	await Promise.all([
+		User.updateOne({ _id }, { $unset: { profilePicture: 1 } }),
+		deleteFromS3({
+			key: `${generateFilePathForUser({
+				_id,
+				type: constants.S3_FILE_TYPES.USER_PROFILE_PICTURE,
+			})}${profilePicture}`,
+		}),
+	]);
+
+	response.json(new ApiResponse(MESSAGES.USER.DELETE_PROFILE_PICTURE_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
 });
 
 const postAttachment: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
@@ -306,5 +326,6 @@ export const userController = {
 	patchEmailTemplate,
 	postAttachment,
 	postEmail,
-	profilePicture,
+	postProfilePicture,
+	deleteProfilePicture,
 };

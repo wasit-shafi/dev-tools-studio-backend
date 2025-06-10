@@ -1,53 +1,23 @@
 openapi: 3.1.0
 info:
   title: Dev Tools Studio
-  description: Backend API for Dev Tools Studio Project
+  description: Backend API docs for the project **Dev Tools Studio**, for more info checkout github repo [https://github.com/wasit-shafi/dev-tools-studio-backend](https://github.com/wasit-shafi/dev-tools-studio-backend) or postman API Collection [https://www.postman.com/wasitshafi/dev-tools-studio-public-wrokspace/overview](https://www.postman.com/wasitshafi/dev-tools-studio-public-wrokspace/overview)
   termsOfService: https://swagger.io/terms/
   contact:
     email: wasitshafi700@gmail.com
-  license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
   version: 1.0.0
-externalDocs:
-  description: Find out more about Swagger
-  url: https://swagger.io
 servers:
+  - url: http://localhost:3000/api/v1
+  - url: http://localhost:3000/api/v2
   - url: http://localhost:3000
-  # - url: /api/v1
 paths:
-  /users:
+  /:
     get:
-      summary: Get a list of users
-      description: Retrieves a list of users, optionally filtered by name.
-      parameters:
-        - in: query
-          name: name
-          schema:
-            type: string
-          required: false
-          description: Name filter for user lookup.
       responses:
         '200':
-          description: A list of users
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-components:
-  schemas:
-    User:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: The unique identifier of the user.
-        name:
-          type: string
-          description: The name of the user.
-      required:
-        - id
-        - name
+          description: Get api / response
+  /say-hello:
+    get:
+      responses:
+        '200':
+          description: Get api /say-hello response

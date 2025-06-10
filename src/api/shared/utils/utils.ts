@@ -3,10 +3,7 @@ import { UAParser } from 'ua-parser-js';
 import { v7 as uuidv7 } from 'uuid';
 
 import { _env } from '@environment';
-import {
-    IGoogleMapParams, IHeadersForAvoidEmailGrouping, IOtpGeneratorOptions, IStaticMapParams, IUserFilePath,
-    TFlagCdnIconSizeValues
-} from '@interfaces';
+import { IGoogleMapParams, IHeadersForAvoidEmailGrouping, IOtpGeneratorOptions, IStaticMapParams, IUserFilePath, TFlagCdnIconSizeValues } from '@interfaces';
 import { logger, MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 

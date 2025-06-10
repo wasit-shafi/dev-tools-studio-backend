@@ -1,9 +1,7 @@
 import { Router } from 'express';
 
 import { authController } from '@apiV1Controllers';
-import {
-    apiRateLimiterStrict, validateReCaptchaResponse, validateRequestBody, verifyAccessToken, verifyRefreshToken
-} from '@middlewares';
+import { apiRateLimiterStrict, validateReCaptchaResponse, validateRequestBody, verifyAccessToken, verifyRefreshToken } from '@middlewares';
 import * as schemas from '@schemas';
 import * as constants from '@utils/constants';
 
@@ -17,7 +15,6 @@ authRouter.post(constants.ROUTES.AUTH_ROUTES._SIGNIN, validateReCaptchaResponse,
 // get user details by providing access token only
 
 authRouter.get(constants.ROUTES.AUTH_ROUTES._ME, verifyAccessToken, authController.getMe);
-
 // getting user details and new access/refresh token only if the current refresh token is valid
 
 authRouter.post(constants.ROUTES.AUTH_ROUTES._REFRESH, verifyRefreshToken, authController.refresh);

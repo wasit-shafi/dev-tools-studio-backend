@@ -30,7 +30,7 @@ userRouter.get(constants.ROUTES.USER_ROUTES.EMAIL_TEMPLATE_LIST, userController.
 userRouter.post(constants.ROUTES.USER_ROUTES.EMAIL, userController.postEmail);
 // Profile Picture
 
-userRouter.post(constants.ROUTES.USER_ROUTES.PROFILE_PICTURE, upload.single('profilePicture'), userController.profilePicture);
+userRouter.route(constants.ROUTES.USER_ROUTES.PROFILE_PICTURE).post(upload.single('profilePicture'), userController.postProfilePicture).delete(userController.deleteProfilePicture);
 // Attachment
 
 userRouter.post(constants.ROUTES.USER_ROUTES.ATTACHMENT, upload.single('attachment'), userController.postAttachment);

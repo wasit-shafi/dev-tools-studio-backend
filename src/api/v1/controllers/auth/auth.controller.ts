@@ -142,7 +142,7 @@ const signout: RequestHandler = asyncHandler(async (request: Request, response: 
 
 const forgotPassword: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
 	const {
-		ipinfo,
+		ipInfo,
 		body: { email },
 	} = request;
 
@@ -160,10 +160,10 @@ const forgotPassword: RequestHandler = asyncHandler(async (request: Request, res
 
 	const when = new Date().toUTCString();
 	const device = utils.getDeviceInfoString(request.headers['user-agent'] || '');
-	const near = utils.getIpInfoString(ipinfo);
+	const near = utils.getIpInfoString(ipInfo);
 
-	const latitude = ipinfo && !ipinfo?.bogon ? ipinfo.loc.split(',')[0] : '';
-	const longitude = ipinfo && !ipinfo?.bogon ? ipinfo.loc.split(',')[1] : '';
+	const latitude = ipInfo && !ipInfo?.bogon ? ipInfo.loc.split(',')[0] : '';
+	const longitude = ipInfo && !ipInfo?.bogon ? ipInfo.loc.split(',')[1] : '';
 
 	const staticMapUrl = utils.getStaticMapUrl({
 		latitude,
@@ -174,7 +174,7 @@ const forgotPassword: RequestHandler = asyncHandler(async (request: Request, res
 		longitude,
 	});
 
-	const countryFlagUrl = utils.getCountryFlagUrl(constants.FLAG_CDN_ICON_SIZE.W20H15, ipinfo?.countryCode);
+	const countryFlagUrl = utils.getCountryFlagUrl(constants.FLAG_CDN_ICON_SIZE.W20H15, ipInfo?.countryCode);
 
 	await ejs.renderFile(
 		path.join(__dirname, '../../../../templates/reset-password.ejs'),

@@ -12,7 +12,6 @@ export const FLAG_CDN_BASE_URL = 'https://flagcdn.com';
 export const GOOGLE_MAPS_BASE_URL = 'https://maps.google.com';
 export const GEOAPIFY_MAPS_BASE_URL = 'https://maps.geoapify.com/v1';
 
-export const IP_INFO_REQUESTS_TIMEOUT: number = 6000; //6 seconds (default is 5 seconds)
 // Refer official docs for sizes: https://flagpedia.net/download/api
 
 export const FLAG_CDN_ICON_SIZE = {

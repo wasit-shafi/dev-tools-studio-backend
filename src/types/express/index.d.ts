@@ -4,9 +4,9 @@
 
 declare namespace Express {
 	export interface Request {
-		//  TODO(WASIT): review types for user & ipinfo
+		//  TODO(WASIT): review types for user & ipInfo
 		user: any;
-		ipinfo: any;
+		ipInfo: any;
 		accessToken: string;
 		refreshToken?: string; // refresh token will not be available
 	}

@@ -3,7 +3,6 @@ import cors from 'cors';
 import express from 'express';
 import fs from 'fs';
 import helmet from 'helmet';
-import ipinfo, { defaultIPSelector } from 'ipinfo-express';
 import morgan from 'morgan';
 import path from 'path';
 import swaggerUi from 'swagger-ui-express';
@@ -13,7 +12,7 @@ import { routerV1 } from '@apiV1/router';
 import { routerV2 } from '@apiV2/router';
 import { globalErrorController } from '@controllers';
 import { _env } from '@environment';
-import { globalApiRateLimiter } from '@middlewares';
+import { globalApiRateLimiter, ipInfo } from '@middlewares';
 import { ApiError, ApiResponse, asyncHandler, logger, MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 
@@ -25,6 +24,8 @@ export const app = express();
 
 app.use(helmet());
 
+app.use(ipInfo);
+
 app.use(
 	cors({
 		credentials: true,
@@ -34,17 +35,6 @@ app.use(
 );
 
 app.use(globalApiRateLimiter);
-
-// For more info refer docs: https://github.com/ipinfo/node-express?tab=readme-ov-file#-ipinfo-nodejs-express-client-library
-
-app.use(
-	ipinfo({
-		token: String(_env.get('IP_INFO_ACCESS_TOKEN')),
-		cache: null,
-		timeout: constants.IP_INFO_REQUESTS_TIMEOUT,
-		ipSelector: _env.get('NODE_ENV') === constants.NODE_ENV.PRODUCTION ? defaultIPSelector : constants.mockIpSelector,
-	})
-);
 
 app.set('view engine', 'ejs');
 
@@ -82,8 +72,9 @@ app.use('/api/v2', routerV2);
 app.get('/', (request: Request, response: Response) => {
 	response.json(
 		new ApiResponse(MESSAGES.SHARED.SERVER_HEALTH_CHECK, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, {
-			yourIp: request.ip,
 			requestProtocol: request.protocol,
+			requestIp: request.ip,
+			ipInfo: request.ipInfo,
 		})
 	);
 });

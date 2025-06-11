@@ -3,7 +3,10 @@ import { UAParser } from 'ua-parser-js';
 import { v7 as uuidv7 } from 'uuid';
 
 import { _env } from '@environment';
-import { IGoogleMapParams, IHeadersForAvoidEmailGrouping, IOtpGeneratorOptions, IStaticMapParams, IUserFilePath, TFlagCdnIconSizeValues } from '@interfaces';
+import {
+    IGoogleMapParams, IHeadersForAvoidEmailGrouping, IOtpGeneratorOptions, IStaticMapParams, IUserFilePath,
+    TFlagCdnIconSizeValues
+} from '@interfaces';
 import { logger, MESSAGES } from '@utils';
 import * as constants from '@utils/constants';
 
@@ -72,6 +75,7 @@ export const getIpInfoString = (ipInfo: unknown): string => {
 
 	if (ipInfo && ipInfo instanceof Object) {
 		if ('bogon' in ipInfo && ipInfo.bogon) {
+			logger.info('YOUR IP IS BOGON IP, RETURNING');
 			return near;
 		} else {
 			const city: string = 'city' in ipInfo && typeof ipInfo.city === 'string' ? ipInfo.city : '';
@@ -84,7 +88,6 @@ export const getIpInfoString = (ipInfo: unknown): string => {
 	}
 
 	near = near.trim();
-
 	return near;
 };
 

@@ -226,6 +226,7 @@ const resetPassword: RequestHandler = asyncHandler(async (request: Request, resp
 		user.passwordResetToken = null;
 		user.passwordResetExpires = null;
 		user.passwordChangedAt = new Date();
+		user.isEmailVerified = true;
 		await user.save();
 		response.json(new ApiResponse(MESSAGES.AUTH.PASSWORD_RESET_MAIL_SENT, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
 		return;

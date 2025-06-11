@@ -1,5 +1,11 @@
-<p><a target="_blank" href="https://app.eraser.io/workspace/WS6iO6zC1mwnArWMopAV" id="edit-in-eraser-github-link"><img alt="Edit in Eraser" src="https://firebasestorage.googleapis.com/v0/b/second-petal-295822.appspot.com/o/images%2Fgithub%2FOpen%20in%20Eraser.svg?alt=media&amp;token=968381c8-a7e7-472a-8ed6-4a6626da5501"></a></p>
+# 🔗 Links
 
-DTS (Backend)
-
-<!--- Eraser file: https://app.eraser.io/workspace/WS6iO6zC1mwnArWMopAV --->
+- **Deployment Link (Frontend):** http://3.110.46.93:4200
+- **Deployment Link (Backend):** http://3.110.46.93:3000
+- **Architecture Diagram:** https://app.eraser.io/workspace/cwZzopjoFs0wIiPvRI8X
+- **Postman Collection:** https://www.postman.com/wasitshafi/dev-tools-studio-public-wrokspace/overview
+- **Backend Docker Image:** https://hub.docker.com/repository/docker/wasitshafi700/dev-tools-studio-backend
+- **Frontend Docker Image:** https://hub.docker.com/repository/docker/wasitshafi700/dev-tools-studio-frontend
+- **Backend Source Code:** https://github.com/wasit-shafi/dev-tools-studio-backend
+- **Frontend Source Code:** https://github.com/wasit-shafi/dev-tools-studio-frontend
+- **Github Project Board:** https://github.com/users/wasit-shafi/projects/5/views/1

@@ -37,7 +37,6 @@ jobs:
           -e AWS_S3_BUCKET_NAME="${{secrets.AWS_S3_BUCKET_NAME}}" \
           -e AWS_S3_BUCKET_REGION="${{secrets.AWS_S3_BUCKET_REGION}}" \
           -e AWS_SECRET_ACCESS_KEY="${{secrets.AWS_SECRET_ACCESS_KEY}}" \
-          -e AWS_SNS_REGION="${{secrets.AWS_SNS_REGION}}" \
           -e CORS_ORIGIN="${{secrets.CORS_ORIGIN}}" \
           -e DATABASE_URI="${{secrets.DATABASE_URI}}" \
           -e EMAIL_SERVICE_SENDER_EMAIL_ID="${{secrets.EMAIL_SERVICE_SENDER_EMAIL_ID}}" \

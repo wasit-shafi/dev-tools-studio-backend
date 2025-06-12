@@ -1,41 +1,43 @@
-import { PublishCommand, SetSMSAttributesCommand, SNSClient } from '@aws-sdk/client-sns';
-import { _env } from '@environment';
-import { ISendSms } from '@interfaces';
-import { logger } from '@utils';
-import * as constants from '@utils/constants';
+// NOTE(Wasit): Not using AWS SNS as of now due to no production access
 
-const snsClientConfig = {
-	region: String(_env.get('AWS_SNS_REGION')),
-	credentials: {
-		accessKeyId: String(_env.get('AWS_ACCESS_KEY_ID')),
-		secretAccessKey: String(_env.get('AWS_SECRET_ACCESS_KEY')),
-	},
-};
+// import { PublishCommand, SetSMSAttributesCommand, SNSClient } from '@aws-sdk/client-sns';
+// import { _env } from '@environment';
+// import { ISendSms } from '@interfaces';
+// import { logger } from '@utils';
+// import * as constants from '@utils/constants';
 
-const snsClient = new SNSClient(snsClientConfig);
+// const snsClientConfig = {
+// 	region: String(_env.get('AWS_SNS_REGION')),
+// 	credentials: {
+// 		accessKeyId: String(_env.get('AWS_ACCESS_KEY_ID')),
+// 		secretAccessKey: String(_env.get('AWS_SECRET_ACCESS_KEY')),
+// 	},
+// };
 
-export const sendSms = async (params: ISendSms): Promise<void> => {
-	const { phoneNumber, message, smsType = constants.DEFAULT_SMS_TYPE } = params;
+// const snsClient = new SNSClient(snsClientConfig);
 
-	// logger.info('sendSms params :: ', { phoneNumber, message, smsType });
+// export const sendSms = async (params: ISendSms): Promise<void> => {
+// 	const { phoneNumber, message, smsType = constants.DEFAULT_SMS_TYPE } = params;
 
-	try {
-		const input = {
-			PhoneNumber: phoneNumber,
-			Message: message,
-		};
+// 	// logger.info('sendSms params :: ', { phoneNumber, message, smsType });
 
-		const publishCommand = new PublishCommand(input);
+// 	try {
+// 		const input = {
+// 			PhoneNumber: phoneNumber,
+// 			Message: message,
+// 		};
 
-		// const setSmsAttributesCommand = new SetSMSAttributesCommand({
-		// 	attributes: {
-		// 		DefaultSMSType: smsType,
-		// 	},
-		// });
+// 		const publishCommand = new PublishCommand(input);
 
-		const publishResponse = await snsClient.send(publishCommand);
-		// logger.info({ publishCommand, publishResponse, setSmsAttributesCommand });
-	} catch (error) {
-		console.log('sendSms error :: ', error);
-	}
-};
+// 		// const setSmsAttributesCommand = new SetSMSAttributesCommand({
+// 		// 	attributes: {
+// 		// 		DefaultSMSType: smsType,
+// 		// 	},
+// 		// });
+
+// 		const publishResponse = await snsClient.send(publishCommand);
+// 		// logger.info({ publishCommand, publishResponse, setSmsAttributesCommand });
+// 	} catch (error) {
+// 		console.log('sendSms error :: ', error);
+// 	}
+// };

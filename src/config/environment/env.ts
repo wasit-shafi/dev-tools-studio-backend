@@ -39,8 +39,6 @@ const __env = {
 	AWS_S3_BUCKET_NAME: process.env.AWS_S3_BUCKET_NAME,
 	AWS_S3_BUCKET_REGION: process.env.AWS_S3_BUCKET_REGION,
 
-	AWS_SNS_REGION: process.env.AWS_SNS_REGION,
-
 	REDIS_HOST: process.env.TS_NODE_DEV && process.env.REDIS_SERVICE_NAME ? process.env.REDIS_SERVICE_NAME : process.env.REDIS_HOST,
 	REDIS_PORT: process.env.REDIS_PORT,
 	REDIS_USER_PASSWORD: process.env.REDIS_USER_PASSWORD,

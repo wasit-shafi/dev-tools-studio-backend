@@ -51,6 +51,7 @@ export interface ISendUserEmail {
 		userId: string;
 		fileName: string;
 	}[];
+	userEmailId?: string; // for acknowledgement email
 }
 
 export interface ISendApplicationEmail {

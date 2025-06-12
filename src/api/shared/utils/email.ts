@@ -34,6 +34,7 @@ export const sendUserEmail = async (params: ISendUserEmail) => {
 		attachmentDetails = [],
 		_id = '',
 		receiveConfirmationEmail,
+		userEmailId,
 	} = params;
 
 	try {
@@ -76,13 +77,14 @@ export const sendUserEmail = async (params: ISendUserEmail) => {
 				path.join(__dirname, '../../../templates/user-email-acknowledgement.ejs'),
 				{
 					sentSuccessfully: true,
+					from: emailOptions.from,
 					to: emailOptions.to,
 				},
 				async (error, templateHtmlString) => {
 					await emailQueue.add(constants.MESSAGING_QUEUES.EMAIL, {
 						emailOptions: {
 							from: `${_env.get('EMAIL_SERVICE_SENDER_NAME')}<${_env.get('EMAIL_SERVICE_SENDER_EMAIL_ID')}>`,
-							to: emailOptions.from,
+							to: userEmailId,
 							subject: 'Email Acknowledgement',
 							html: templateHtmlString,
 							headers: { ...getHeadersForAvoidEmailGrouping() },
@@ -97,6 +99,7 @@ export const sendUserEmail = async (params: ISendUserEmail) => {
 			path.join(__dirname, '../../../templates/user-email-acknowledgement.ejs'),
 			{
 				sentSuccessfully: false,
+				from: emailOptions.from,
 				to: emailOptions.to,
 			},
 			async (error, templateHtmlString) => {

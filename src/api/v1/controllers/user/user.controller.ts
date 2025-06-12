@@ -4,7 +4,10 @@ import { _env } from '@environment';
 import { IEmailOptions, ISendUserEmail } from '@interfaces';
 import { emailQueue } from '@messageQueue';
 import { Attachment, Credential, EmailTemplate, User } from '@models';
-import { ApiError, ApiResponse, asyncHandler, deleteFromS3, generateFilePathForUser, generatePresignedUrl, getHeadersForAvoidEmailGrouping, MESSAGES, uploadToS3 } from '@utils';
+import {
+    ApiError, ApiResponse, asyncHandler, deleteFromS3, generateFilePathForUser, generatePresignedUrl,
+    getHeadersForAvoidEmailGrouping, MESSAGES, uploadToS3
+} from '@utils';
 import * as constants from '@utils/constants';
 
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
@@ -183,6 +186,7 @@ const postEmail: RequestHandler = asyncHandler(async (request: Request, response
 		credential,
 		emailOptions,
 		receiveConfirmationEmail,
+		...(receiveConfirmationEmail && { userEmailId: request.user.email }),
 		emailType: constants.EMAIL_TYPES.USER,
 		_id: request.user._id,
 		attachmentDetails: transformedAttachmentDetails,

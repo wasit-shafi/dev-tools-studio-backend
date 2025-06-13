@@ -33,9 +33,34 @@ const signup: RequestHandler = asyncHandler(async (request: Request, response: R
 		roles: [constants.USER_ROLES.APP_USER],
 	});
 
-	response
-		.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED)
-		.json(new ApiResponse(MESSAGES.AUTH.SIGNUP_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED, { _id: newUser._id }));
+	await ejs.renderFile(
+		path.join(__dirname, '../../../../templates/welcome.ejs'),
+		{
+			firstName,
+			websiteUrl: _env.get('CORS_ORIGIN'),
+		},
+		async (error, templateHtmlString) => {
+			if (!error) {
+				const emailOptions: IEmailOptions = {
+					from: `${_env.get('EMAIL_SERVICE_SENDER_NAME')}<${_env.get('EMAIL_SERVICE_SENDER_EMAIL_ID')}>`,
+					to: email,
+
+					subject: `Dev Tools Studio Account Created Successfully!!`,
+					html: templateHtmlString,
+					headers: { ...getHeadersForAvoidEmailGrouping() },
+				};
+
+				await emailQueue.add(constants.MESSAGING_QUEUES.EMAIL, {
+					emailOptions,
+					emailType: constants.EMAIL_TYPES.APPLICATION,
+				});
+			}
+
+			response
+				.status(constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED)
+				.json(new ApiResponse(MESSAGES.AUTH.SIGNUP_SUCCESS, constants.HTTP_STATUS_CODES.SUCCESSFUL.CREATED, { _id: newUser._id }));
+		}
+	);
 });
 
 const signin: RequestHandler = asyncHandler(async (request: Request, response: Response, next: NextFunction) => {

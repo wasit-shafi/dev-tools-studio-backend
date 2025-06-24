@@ -5,8 +5,16 @@ import { IEmailOptions, ISendUserEmail } from '@interfaces';
 import { emailQueue } from '@messageQueue';
 import { Attachment, Credential, EmailTemplate, User } from '@models';
 import {
-    ApiError, ApiResponse, asyncHandler, deleteFromS3, generateFilePathForUser, generatePresignedUrl,
-    getHeadersForAvoidEmailGrouping, MESSAGES, uploadToS3
+	ApiError,
+	ApiResponse,
+	asyncHandler,
+	deleteFromS3,
+	generateFilePathForUser,
+	generatePresignedUrl,
+	getHeadersForAvoidEmailGrouping,
+	logger,
+	MESSAGES,
+	uploadToS3,
 } from '@utils';
 import * as constants from '@utils/constants';
 

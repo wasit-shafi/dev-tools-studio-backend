@@ -18,7 +18,7 @@ jobs:
           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
-      # NOTE: added '--platform linux/amd64,linux/arm64' due to error on AWS ec2 (Ubuntu) after changing the base image from node:lts to node:22-alpine (Facing error with only images build from my laptop/M4 Pro Chip and pushed on DockerHub)
+      # NOTE: added '--platform linux/amd64,linux/arm64' due to error on AWS ec2 (Ubuntu) after changing the base image from node:lts to node:22-alpine (Facing error with only images build from my laptop/M4 Pro Chip and then pushed on DockerHub)
       # https://forums.docker.com/t/docker-getting-started-tutorial-docker-no-matching-manifest-for-linux-amd64-in-the-manifest-list-entries/147304
       # https://stackoverflow.com/questions/75901618/no-matching-manifest-for-linux-amd64-in-the-manifest-list-entries-when-trying
       # --platform linux/amd64,linux/arm64

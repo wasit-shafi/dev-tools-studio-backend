@@ -1,3 +1,5 @@
+$${\color{red}NOTE: Due \space to \space some \space security \space issues \space on \space AWS, \space I \space have \space terminated \space the \space EC2 \space instance \space on \space 26 \space June \space 2025 \space due \space to \space which \space the \space live \space project \space links \space will \space not \space be \space working \space temporarily, \space will \space restore \space it \space ASAP. \space Thank \space You}$$
+
 # 🔗 Links
 
 - **Deployment Link (Frontend):** http://3.110.46.93:4200
@@ -9,6 +11,10 @@
 - **Backend Source Code:** https://github.com/wasit-shafi/dev-tools-studio-backend
 - **Frontend Source Code:** https://github.com/wasit-shafi/dev-tools-studio-frontend
 - **Github Project Board:** https://github.com/users/wasit-shafi/projects/5/views/1
+- **About Dev Tools Studio Project - YouTube Video:** https://youtu.be/HiqfIKH9ywE
+
+# Watch Video On YouTube
+[![Watch Video on Youtube](https://github.com/user-attachments/assets/fb1d1b72-2221-4d30-aaa3-ff4d9a64a148)](https://youtu.be/HiqfIKH9ywE)
 
 <img src="https://res.cloudinary.com/dtlx6i2m7/image/upload/v1749886896/dev-tools-studio/snapshots/github/ytnkjuqjk79vgs22btnn.png"/>
 <img src="https://res.cloudinary.com/dtlx6i2m7/image/upload/v1749886896/dev-tools-studio/snapshots/github/lcvioddfykhywmsroevk.png"/>

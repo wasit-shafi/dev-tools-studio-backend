@@ -12,7 +12,10 @@
 		"up:prod": "docker-compose -f docker-compose.prod.yml up --build -V",
 		"down": "docker-compose down --remove-orphans",
 		"down:prod": "docker-compose -f docker-compose.prod.yml down --remove-orphans",
-		"format-codebase": "npx prettier --write ."
+		"format-codebase": "npx prettier --write .",
+		"secrets-list": "git secrets --list",
+		"secrets-scan": "git secrets --scan",
+		"secrets-scan-history": "git secrets --scan-history"
 	},
 	"author": "",
 	"license": "ISC",

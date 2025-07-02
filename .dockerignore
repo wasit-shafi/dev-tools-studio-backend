@@ -3,7 +3,16 @@ node_modules
 .gitignore
 *.md
 dist
-.env
+# Very Important don't remove this (not to include any *.env file)!!
+**/*.env
 .vscode
 .idea
-public/temp
+src/public/temp
+**/*.DS_Store
+.github
+.prettierrc
+.prettierignore
+Dockerfile
+Dockerfile.prod
+docker-compose.prod.yml
+docker-compose.yml

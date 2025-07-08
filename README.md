@@ -1,9 +1,10 @@
+<!--
 $${\color{red}NOTE: Due \space to \space some \space security \space issues \space on \space AWS, \space I \space have \space terminated \space the \space EC2 \space instance \space on \space 26 \space June \space 2025 \space due \space to \space which \space the \space live \space project \space links \space will \space not \space be \space working \space temporarily, \space will \space restore \space it \space ASAP. \space Thank \space You}$$
-
+-->
 # 🔗 Links
 
-- **Deployment Link (Frontend):** http://3.110.46.93:4200
-- **Deployment Link (Backend):** http://3.110.46.93:3000
+- **Deployment Link (Frontend):** https://devtoolsstudio.surge.sh
+- **Deployment Link (Backend):** https://dev-tools-studio-backend-git-dev.on.shiper.app
 - **Architecture Diagram:** https://app.eraser.io/workspace/cwZzopjoFs0wIiPvRI8X
 - **Postman Collection:** https://www.postman.com/wasitshafi/dev-tools-studio-public-wrokspace/overview
 - **Backend Docker Image:** https://hub.docker.com/repository/docker/wasitshafi700/dev-tools-studio-backend

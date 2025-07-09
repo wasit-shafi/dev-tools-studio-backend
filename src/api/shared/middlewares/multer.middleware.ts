@@ -34,6 +34,10 @@ export const upload = multer({
 		fileSize: constants.FILE_SIZE.BYTES.ONE_MB * constants.GLOBAL_MAX_FILE_SIZE_LIMIT_IN_MB,
 	},
 	fileFilter: (request: Request, file: any, callback) => {
+		// TODO(Wasit): Remove below line when AWS S3 cloud storage is enabled back.
+
+		callback(new Error('Uploading/Storing files on cloud storage (AWS S3 Bucket) is temporarily disabled since 26 July 2025.'));
+
 		const { path = '' } = request;
 
 		switch (path) {

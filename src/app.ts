@@ -70,7 +70,37 @@ app.use('/api/v1', routerV1);
 app.use('/api/v2', routerV2);
 
 app.get('/', (request: Request, response: Response) => {
+	console.clear();
 	console.log('request :: ', request);
+	const getCircularReplacer = () => {
+		const seen = new WeakSet();
+		return (key: string, value: unknown) => {
+			if (typeof value === 'object' && value !== null) {
+				if (seen.has(value)) {
+					return '[Circular]';
+				}
+				seen.add(value);
+			}
+			return value;
+		};
+	};
+
+	const safeStringify = (value: unknown, space?: string | number) => {
+		const circularReplacer = getCircularReplacer();
+		return JSON.stringify(
+			value,
+			(key, value) => {
+				if (typeof value === 'bigint') {
+					return value.toString();
+				} else if (Buffer.isBuffer(value)) {
+					return value.toString('base64');
+				}
+
+				return circularReplacer(key, value);
+			},
+			space
+		);
+	};
 
 	response.json(
 		new ApiResponse(MESSAGES.SHARED.SERVER_HEALTH_CHECK, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, {
@@ -93,6 +123,7 @@ app.get('/', (request: Request, response: Response) => {
 				originalUrl: request.originalUrl,
 				params: request.params,
 			},
+			req: safeStringify(request),
 		})
 	);
 });

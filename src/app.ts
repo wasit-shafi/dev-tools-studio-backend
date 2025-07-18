@@ -75,6 +75,7 @@ app.get('/', (request: Request, response: Response) => {
 			requestProtocol: request.protocol,
 			requestIp: request.ip,
 			ipInfo: request.ipInfo,
+			headers: request.headers,
 		})
 	);
 });

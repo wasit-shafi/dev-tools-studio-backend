@@ -76,6 +76,21 @@ app.get('/', (request: Request, response: Response) => {
 			requestIp: request.ip,
 			ipInfo: request.ipInfo,
 			headers: request.headers,
+			reqData: {
+				headers: request.headers,
+				method: request.method,
+				url: request.url,
+				httpVersion: request.httpVersion,
+				body: request.body,
+				cookies: request.cookies,
+				path: request.path,
+				protocol: request.protocol,
+				query: request.query,
+				hostname: request.hostname,
+				ip: request.ip,
+				originalUrl: request.originalUrl,
+				params: request.params,
+			},
 		})
 	);
 });

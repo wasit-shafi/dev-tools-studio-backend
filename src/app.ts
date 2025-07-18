@@ -70,6 +70,8 @@ app.use('/api/v1', routerV1);
 app.use('/api/v2', routerV2);
 
 app.get('/', (request: Request, response: Response) => {
+	console.log('request :: ', request);
+
 	response.json(
 		new ApiResponse(MESSAGES.SHARED.SERVER_HEALTH_CHECK, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, {
 			requestProtocol: request.protocol,

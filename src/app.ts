@@ -21,8 +21,7 @@ import { serverAdapter } from './bull-board/create-board';
 import type { Request, Response, NextFunction } from 'express';
 export const app = express();
 
-// app.use(helmet());
-app.set('trust proxy', true);
+app.use(helmet());
 
 app.use(ipInfo);
 
@@ -70,66 +69,15 @@ app.use('/api/v1', routerV1);
 app.use('/api/v2', routerV2);
 
 app.get('/', (request: Request, response: Response) => {
-	console.clear();
-	console.log('\n\n\n\n\nrequest :: ', request);
-	console.log('\n\n\n\n\nrequest.connection :: ', request.connection);
-	console.log('\n\n\n\n\nrequest.ips :: ', request.ips);
+	// NOTE(Wasit): not returning data in response back as of now as using shiper.app deployment was not able to get the actual ip address of the user in request (previously it was working fine with AWS EC2 instance)
 
-	const getCircularReplacer = () => {
-		const seen = new WeakSet();
-		return (key: string, value: unknown) => {
-			if (typeof value === 'object' && value !== null) {
-				if (seen.has(value)) {
-					return '[Circular]';
-				}
-				seen.add(value);
-			}
-			return value;
-		};
+	const data = {
+		requestProtocol: request.protocol,
+		requestIp: request.ip,
+		ipInfo: request.ipInfo,
 	};
 
-	const safeStringify = (value: unknown, space?: string | number) => {
-		const circularReplacer = getCircularReplacer();
-		return JSON.stringify(
-			value,
-			(key, value) => {
-				if (typeof value === 'bigint') {
-					return value.toString();
-				} else if (Buffer.isBuffer(value)) {
-					return value.toString('base64');
-				}
-
-				return circularReplacer(key, value);
-			},
-			space
-		);
-	};
-
-	response.json(
-		new ApiResponse(MESSAGES.SHARED.SERVER_HEALTH_CHECK, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK, {
-			requestProtocol: request.protocol,
-			requestIp: request.ip,
-			ipInfo: request.ipInfo,
-			headers: request.headers,
-			ips: request.ips,
-			reqData: {
-				headers: request.headers,
-				method: request.method,
-				url: request.url,
-				httpVersion: request.httpVersion,
-				body: request.body,
-				cookies: request.cookies,
-				path: request.path,
-				protocol: request.protocol,
-				query: request.query,
-				hostname: request.hostname,
-				ip: request.ip,
-				originalUrl: request.originalUrl,
-				params: request.params,
-			},
-			req: safeStringify(request),
-		})
-	);
+	response.json(new ApiResponse(MESSAGES.SHARED.SERVER_HEALTH_CHECK, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
 });
 
 app.all('*', (request: Request, response: Response, next: NextFunction) => {

@@ -19,10 +19,10 @@ import * as constants from '@utils/constants';
 import { serverAdapter } from './bull-board/create-board';
 
 import type { Request, Response, NextFunction } from 'express';
-
 export const app = express();
 
-app.use(helmet());
+// app.use(helmet());
+app.set('trust proxy', true);
 
 app.use(ipInfo);
 
@@ -71,7 +71,10 @@ app.use('/api/v2', routerV2);
 
 app.get('/', (request: Request, response: Response) => {
 	console.clear();
-	console.log('request :: ', request);
+	console.log('\n\n\n\n\nrequest :: ', request);
+	console.log('\n\n\n\n\nrequest.connection :: ', request.connection);
+	console.log('\n\n\n\n\nrequest.ips :: ', request.ips);
+
 	const getCircularReplacer = () => {
 		const seen = new WeakSet();
 		return (key: string, value: unknown) => {
@@ -108,6 +111,7 @@ app.get('/', (request: Request, response: Response) => {
 			requestIp: request.ip,
 			ipInfo: request.ipInfo,
 			headers: request.headers,
+			ips: request.ips,
 			reqData: {
 				headers: request.headers,
 				method: request.method,

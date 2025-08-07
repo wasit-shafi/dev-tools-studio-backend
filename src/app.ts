@@ -5,6 +5,7 @@ import fs from 'fs';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
+import favicon from 'serve-favicon';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yaml';
 
@@ -23,6 +24,9 @@ export const app = express();
 
 app.use(helmet());
 
+// Refer links for more info: https://stackoverflow.com/questions/15463199/how-to-set-custom-favicon-in-express, https://expressjs.com/en/resources/middleware/serve-favicon.html,  https://stackoverflow.com/questions/76227469/how-to-add-favicon-for-content-type-application-json
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
 app.use(ipInfo);
 
 app.use(
@@ -36,6 +40,7 @@ app.use(
 app.use(globalApiRateLimiter);
 
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '/views'));
 
 app.use(morgan(':method :url :status :date[iso]'));
 

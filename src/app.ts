@@ -85,7 +85,7 @@ app.get('/', (request: Request, response: Response) => {
 	response.json(new ApiResponse(MESSAGES.SHARED.SERVER_HEALTH_CHECK, constants.HTTP_STATUS_CODES.SUCCESSFUL.OK));
 });
 
-app.all('*', (request: Request, response: Response, next: NextFunction) => {
+app.all('/{*any}', (request: Request, response: Response, next: NextFunction) => {
 	next(new ApiError(`Can't find ${request.originalUrl} on the server`, constants.HTTP_STATUS_CODES.CLIENT_ERROR.NOT_FOUND));
 });
 

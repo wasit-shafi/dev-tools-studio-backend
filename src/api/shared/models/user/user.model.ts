@@ -150,14 +150,16 @@ const userSchema = new Schema(
 			versionKey: false,
 
 			transform: async function (document, returnObject) {
+				// @ts-ignore
 				delete returnObject.password;
 				delete returnObject.passwordChangedAt;
 				delete returnObject.passwordResetToken;
 				delete returnObject.passwordResetExpires;
-
+				// @ts-ignore
 				delete returnObject.accessTokens;
+				// @ts-ignore
 				delete returnObject.refreshTokens;
-
+				// @ts-ignore
 				delete returnObject.updatedAt;
 
 				if (document?.profilePicture) {

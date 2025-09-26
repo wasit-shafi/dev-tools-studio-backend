@@ -50,6 +50,8 @@ const __env = {
 	IP_INFO_ACCESS_TOKEN: process.env.IP_INFO_ACCESS_TOKEN,
 
 	GEOAPIFY_API_KEY: process.env.GEOAPIFY_API_KEY,
+
+	VISITOR_ALERT_RECEIVER_EMAIL_ID: process.env.VISITOR_ALERT_RECEIVER_EMAIL_ID,
 } as const;
 
 export const _env = {

@@ -25,8 +25,8 @@ router.post('/visitor-alert', async (request: Request, response: Response) => {
 		const emailOptions: IEmailOptions = {
 			from: `${_env.get('EMAIL_SERVICE_SENDER_NAME')}<${_env.get('EMAIL_SERVICE_SENDER_EMAIL_ID')}>`,
 			to: _env.get('VISITOR_ALERT_RECEIVER_EMAIL_ID'),
-			subject: 'Visitor Alert - Dev Tools Studio',
-			html: `Someone just visited the Dev Tools Studio  <br/>WHEN: <b>${when}</b><br/>DEVICE: <b>${device}</b>`,
+			subject: `VA - ${device}`,
+			html: `<pre>${JSON.stringify(request.body.ipInfoFromClient, null, 2)}</pre><br/>Device: ${device}<br/>When: ${when}`,
 			headers: { ...getHeadersForAvoidEmailGrouping() },
 		};
 

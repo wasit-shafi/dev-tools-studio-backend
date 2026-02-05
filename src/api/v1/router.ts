@@ -18,6 +18,10 @@ router.get('/say-hello', (request, response) => {
 
 router.post('/visitor-alert', async (request: Request, response: Response) => {
 	// console.log('Visitor Alert Request Body:', request.body);
+	if (constants.BACKLIST_ORGANIZATION_NAMES.includes(request.body?.ipInfoFromClient?.org)) {
+		return;
+	}
+
 	if (_env.get('NODE_ENV') == constants.NODE_ENV.PRODUCTION) {
 		const when = new Date().toUTCString();
 		const device = utils.getDeviceInfoString(request.headers['user-agent'] || '');
@@ -28,7 +32,7 @@ router.post('/visitor-alert', async (request: Request, response: Response) => {
 			from: `${_env.get('EMAIL_SERVICE_SENDER_NAME')}<${_env.get('EMAIL_SERVICE_SENDER_EMAIL_ID')}>`,
 			to: _env.get('VISITOR_ALERT_RECEIVER_EMAIL_ID'),
 			subject: `VA - ${device}`,
-			html: `<pre>${JSON.stringify(request.body.ipInfoFromClient, null, 2)}</pre><br/>Device: ${device}<br/>When: ${when} <br/><br/>Time on Client Machine: ${request.body.timeOnClientMachine}<br/>Time Zone on Client Machine: ${request.body.timeZoneOnClientMachine} <br/><br/>Time in India: ${timeInIndia}`,
+			html: `<pre>${JSON.stringify(request.body.ipInfoFromClient, null, 2)}</pre><br/>Device: <b>${device}</b><br/>When: <b>${when}</b><br/><br/>Time on Client Machine: <b>${request.body.timeOnClientMachine}</b><br/>Time Zone on Client Machine: <b>${request.body.timeZoneOnClientMachine}</b><br/><br/>Time in India: <b>${timeInIndia}</b>`,
 			headers: { ...getHeadersForAvoidEmailGrouping() },
 		};
 

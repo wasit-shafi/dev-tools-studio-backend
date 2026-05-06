@@ -32,11 +32,11 @@
 		"cookie-parser": "^1.4.7",
 		"cors": "^2.8.6",
 		"ejs": "^5.0.2",
-		"express": "^5.1.0",
+		"express": "^5.2.1",
 		"express-rate-limit": "^8.5.0",
 		"helmet": "^8.1.0",
 		"jsonwebtoken": "^9.0.3",
-		"mongodb": "^6.18.0",
+		"mongodb": "^7.2.0",
 		"mongoose": "^8.17.2",
 		"morgan": "^1.10.1",
 		"multer": "^2.1.1",
@@ -58,10 +58,10 @@
 		"@types/cookie-parser": "^1.4.10",
 		"@types/cors": "^2.8.19",
 		"@types/ejs": "^3.1.5",
-		"@types/express": "^5.0.3",
+		"@types/express": "^5.0.6",
 		"@types/jsonwebtoken": "^9.0.10",
 		"@types/morgan": "^1.9.10",
-		"@types/node": "^22.15.24",
+		"@types/node": "^25.6.0",
 		"@types/nodemailer": "^8.0.0",
 		"@types/otp-generator": "^4.0.2",
 		"@types/swagger-ui-express": "^4.1.8",
@@ -73,6 +73,6 @@
 		"snyk": "^1.1304.1",
 		"ts-node-dev": "^2.0.0",
 		"tsconfig-paths": "^4.2.0",
-		"typescript": "^5.9.2"
+		"typescript": "^6.0.3"
 	}
 }

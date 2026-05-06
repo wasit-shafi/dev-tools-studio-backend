@@ -21,7 +21,9 @@ const userSchema = new Schema(
 		displayName: {
 			type: String,
 			default: function () {
-				return 'firstName' in this && 'lastName' in this ? `${this.firstName.toLowerCase()} ${this.lastName.toLowerCase()}` : '';
+				return 'firstName' in this && 'lastName' in this && typeof this.firstName === 'string' && typeof this.lastName === 'string'
+					? `${this.firstName.toLowerCase()} ${this.lastName.toLowerCase()}`
+					: '';
 			},
 		},
 		userName: {
@@ -30,7 +32,9 @@ const userSchema = new Schema(
 			unique: true,
 			index: true,
 			default: function () {
-				return 'firstName' in this && 'lastName' in this ? `${this.firstName.toLowerCase()}-${this.lastName.toLowerCase()}-${uuidv7()}` : '';
+				return 'firstName' in this && 'lastName' in this && typeof this.firstName === 'string' && typeof this.lastName === 'string'
+					? `${this.firstName.toLowerCase()}-${this.lastName.toLowerCase()}-${uuidv7()}`
+					: '';
 			},
 		},
 		email: {
@@ -102,11 +106,18 @@ const userSchema = new Schema(
 
 			async generateAccessToken(): Promise<string> {
 				const user = this;
+				const payload = { data: { _id: user._id, email: user.email, userName: user.userName, roles: user.roles } };
+				const ACCESS_TOKEN_SECRET = String(_env.get('ACCESS_TOKEN_SECRET'));
+				const metadata = {
+					header: {
+						typ: 'JWT',
+					},
+					algorithm: 'HS256',
+					expiresIn: String(_env.get('ACCESS_TOKEN_EXPIRY')),
+				};
 				// @ts-ignore
 				// TODO(Wasit): Review it why generic string is causing error, while previous there was no error.
-				const accessToken: string = jwt.sign({ data: { _id: user._id, email: user.email, userName: user.userName, roles: user.roles } }, String(_env.get('ACCESS_TOKEN_SECRET')), {
-					expiresIn: String(_env.get('ACCESS_TOKEN_EXPIRY')),
-				});
+				const accessToken: string = jwt.sign(payload, ACCESS_TOKEN_SECRET, metadata);
 				user.accessTokens.push(accessToken);
 				await user.save();
 
@@ -115,11 +126,18 @@ const userSchema = new Schema(
 
 			async generateRefreshToken(): Promise<string> {
 				const user = this;
+				const payload = { data: { _id: user._id } };
+				const REFRESH_TOKEN_SECRET = String(_env.get('REFRESH_TOKEN_SECRET'));
+				const metadata = {
+					header: {
+						typ: 'JWT',
+					},
+					algorithm: 'HS256',
+					expiresIn: String(_env.get('REFRESH_TOKEN_EXPIRY')),
+				};
 				// @ts-ignore
 				// TODO(Wasit): Review it why generic string is causing error, while previous there was no error.
-				const refreshToken: string = jwt.sign({ data: { _id: user._id } }, String(_env.get('REFRESH_TOKEN_SECRET')), {
-					expiresIn: String(_env.get('REFRESH_TOKEN_EXPIRY')),
-				});
+				const refreshToken: string = jwt.sign(payload, REFRESH_TOKEN_SECRET, metadata);
 
 				user.refreshTokens.push(refreshToken);
 				await user.save();
@@ -163,8 +181,10 @@ const userSchema = new Schema(
 				delete returnObject.updatedAt;
 
 				if (document?.profilePicture) {
+					const key = `${generateFilePathForUser({ _id: document._id.toString(), type: constants.S3_FILE_TYPES.USER_PROFILE_PICTURE })}${document.profilePicture}`;
+
 					const presignedUrl = await generatePresignedUrl({
-						key: `${generateFilePathForUser({ _id: document._id.toString(), type: constants.S3_FILE_TYPES.USER_PROFILE_PICTURE })}${document.profilePicture}`,
+						key,
 						operation: constants.CLIENT_S3_OPERATIONS.GET_OBJECT,
 					});
 
@@ -178,6 +198,7 @@ const userSchema = new Schema(
 		timestamps: true,
 	}
 );
+// NOTE: next() is removed from mongoose 9.x.x: https://mongoosejs.com/docs/migrating_to_9.html#pre-middleware-no-longer-supports-next
 
 userSchema.pre('save', async function (next) {
 	let user = this;

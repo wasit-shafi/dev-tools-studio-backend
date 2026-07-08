@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Dev Tools Studio
-  description: Backend API docs for the project **Dev Tools Studio**, for more info checkout github repo [https://github.com/wasit-shafi/dev-tools-studio-backend](https://github.com/wasit-shafi/dev-tools-studio-backend) or postman API Collection [https://www.postman.com/wasitshafi/dev-tools-studio/overview](https://www.postman.com/wasitshafi/dev-tools-studio/overview)
+  description: Backend API docs for the project **Dev Tools Studio**, for more info checkout github repo [https://github.com/wasit-shafi/dev-tools-studio-backend](https://github.com/wasit-shafi/dev-tools-studio-backend) or postman API Collection [https://www.postman.com/wasit-shafi-wani/dev-tools-studio/overview](https://www.postman.com/wasit-shafi-wani/dev-tools-studio/overview)
   termsOfService: https://swagger.io/terms/
   contact:
     email: wasitshafi700@gmail.com
